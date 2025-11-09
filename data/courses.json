@@ -96,25 +96,6 @@
     "status": "active"
   },
   {
-    "slug": "python-pro-zacatecniky",
-    "title": "Programátor Python",
-    "description": "Komplexní rekvalifikační kurz programování v Pythonu. Naučíte se základy programování, objektově orientované programování, práci s databázemi a vývoj webových aplikací. Kurz je vhodný pro úplné začátečníky i pro ty, kteří chtějí změnit kariéru.",
-    "duration": "6 měsíců",
-    "level": "Začátečníci",
-    "status": "active",
-    "accreditation": "Programátor WWW aplikací v jazyce Python - akreditováno MŠMT ČR",
-    "syllabus": [
-      "Základy programování a algoritmizace",
-      "Syntaxe a struktura Pythonu",
-      "Objektově orientované programování",
-      "Práce s databázemi (SQL)",
-      "Vývoj webových aplikací (Django/Flask)",
-      "REST API a moderní webové technologie",
-      "Testování a verzování kódu",
-      "Praktické projekty a portfolio"
-    ]
-  },
-  {
     "slug": "programator-csharp",
     "title": "Programátor C#",
     "description": "Rekvalifikační kurz programování v C# .NET. Naučíte se moderní vývoj aplikací s Microsoft technologiemi, ASP.NET MVC, Entity Framework a další pokročilé nástroje.",

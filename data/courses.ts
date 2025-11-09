@@ -75,10 +75,13 @@ function normalizeLevel(level: string): Course['level'] {
  * Normalize course data to Course interface (handles both old and multilingual structures)
  */
 function normalizeCourse(course: any, lang: string = 'cs'): Course | null {
-  if (!isCourse(course)) return null
+  // Validate basic course structure
+  if (!course || typeof course !== 'object' || typeof course.slug !== 'string' || !(course.status === 'active' || course.status === 'upcoming')) {
+    return null
+  }
 
-  // Handle multilingual structure
-  if (course.languages && typeof course.languages === 'object') {
+  // Check for multilingual structure first (before type guard narrows the type)
+  if ('languages' in course && typeof course.languages === 'object') {
     // Try requested language first, then fallback to available languages
     const langData = course.languages[lang] || 
                      course.languages['cs'] || 
@@ -86,7 +89,11 @@ function normalizeCourse(course: any, lang: string = 'cs'): Course | null {
                      course.languages['ru'] ||
                      Object.values(course.languages)[0]
     
-    if (langData && typeof langData === 'object') {
+    if (langData && typeof langData === 'object' && 
+        typeof langData.title === 'string' &&
+        typeof langData.description === 'string' &&
+        typeof langData.duration === 'string' &&
+        typeof langData.level === 'string') {
       return {
         slug: course.slug,
         title: langData.title,
@@ -102,7 +109,10 @@ function normalizeCourse(course: any, lang: string = 'cs'): Course | null {
   }
 
   // Handle old structure (fallback to default language if multilingual not available)
-  if (course.title) {
+  if (typeof course.title === 'string' && 
+      typeof course.description === 'string' &&
+      typeof course.duration === 'string' &&
+      typeof course.level === 'string') {
     return {
       slug: course.slug,
       title: course.title,
