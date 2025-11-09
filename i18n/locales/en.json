@@ -102,8 +102,8 @@
     "description": "Get in touch with us",
     "email": "Email",
     "phone": "Phone",
-    "address": "Address",
-    "addressValue": "Prague 1, 110 00, Czech Republic",
+    "address": "Registered Office",
+    "addressValue": "Rybná 716/24, Staré Město, 110 00 Prague",
     "contactInfo": "Contact Information",
     "form": {
       "title": "Send us a message",

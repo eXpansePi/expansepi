@@ -71,12 +71,34 @@ export default function HomeClient({ lang }: HomeClientProps) {
   const TURN_RATE = 0.01
   const REPULSION_RADIUS = 150
   const REPULSION_STRENGTH = 0.2
-  const NODE_COUNT = 180
+  // Base node count for large screens (maintains original behavior)
+  const BASE_NODE_COUNT = 180
   const CONNECTION_DISTANCE = 150
   const BIRTH_FADE_SPEED = 0.002
   const ELLIPSE_RADIUS_X = 700
   const ELLIPSE_RADIUS_Y = 600
   const ELLIPSE_FADE_STRENGTH = 0.7
+
+  // Calculate responsive node count based on screen size
+  const calculateNodeCount = (width: number, height: number): number => {
+    const area = width * height
+    // Base area for large screens (1920x1080 = 2,073,600)
+    const baseArea = 1920 * 1080
+    // Minimum node count for very small screens
+    const minNodes = 40
+    // Maximum node count (for large screens, maintain original)
+    const maxNodes = BASE_NODE_COUNT
+    
+    // Calculate density ratio
+    const densityRatio = area / baseArea
+    
+    // Scale nodes based on area, but cap at maxNodes for large screens
+    // Use a square root scaling to reduce nodes more aggressively on small screens
+    const scaledNodes = Math.floor(BASE_NODE_COUNT * Math.sqrt(densityRatio))
+    
+    // Clamp between min and max
+    return Math.max(minNodes, Math.min(maxNodes, scaledNodes))
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -85,6 +107,9 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
     let width = (canvas.width = window.innerWidth)
     let height = (canvas.height = window.innerHeight)
+    
+    // Calculate node count based on current screen size
+    let nodeCount = calculateNodeCount(width, height)
 
     const nodes: Array<{
       x: number
@@ -93,7 +118,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
       vy: number
       angle: number
       life: number
-    }> = Array.from({ length: NODE_COUNT }, () => {
+    }> = Array.from({ length: nodeCount }, () => {
       const angle = Math.random() * Math.PI * 2
       return {
         x: Math.random() * width,
@@ -252,6 +277,32 @@ export default function HomeClient({ lang }: HomeClientProps) {
     const handleResize = () => {
       width = canvas.width = window.innerWidth
       height = canvas.height = window.innerHeight
+      
+      // Recalculate node count on resize
+      const newNodeCount = calculateNodeCount(width, height)
+      
+      // Adjust nodes array if count changed
+      if (newNodeCount !== nodeCount) {
+        if (newNodeCount > nodeCount) {
+          // Add nodes
+          const toAdd = newNodeCount - nodeCount
+          for (let i = 0; i < toAdd; i++) {
+            const angle = Math.random() * Math.PI * 2
+            nodes.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              vx: Math.cos(angle) * BASE_SPEED,
+              vy: Math.sin(angle) * BASE_SPEED,
+              angle,
+              life: 0, // Start fading in
+            })
+          }
+        } else {
+          // Remove nodes (remove from end)
+          nodes.splice(newNodeCount)
+        }
+        nodeCount = newNodeCount
+      }
     }
 
     const handleMouseMove = (e: MouseEvent) => {

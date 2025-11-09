@@ -78,8 +78,8 @@ export default async function ContactPage({ params }: ContactPageProps) {
                       </svg>
                       {t.contact.phone}
                     </p>
-                    <a href="tel:+420123456789" className="text-blue-600 hover:text-blue-700 transition-colors">
-                      +420 123 456 789
+                    <a href="tel:+420775715700" className="text-blue-600 hover:text-blue-700 transition-colors">
+                      +420 775 715 700
                     </a>
                   </div>
 

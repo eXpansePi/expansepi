@@ -102,8 +102,8 @@
     "description": "Kontaktujte nás pro více informací",
     "email": "Email",
     "phone": "Telefon",
-    "address": "Adresa",
-    "addressValue": "Praha 1, 110 00, Česká republika",
+    "address": "Sídlo",
+    "addressValue": "Rybná 716/24, Staré Město, 110 00 Praha",
     "contactInfo": "Kontaktní informace",
     "form": {
       "title": "Napište nám",
