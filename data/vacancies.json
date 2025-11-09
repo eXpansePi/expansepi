@@ -1,0 +1,41 @@
+[
+  {
+    "slug": "senior-python-developer",
+    "title": "Senior Python Developer",
+    "description": "Hledáme zkušeného Python vývojáře pro práci na moderních projektech.",
+    "details": "# Senior Python Developer\n\nBudete pracovat na... (obsah bude doplněn)",
+    "location": "Praha / Remote",
+    "workMode": "hybrid",
+    "employmentType": "FULL_TIME",
+    "department": "Engineering",
+    "tags": ["python", "backend"],
+    "status": "open",
+    "postedAt": "2024-01-12"
+  },
+  {
+    "slug": "data-analyst",
+    "title": "Data Analyst",
+    "description": "Příležitost pro datového analytika s pokročilými znalostmi Pythonu a SQL.",
+    "details": "# Data Analyst\n\nBudete analyzovat... (obsah bude doplněn)",
+    "location": "Brno",
+    "workMode": "onsite",
+    "employmentType": "FULL_TIME",
+    "department": "Data",
+    "tags": ["data", "python", "sql"],
+    "status": "open",
+    "postedAt": "2024-01-10"
+  },
+  {
+    "slug": "frontend-developer",
+    "title": "Frontend Developer",
+    "description": "Hledáme frontend vývojáře se znalostmi React a TypeScript.",
+    "details": "# Frontend Developer\n\nBudete vyvíjet... (obsah bude doplněn)",
+    "location": "Praha / Remote",
+    "workMode": "remote",
+    "employmentType": "FULL_TIME",
+    "department": "Engineering",
+    "tags": ["frontend", "react", "typescript"],
+    "status": "draft",
+    "postedAt": "2024-01-08"
+  }
+]

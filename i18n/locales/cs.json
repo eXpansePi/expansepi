@@ -1,0 +1,124 @@
+{
+  "common": {
+    "home": "Domů",
+    "courses": "Kurzy",
+    "about": "O nás",
+    "contact": "Kontakt",
+    "vacancies": "Volné pozice",
+    "blog": "Blog",
+    "readMore": "Číst více →",
+    "moreInfo": "Více informací",
+    "backToList": "← Zpět na seznam",
+    "applyNow": "Zažádat o pozici",
+    "notFound": "Nenalezeno"
+  },
+  "nav": {
+    "language": "Jazyk"
+  },
+  "home": {
+    "title": "eXpansePi - IT Vzdělávání budoucnosti",
+    "subtitle": "Budujeme novou generaci softwarových inženýrů",
+    "tagline": "Rekvalifikační IT kurzy s experty z Matfyzu UK a ČVUT",
+    "cta": "Vstupte do světa IT",
+    "ctaSecondary": "Více o nás",
+    "viewAll": "Zobrazit všechny →",
+    "readyToStart": "Připraveni začít?",
+    "contact": "Kontakt",
+    "courses": "Kurzy",
+    "heroTitle": "Rekvalifikační kurzy, které změní vaši kariéru",
+    "heroDescription": "Naučte se Python, datovou analýzu, web development a další dovednosti.",
+    "ourCourses": "Naše kurzy",
+    "benefits": {
+      "title": "Proč si vybrat nás",
+      "experienced": {
+        "title": "Zkušení lektoři",
+        "description": "Absolventi Matfyzu UK a ČVUT s praktickými zkušenostmi"
+      },
+      "practical": {
+        "title": "Praktické zaměření",
+        "description": "Kurzy zaměřené na reálné projekty"
+      },
+      "certification": {
+        "title": "Certifikace",
+        "description": "Oficiální certifikát po absolvování"
+      },
+      "individual": {
+        "title": "Individuální přístup",
+        "description": "Malé skupiny pro osobní pozornost"
+      }
+    },
+    "stats": {
+      "graduates": "Absolventů",
+      "success": "Úspěšnost",
+      "lecturers": "Lektorů",
+      "courses": "Kurzů"
+    },
+    "courseLevels": {
+      "beginner": "Začátečníci",
+      "intermediate": "Středně pokročilí",
+      "advanced": "Pokročilí"
+    },
+    "search": {
+      "placeholder": "Hledat kurzy...",
+      "label": "Vyhledávání"
+    }
+  },
+  "courses": {
+    "title": "Kurzy",
+    "available": "Dostupné kurzy",
+    "preparing": "Připravujeme",
+    "level": "Úroveň",
+    "duration": "Trvání",
+    "noData": "Žádné kurzy nejsou dostupné"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Články, tipy a návody z oblasti IT vzdělávání.",
+    "latestArticles": "Nejnovější články",
+    "preparing": "Připravujeme",
+    "notPublished": "Tento článek není veřejný"
+  },
+  "vacancies": {
+    "title": "Volné pozice",
+    "description": "Přidejte se k našemu týmu a pomozte nám budovat budoucnost IT vzdělávání.",
+    "openPositions": "Otevřené pozice",
+    "preparing": "Připravujeme",
+    "closed": "Ukončené",
+    "fullTime": "Plný úvazek",
+    "partTime": "Zkrácený úvazek",
+    "contract": "Kontrakt",
+    "intern": "Stáž",
+    "onsite": "On-site",
+    "remote": "Remote",
+    "hybrid": "Hybrid",
+    "notOpen": "Pozice není otevřená"
+  },
+  "about": {
+    "title": "O nás",
+    "description": "Poznáte náš tým a vizi"
+  },
+  "contact": {
+    "title": "Kontakt",
+    "description": "Kontaktujte nás pro více informací",
+    "email": "Email",
+    "phone": "Telefon",
+    "address": "Adresa",
+    "addressValue": "Praha 1, 110 00, Česká republika",
+    "contactInfo": "Kontaktní informace",
+    "form": {
+      "title": "Napište nám",
+      "name": "Jméno",
+      "namePlaceholder": "Vaše jméno",
+      "email": "Email",
+      "emailPlaceholder": "vas@email.cz",
+      "subject": "Předmět",
+      "subjectPlaceholder": "Předmět zprávy",
+      "message": "Zpráva",
+      "messagePlaceholder": "Vaše zpráva...",
+      "send": "Odeslat",
+      "sending": "Odesílání...",
+      "success": "Váš emailový klient by se měl otevřít. Prosím, zkontrolujte a odešlete zprávu ručně.",
+      "error": "Chyba při odesílání. Zkuste to prosím znovu."
+    }
+  }
+}

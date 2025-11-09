@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "zaciname-s-pythonem-prvni-kroky",
+    "title": "Začínáme s Pythonem: První kroky",
+    "description": "Průvodce pro úplné začátečníky, kteří se chtějí naučit programovat v Pythonu.",
+    "excerpt": "Praktický úvod do Pythonu: instalace, první skript a tipy jak pokračovat.",
+    "content": "# Začínáme s Pythonem\n\nPython je skvělý jazyk... (obsah bude doplněn)",
+    "date": "2024-01-15",
+    "author": "eXpansePi Team",
+    "tags": ["python", "zacatecnici"],
+    "status": "published",
+    "readingMinutes": 5
+  },
+  {
+    "slug": "5-duvodu-rekvalifikace-do-it",
+    "title": "5 důvodů, proč se rekvalifikovat do IT",
+    "description": "Proč je IT sektor ideální volbou pro změnu kariéry a jak začít.",
+    "excerpt": "IT nabízí růst, flexibilitu a atraktivní platové ohodnocení. Zde je 5 hlavních důvodů.",
+    "content": "# Rekvalifikace do IT\n\nNapříč trhem práce... (obsah bude doplněn)",
+    "date": "2024-01-10",
+    "author": "eXpansePi Team",
+    "tags": ["kariéra", "rekvalifikace"],
+    "status": "published",
+    "readingMinutes": 4
+  },
+  {
+    "slug": "datova-analyza-v-praxi",
+    "title": "Datová analýza v praxi",
+    "description": "Jak používat Python a pandas pro analýzu reálných datových sad.",
+    "excerpt": "Základy práce s daty v Pythonu: pandas, čištění a jednoduché vizualizace.",
+    "content": "# Datová analýza v praxi\n\nData jsou v centru rozhodování... (obsah bude doplněn)",
+    "date": "2024-01-05",
+    "author": "eXpansePi Team",
+    "tags": ["data", "python"],
+    "status": "published",
+    "readingMinutes": 6
+  },
+  {
+    "slug": "pripravujeme-automatizace-v-pythonu",
+    "title": "Automatizace v Pythonu",
+    "description": "Jak automatizovat opakované úlohy pomocí skriptů v Pythonu.",
+    "excerpt": "Automatizace pracovních procesů – ušetřete čas pomocí Python skriptů.",
+    "content": "# Automatizace v Pythonu\n\nTento článek je ve fázi přípravy.",
+    "date": "2024-02-01",
+    "author": "eXpansePi Team",
+    "tags": ["python", "automatizace"],
+    "status": "draft",
+    "readingMinutes": 7
+  }
+]

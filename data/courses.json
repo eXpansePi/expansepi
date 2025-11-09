@@ -1,0 +1,165 @@
+[
+  {
+    "slug": "programator-www-aplikaci-v-pythonu",
+    "languages": {
+      "cs": {
+        "title": "Programátor www aplikací v jazyce Python",
+        "description": "Akreditovaný rekvalifikační kurz zaměřený na tvorbu webových aplikací v jazyce Python s využitím frameworku Django. Kurz probíhá kombinovanou formou – hlavní část online v podobě 13 školení a 2 prezenční školení v Praze. Kurz je plně hrazen Úřadem práce ČR. Účastníci se naučí programovat v Pythonu, pracovat s databázemi a vyvíjet webové aplikace včetně závěrečného projektu vhodného do portfolia.",
+        "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
+        "level": "Začátečník",
+        "accreditation": "Akreditováno Ministerstvem školství, mládeže a tělovýchovy (MŠMT)",
+        "syllabus": [
+          "Poučení o bezpečnosti a ochraně zdraví při práci",
+          "HTML a CSS – struktura, responzivní design, přístupnost",
+          "Základy Pythonu – syntaxe, datové typy, cykly, funkce",
+          "OOP v Pythonu – třídy, dědičnost, polymorfismus",
+          "Algoritmy – vyhledávání, třídění, rekurze, Big-O notace",
+          "Datové struktury – seznamy, slovníky, množiny, zásobník, fronta, stromy, grafy",
+          "Git a GitHub – verzování, branchování, spolupráce",
+          "Databáze a SQL – návrh, dotazy, relace, JOIN operace",
+          "Django – modely, šablony, pohledy, formuláře, administrace, nasazení",
+          "Skupinové programování – vývoj týmového projektu"
+        ],
+        "form": "Kombinovaná (hlavní část online, doplněno o 2 prezenční školení v Praze)",
+        "exam": "Závěrečná písemná zkouška (15 otázek) a odevzdání software projektu",
+        "certification": "Osvědčení o rekvalifikaci – Programátor www aplikací v jazyce Python",
+        "funding": "Plně hrazeno Úřadem práce ČR",
+        "highlights": [
+          "Akreditace MŠMT",
+          "Hlavní část online – studujte odkudkoliv",
+          "Praktická výuka na reálných projektech",
+          "Součástí je týmové programování a závěrečný projekt",
+          "Kurz je zcela zdarma – hrazen Úřadem práce ČR"
+        ]
+      },
+      "en": {
+        "title": "Python Web Application Developer Course",
+        "description": "An accredited hybrid retraining course focused on creating web applications using the Python programming language and Django framework. The course is primarily conducted online through 13 live sessions and 2 in-person workshops in Prague. It is fully funded by the Czech Labour Office. Students learn Python programming, web development, databases, and teamwork through a final project that demonstrates their skills and can be added to their portfolio.",
+        "duration": "120 teaching hours (13 online + 2 in-person sessions in Prague)",
+        "level": "Beginner",
+        "accreditation": "Accredited by the Ministry of Education, Youth and Sports (MŠMT)",
+        "syllabus": [
+          "Introduction and safety at work",
+          "HTML & CSS – structure, responsive design, accessibility",
+          "Python basics – syntax, data types, loops, functions",
+          "Object-Oriented Programming in Python – classes, inheritance, polymorphism",
+          "Algorithms – searching, sorting, recursion, Big-O notation",
+          "Data structures – lists, dictionaries, sets, stacks, queues, trees, graphs",
+          "Git and GitHub – version control, branching, collaboration",
+          "Databases and SQL – relational design, queries, and joins",
+          "Django – models, templates, views, forms, admin interface, deployment",
+          "Team programming – group project development"
+        ],
+        "form": "Hybrid (mainly online, supplemented with 2 in-person workshops in Prague)",
+        "exam": "Final written exam (15 questions) and submission of a software project",
+        "certification": "Official retraining certificate – Python Web Application Developer",
+        "funding": "Fully funded by the Czech Labour Office",
+        "highlights": [
+          "Accredited by the Ministry of Education (MŠMT)",
+          "Primarily online – study from anywhere",
+          "Hands-on learning with real programming tasks",
+          "Includes team programming and a final project",
+          "Completely funded by the Czech Labour Office"
+        ]
+      },
+      "ru": {
+        "title": "Разработчик веб-приложений на Python",
+        "description": "Аккредитованный курс переподготовки, направленный на разработку веб-приложений с использованием языка Python и фреймворка Django. Курс проводится в гибридном формате: 13 онлайн-занятий и 2 очных семинара в Праге. Обучение полностью финансируется Чешским центром занятости. Участники изучают Python, базы данных, веб-разработку и создают собственный итоговый проект для портфолио.",
+        "duration": "120 учебных часов (13 онлайн + 2 очных занятия в Праге)",
+        "level": "Начальный",
+        "accreditation": "Аккредитовано Министерством образования, молодежи и спорта (MŠMT)",
+        "syllabus": [
+          "Введение и охрана труда",
+          "HTML и CSS – структура, адаптивный дизайн, доступность",
+          "Основы Python – синтаксис, типы данных, циклы, функции",
+          "ООП в Python – классы, наследование, полиморфизм",
+          "Алгоритмы – поиск, сортировка, рекурсия, Big-O",
+          "Структуры данных – списки, словари, множества, стеки, очереди, деревья, графы",
+          "Git и GitHub – система контроля версий, ветвления и совместная работа",
+          "Базы данных и SQL – проектирование, запросы, объединения",
+          "Django – модели, шаблоны, представления, формы, админ-панель, развертывание",
+          "Командная разработка – создание итогового проекта"
+        ],
+        "form": "Гибридная (в основном онлайн, дополнено 2 очными сессиями в Праге)",
+        "exam": "Итоговый письменный экзамен (15 вопросов) и сдача программного проекта",
+        "certification": "Официальный сертификат переподготовки – Разработчик веб-приложений на Python",
+        "funding": "Полностью финансируется Чешским центром занятости",
+        "highlights": [
+          "Аккредитация Министерства образования (MŠMT)",
+          "Основная часть онлайн – учитесь из любого места",
+          "Практическое обучение с реальными задачами",
+          "Командная работа и итоговый проект",
+          "Полностью бесплатное обучение – финансируется Центром занятости"
+        ]
+      }
+    },
+    "status": "active"
+  },
+  {
+    "slug": "python-pro-zacatecniky",
+    "title": "Programátor Python",
+    "description": "Komplexní rekvalifikační kurz programování v Pythonu. Naučíte se základy programování, objektově orientované programování, práci s databázemi a vývoj webových aplikací. Kurz je vhodný pro úplné začátečníky i pro ty, kteří chtějí změnit kariéru.",
+    "duration": "6 měsíců",
+    "level": "Začátečníci",
+    "status": "active",
+    "accreditation": "Programátor WWW aplikací v jazyce Python - akreditováno MŠMT ČR",
+    "syllabus": [
+      "Základy programování a algoritmizace",
+      "Syntaxe a struktura Pythonu",
+      "Objektově orientované programování",
+      "Práce s databázemi (SQL)",
+      "Vývoj webových aplikací (Django/Flask)",
+      "REST API a moderní webové technologie",
+      "Testování a verzování kódu",
+      "Praktické projekty a portfolio"
+    ]
+  },
+  {
+    "slug": "programator-csharp",
+    "title": "Programátor C#",
+    "description": "Rekvalifikační kurz programování v C# .NET. Naučíte se moderní vývoj aplikací s Microsoft technologiemi, ASP.NET MVC, Entity Framework a další pokročilé nástroje.",
+    "duration": "6 měsíců",
+    "level": "Začátečníci",
+    "status": "upcoming"
+  },
+  {
+    "slug": "programator-java",
+    "title": "Programátor Java",
+    "description": "Komplexní kurz programování v Javě. Zahrnuje základy Javy, Spring Framework, vývoj enterprise aplikací a moderní best practices v Java ekosystému.",
+    "duration": "6 měsíců",
+    "level": "Začátečníci",
+    "status": "upcoming"
+  },
+  {
+    "slug": "programator-php",
+    "title": "Programátor PHP",
+    "description": "Kurz vývoje webových aplikací v PHP. Naučíte se moderní PHP, Laravel framework, práci s databázemi a vývoj REST API.",
+    "duration": "6 měsíců",
+    "level": "Začátečníci",
+    "status": "upcoming"
+  },
+  {
+    "slug": "programator-javascript",
+    "title": "Programátor JavaScript",
+    "description": "Kompletní kurz JavaScriptu a moderních frontend technologií. Zahrnuje ES6+, React, Node.js, TypeScript a vývoj full-stack aplikací.",
+    "duration": "6 měsíců",
+    "level": "Začátečníci",
+    "status": "upcoming"
+  },
+  {
+    "slug": "datova-analyza",
+    "title": "Datová analýza",
+    "description": "Pokročilé techniky analýzy dat a vizualizace s Pythonem a moderními nástroji pro data science.",
+    "duration": "10 týdnů",
+    "level": "Pokročilí",
+    "status": "upcoming"
+  },
+  {
+    "slug": "web-development",
+    "title": "Web development",
+    "description": "Kompletní kurz vývoje moderních webových aplikací s React a TypeScript.",
+    "duration": "12 týdnů",
+    "level": "Středně pokročilí",
+    "status": "upcoming"
+  }
+]
