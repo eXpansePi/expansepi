@@ -44,18 +44,20 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-        <Link href={`/${currentLang}`} className="text-xl sm:text-2xl font-bold text-blue-600 hover:opacity-80 transition-opacity drop-shadow-sm">
-          eXpanse<span className="text-gray-900">Pi</span>
+        <Link href={`/${currentLang}`} className="text-xl sm:text-2xl font-bold hover:opacity-80 transition-opacity drop-shadow-sm">
+          <span className="text-gray-900">eXpanse</span><span className="text-blue-600">Pi</span>
         </Link>
         
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-6 lg:space-x-8 text-gray-800 font-medium">
+        <div className="hidden md:flex space-x-6 lg:space-x-8 text-gray-800">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`hover:text-blue-600 transition-colors font-semibold ${
-                activePage === link.href ? "text-blue-600" : ""
+              className={`transition-colors ${
+                activePage === link.href 
+                  ? "text-blue-600 font-bold" 
+                  : "font-normal hover:text-blue-600"
               }`}
             >
               {link.label}
@@ -133,8 +135,10 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
               key={link.href}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
-              className={`block py-2 text-gray-800 hover:text-blue-600 transition-colors font-semibold ${
-                activePage === link.href ? "text-blue-600" : ""
+              className={`block transition-colors ${
+                activePage === link.href 
+                  ? "text-blue-600 font-bold" 
+                  : "text-gray-800 font-normal hover:text-blue-600"
               }`}
             >
               {link.label}
