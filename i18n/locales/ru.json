@@ -104,6 +104,10 @@
     "phone": "Телефон",
     "address": "Юридический адрес",
     "addressValue": "Rybná 716/24, Staré Město, 110 00 Прага",
+    "ico": "ИНН",
+    "icoValue": "19145535",
+    "bankAccount": "Банковский счет",
+    "bankAccountValue": "3783363003/5500",
     "contactInfo": "Контактная информация",
     "form": {
       "title": "Напишите нам",

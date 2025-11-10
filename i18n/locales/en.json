@@ -104,6 +104,10 @@
     "phone": "Phone",
     "address": "Registered Office",
     "addressValue": "Rybná 716/24, Staré Město, 110 00 Prague",
+    "ico": "Company ID",
+    "icoValue": "19145535",
+    "bankAccount": "Bank Account",
+    "bankAccountValue": "3783363003/5500",
     "contactInfo": "Contact Information",
     "form": {
       "title": "Send us a message",
