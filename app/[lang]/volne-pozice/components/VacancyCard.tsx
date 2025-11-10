@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { Vacancy } from "@/types/vacancy"
+import { getDetailRoutePath } from "@/lib/routes"
+import { type Language } from "@/i18n/config"
 
 interface VacancyCardProps {
   vacancy: Vacancy
@@ -24,7 +26,7 @@ export default function VacancyCard({ vacancy, lang }: VacancyCardProps) {
       </div>
       <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 line-clamp-2 leading-relaxed">{vacancy.description}</p>
       <Link
-        href={`/${lang}/volne-pozice/${vacancy.slug}`}
+        href={getDetailRoutePath(lang as Language, 'vacancies', vacancy.slug)}
         className="text-sm sm:text-base text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-2"
       >
         {lang === 'cs' ? 'Více informací' : lang === 'en' ? 'More information' : 'Подробнее'} →

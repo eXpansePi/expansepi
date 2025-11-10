@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import Navigation from "../components/Navigation"
 import { getTranslations } from "@/i18n/index"
-import { isValidLanguage, defaultLanguage } from "@/i18n/config"
+import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import ContactForm from "./ContactForm"
+import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
 
 interface ContactPageProps {
   params: Promise<{ lang: string }>
@@ -10,10 +11,11 @@ interface ContactPageProps {
 
 export async function generateMetadata({ params }: ContactPageProps): Promise<Metadata> {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
-  const contactUrl = `${baseUrl}/${lang}/kontakt`
+  const contactUrl = `${baseUrl}${getRoutePath(lang, 'contact')}`
+  const allRoutes = getAllRoutePaths('contact')
   
   return {
     title: t.contact.title,
@@ -21,9 +23,9 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
     alternates: {
       canonical: contactUrl,
       languages: {
-        'cs': `${baseUrl}/cs/kontakt`,
-        'en': `${baseUrl}/en/kontakt`,
-        'ru': `${baseUrl}/ru/kontakt`
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`
       }
     },
     openGraph: {
@@ -39,12 +41,12 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
 
 export default async function ContactPage({ params }: ContactPageProps) {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Navigation activePage={`/${lang}/kontakt`} lang={lang} t={t} />
+      <Navigation activePage={getRoutePath(lang, 'contact')} lang={lang} t={t} />
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">{t.contact.title}</h1>

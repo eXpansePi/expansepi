@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { BlogPost } from "@/types/blog"
+import { getDetailRoutePath } from "@/lib/routes"
+import { type Language } from "@/i18n/config"
 
 interface BlogCardProps {
   post: BlogPost
@@ -19,7 +21,7 @@ export default function BlogCard({ post, lang }: BlogCardProps) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
         <span className="text-xs sm:text-sm text-gray-500">{post.author}</span>
         <Link
-          href={`/${lang}/blog/${post.slug}`}
+          href={getDetailRoutePath(lang as Language, 'blog', post.slug)}
           className="text-sm sm:text-base text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-2"
         >
           {lang === 'cs' ? 'Číst článek' : lang === 'en' ? 'Read article' : 'Читать статью'} →

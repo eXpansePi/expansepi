@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import Navigation from "../components/Navigation"
 import { getTranslations } from "@/i18n/index"
-import { isValidLanguage, defaultLanguage } from "@/i18n/config"
+import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getActiveCourses, getUpcomingCourses } from "@/data/courses"
 import { CourseCard } from "./components"
+import { getRoutePath, getAllRoutePaths, type RouteKey } from "@/lib/routes"
 
 interface CoursesPageProps {
   params: Promise<{ lang: string }>
@@ -11,10 +12,11 @@ interface CoursesPageProps {
 
 export async function generateMetadata({ params }: CoursesPageProps): Promise<Metadata> {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
-  const coursesUrl = `${baseUrl}/${lang}/kurzy`
+  const coursesUrl = `${baseUrl}${getRoutePath(lang, 'courses')}`
+  const allRoutes = getAllRoutePaths('courses')
   
   return {
     title: t.courses.title,
@@ -26,9 +28,9 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
     alternates: {
       canonical: coursesUrl,
       languages: {
-        'cs': `${baseUrl}/cs/kurzy`,
-        'en': `${baseUrl}/en/kurzy`,
-        'ru': `${baseUrl}/ru/kurzy`
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`
       }
     },
     openGraph: {
@@ -66,7 +68,7 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
 
 export default async function CoursesPage({ params }: CoursesPageProps) {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
 
   const activeCourses = getActiveCourses(lang)
@@ -74,7 +76,7 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Navigation activePage={`/${lang}/kurzy`} lang={lang} t={t} />
+      <Navigation activePage={getRoutePath(lang, 'courses')} lang={lang} t={t} />
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">{t.courses.title}</h1>

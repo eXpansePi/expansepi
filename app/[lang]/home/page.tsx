@@ -4,6 +4,7 @@ import Navigation from "../components/Navigation"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getActiveCourses } from "@/data/courses"
+import { getRoutePath, getDetailRoutePath, getAllRoutePaths } from "@/lib/routes"
 
 interface HomePageProps {
   params: Promise<{ lang: string }>
@@ -11,10 +12,11 @@ interface HomePageProps {
 
 export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
-  const homeUrl = `${baseUrl}/${lang}/home`
+  const homeUrl = `${baseUrl}${getRoutePath(lang, 'home')}`
+  const allRoutes = getAllRoutePaths('home')
   
   return {
     title: t.home.title,
@@ -22,9 +24,9 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
     alternates: {
       canonical: homeUrl,
       languages: {
-        'cs': `${baseUrl}/cs/home`,
-        'en': `${baseUrl}/en/home`,
-        'ru': `${baseUrl}/ru/home`
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`
       }
     },
     openGraph: {
@@ -40,7 +42,7 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
 
 export default async function HomePage({ params }: HomePageProps) {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const courses = getActiveCourses(lang).slice(0, 3)
 
@@ -91,7 +93,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Navigation activePage={`/${lang}/home`} lang={lang} t={t} />
+      <Navigation activePage={getRoutePath(lang, 'home')} lang={lang} t={t} />
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto w-full">
           <div className="text-center mb-8 sm:mb-12">
@@ -171,7 +173,7 @@ export default async function HomePage({ params }: HomePageProps) {
                       
                       {/* CTA Button */}
                       <Link
-                        href={`/${lang}/kurzy/${c.slug}`}
+                        href={getDetailRoutePath(lang, 'courses', c.slug)}
                         className="mt-auto block text-center px-4 py-2 text-xs sm:text-sm bg-gradient-to-r from-blue-600 to-sky-400 text-white rounded-lg hover:from-blue-700 hover:to-sky-500 font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
                       >
                         {t.common.moreInfo}
@@ -181,7 +183,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 </div>
                 <div className="text-center">
                   <Link
-                    href={`/${lang}/kurzy`}
+                    href={getRoutePath(lang, 'courses')}
                     className="inline-block px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-sky-400 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
                   >
                     {t.home.viewAll}
@@ -192,7 +194,7 @@ export default async function HomePage({ params }: HomePageProps) {
               <div className="text-center py-12">
                 <p className="text-gray-600 mb-6">{t.courses.preparing}</p>
                 <Link
-                  href={`/${lang}/kurzy`}
+                  href={getRoutePath(lang, 'courses')}
                   className="inline-block px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-sky-400 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
                 >
                   {t.home.viewAll}
@@ -218,13 +220,13 @@ export default async function HomePage({ params }: HomePageProps) {
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">{t.home.readyToStart}</h2>
             <div className="flex gap-2 sm:gap-3 justify-center flex-col sm:flex-row">
               <Link
-                href={`/${lang}/kontakt`}
+                href={getRoutePath(lang, 'contact')}
                 className="px-5 sm:px-6 py-2 text-sm bg-gradient-to-r from-blue-600 to-sky-400 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
               >
                 {t.home.contact}
               </Link>
               <Link
-                href={`/${lang}/kurzy`}
+                href={getRoutePath(lang, 'courses')}
                 className="px-5 sm:px-6 py-2 text-sm bg-white text-blue-600 rounded-lg border-2 border-blue-600 font-semibold hover:bg-blue-50 transition-colors"
               >
                 {t.home.courses}

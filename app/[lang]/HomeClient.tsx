@@ -6,6 +6,7 @@ import anime from "animejs/lib/anime.es.js"
 import Navigation from "./components/Navigation"
 import { getTranslations } from "@/i18n/index"
 import { type Language } from "@/i18n/config"
+import { getRoutePath } from "@/lib/routes"
 
 interface HomeClientProps {
   lang: Language
@@ -422,13 +423,13 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Link
-              href={`/${lang}/home`}
+              href={getRoutePath(lang, 'home')}
               className="cta-button opacity-0 px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-gradient-to-r from-blue-600 to-sky-400 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
             >
               {t.home.cta}
             </Link>
             <Link
-              href={`/${lang}/o-nas`}
+              href={getRoutePath(lang, 'about')}
               className="cta-button opacity-0 px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-white text-blue-600 font-semibold shadow-md border-2 border-blue-600 transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
             >
               {t.home.ctaSecondary}

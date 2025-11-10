@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import Navigation from "../../components/Navigation"
 import { getTranslations } from "@/i18n/index"
-import { isValidLanguage, defaultLanguage } from "@/i18n/config"
+import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getOpenVacancies, getVacancyBySlug } from "@/data/vacancies"
 import { getJobPostingSchema, getBreadcrumbSchema } from "@/lib/seo"
+import { getRoutePath, getDetailRoutePath, getAllDetailRoutePaths } from "@/lib/routes"
 
 interface VacancyDetailProps {
   params: Promise<{ lang: string; slug: string }>
@@ -20,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: VacancyDetailProps): Promise<Metadata> {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const vacancy = getVacancyBySlug(resolvedParams.slug)
 
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }: VacancyDetailProps): Promise<
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
-  const vacancyUrl = `${baseUrl}/${lang}/volne-pozice/${vacancy.slug}`
+  const vacancyUrl = `${baseUrl}${getDetailRoutePath(lang, 'vacancies', vacancy.slug)}`
+  const allRoutes = getAllDetailRoutePaths('vacancies', vacancy.slug)
 
   return {
     title: vacancy.title,
@@ -37,9 +39,9 @@ export async function generateMetadata({ params }: VacancyDetailProps): Promise<
     alternates: {
       canonical: vacancyUrl,
       languages: {
-        'cs': `${baseUrl}/cs/volne-pozice/${vacancy.slug}`,
-        'en': `${baseUrl}/en/volne-pozice/${vacancy.slug}`,
-        'ru': `${baseUrl}/ru/volne-pozice/${vacancy.slug}`
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`
       }
     },
     openGraph: {
@@ -69,29 +71,30 @@ export async function generateMetadata({ params }: VacancyDetailProps): Promise<
 
 export default async function VacancyDetail({ params }: VacancyDetailProps) {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const vacancy = getVacancyBySlug(resolvedParams.slug)
 
   if (!vacancy || vacancy.status !== 'open') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <Navigation activePage={`/${lang}/volne-pozice`} lang={lang} t={t} />
+        <Navigation activePage={getRoutePath(lang, 'vacancies')} lang={lang} t={t} />
         <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
           <div className="max-w-2xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">{t.common.notFound}</h1>
-            <a href={`/${lang}/volne-pozice`} className="text-blue-600 font-semibold hover:underline">{t.common.backToList}</a>
+            <a href={getRoutePath(lang, 'vacancies')} className="text-blue-600 font-semibold hover:underline">{t.common.backToList}</a>
           </div>
         </main>
       </div>
     )
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
   const jobSchema = getJobPostingSchema(vacancy, lang)
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: t.common.home, url: `https://expansepi.com/${lang}` },
-    { name: t.common.vacancies, url: `https://expansepi.com/${lang}/volne-pozice` },
-    { name: vacancy.title, url: `https://expansepi.com/${lang}/volne-pozice/${vacancy.slug}` },
+    { name: t.common.home, url: `${baseUrl}/${lang}` },
+    { name: t.common.vacancies, url: `${baseUrl}${getRoutePath(lang, 'vacancies')}` },
+    { name: vacancy.title, url: `${baseUrl}${getDetailRoutePath(lang, 'vacancies', vacancy.slug)}` },
   ])
 
   return (
@@ -104,7 +107,7 @@ export default async function VacancyDetail({ params }: VacancyDetailProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <Navigation activePage={`/${lang}/volne-pozice`} lang={lang} t={t} />
+      <Navigation activePage={getRoutePath(lang, 'vacancies')} lang={lang} t={t} />
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
         <article className="max-w-2xl mx-auto">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">{vacancy.title}</h1>
@@ -123,7 +126,7 @@ export default async function VacancyDetail({ params }: VacancyDetailProps) {
               <button className="w-full sm:w-auto bg-blue-600 text-white px-4 sm:px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-xs sm:text-sm">
                 {t.common.applyNow}
               </button>
-              <a href={`/${lang}/volne-pozice`} className="w-full sm:w-auto text-center sm:text-left text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center justify-center gap-2 text-xs sm:text-sm">
+              <a href={getRoutePath(lang, 'vacancies')} className="w-full sm:w-auto text-center sm:text-left text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center justify-center gap-2 text-xs sm:text-sm">
                 ← {t.common.backToList}
               </a>
             </div>

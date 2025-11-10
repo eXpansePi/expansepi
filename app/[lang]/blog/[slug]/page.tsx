@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import Navigation from "../../components/Navigation"
 import { getTranslations } from "@/i18n/index"
-import { isValidLanguage, defaultLanguage } from "@/i18n/config"
+import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getPublishedPosts, getPostBySlug } from "@/data/posts"
 import { getBlogPostingSchema, getBreadcrumbSchema } from "@/lib/seo"
+import { getRoutePath, getDetailRoutePath, getAllDetailRoutePaths } from "@/lib/routes"
 
 interface BlogDetailProps {
   params: Promise<{ lang: string; slug: string }>
@@ -20,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: BlogDetailProps): Promise<Metadata> {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const post = getPostBySlug(resolvedParams.slug)
 
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }: BlogDetailProps): Promise<Met
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
-  const postUrl = `${baseUrl}/${lang}/blog/${post.slug}`
+  const postUrl = `${baseUrl}${getDetailRoutePath(lang, 'blog', post.slug)}`
+  const allRoutes = getAllDetailRoutePaths('blog', post.slug)
 
   return {
     title: post.title,
@@ -37,9 +39,9 @@ export async function generateMetadata({ params }: BlogDetailProps): Promise<Met
     alternates: {
       canonical: postUrl,
       languages: {
-        'cs': `${baseUrl}/cs/blog/${post.slug}`,
-        'en': `${baseUrl}/en/blog/${post.slug}`,
-        'ru': `${baseUrl}/ru/blog/${post.slug}`
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`
       }
     },
     openGraph: {
@@ -72,29 +74,30 @@ export async function generateMetadata({ params }: BlogDetailProps): Promise<Met
 
 export default async function BlogDetail({ params }: BlogDetailProps) {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const post = getPostBySlug(resolvedParams.slug)
 
   if (!post || post.status !== 'published') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <Navigation activePage={`/${lang}/blog`} lang={lang} t={t} />
+        <Navigation activePage={getRoutePath(lang, 'blog')} lang={lang} t={t} />
         <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
           <div className="max-w-2xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">{t.common.notFound}</h1>
-            <a href={`/${lang}/blog`} className="text-blue-600 font-semibold hover:underline">{t.common.backToList}</a>
+            <a href={getRoutePath(lang, 'blog')} className="text-blue-600 font-semibold hover:underline">{t.common.backToList}</a>
           </div>
         </main>
       </div>
     )
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
   const blogSchema = getBlogPostingSchema(post, lang)
   const breadcrumbSchema = getBreadcrumbSchema([
-    { name: t.common.home, url: `https://expansepi.com/${lang}` },
-    { name: t.common.blog, url: `https://expansepi.com/${lang}/blog` },
-    { name: post.title, url: `https://expansepi.com/${lang}/blog/${post.slug}` },
+    { name: t.common.home, url: `${baseUrl}/${lang}` },
+    { name: t.common.blog, url: `${baseUrl}${getRoutePath(lang, 'blog')}` },
+    { name: post.title, url: `${baseUrl}${getDetailRoutePath(lang, 'blog', post.slug)}` },
   ])
 
   return (
@@ -107,7 +110,7 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <Navigation activePage={`/${lang}/blog`} lang={lang} t={t} />
+      <Navigation activePage={getRoutePath(lang, 'blog')} lang={lang} t={t} />
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
         <article className="max-w-2xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">{post.title}</h1>
@@ -123,7 +126,7 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
             )}
           </div>
           <div className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-gray-200">
-            <a href={`/${lang}/blog`} className="text-sm sm:text-base text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-2">
+            <a href={getRoutePath(lang, 'blog')} className="text-sm sm:text-base text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-2">
               ← {t.common.backToList}
             </a>
           </div>

@@ -5,6 +5,7 @@ import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import coursesData from "@/data/courses.json"
 import { getCourseSchema, getBreadcrumbSchema } from "@/lib/seo"
 import ExpandableSyllabus from "./components/ExpandableSyllabus"
+import { getRoutePath, getDetailRoutePath, getAllDetailRoutePaths } from "@/lib/routes"
 
 interface CourseDetailProps {
   params: Promise<{ lang: string; slug: string }>
@@ -68,7 +69,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: CourseDetailProps): Promise<Metadata> {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const courseData = getCourseData(resolvedParams.slug, lang)
   
   if (!courseData) {
@@ -77,7 +78,8 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
-  const courseUrl = `${baseUrl}/${lang}/kurzy/${resolvedParams.slug}`
+  const courseUrl = `${baseUrl}${getDetailRoutePath(lang, 'courses', resolvedParams.slug)}`
+  const allRoutes = getAllDetailRoutePaths('courses', resolvedParams.slug)
 
   return {
     title: courseData.title,
@@ -85,9 +87,9 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
     alternates: {
       canonical: courseUrl,
       languages: {
-        'cs': `${baseUrl}/cs/kurzy/${resolvedParams.slug}`,
-        'en': `${baseUrl}/en/kurzy/${resolvedParams.slug}`,
-        'ru': `${baseUrl}/ru/kurzy/${resolvedParams.slug}`
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`
       }
     },
     openGraph: {
@@ -117,18 +119,18 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
 
 export default async function CourseDetail({ params }: CourseDetailProps) {
   const resolvedParams = await params
-  const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
+  const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const courseData = getCourseData(resolvedParams.slug, lang)
 
   if (!courseData) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <Navigation activePage={`/${lang}/kurzy`} lang={lang} t={t} />
+        <Navigation activePage={getRoutePath(lang, 'courses')} lang={lang} t={t} />
         <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">{t.common.notFound}</h1>
-            <a href={`/${lang}/kurzy`} className="text-blue-600 font-semibold hover:underline">{t.common.backToList}</a>
+            <a href={getRoutePath(lang, 'courses')} className="text-blue-600 font-semibold hover:underline">{t.common.backToList}</a>
           </div>
         </main>
       </div>
@@ -136,11 +138,11 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
-  const courseUrl = `${baseUrl}/${lang}/kurzy/${resolvedParams.slug}`
+  const courseUrl = `${baseUrl}${getDetailRoutePath(lang, 'courses', resolvedParams.slug)}`
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Navigation activePage={`/${lang}/kurzy`} lang={lang} t={t} />
+      <Navigation activePage={getRoutePath(lang, 'courses')} lang={lang} t={t} />
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           {/* Course Header */}
@@ -267,7 +269,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
           </div>
 
           {/* Back Link */}
-          <a href={`/${lang}/kurzy`} className="inline-flex items-center gap-2 text-xs sm:text-sm text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+          <a href={getRoutePath(lang, 'courses')} className="inline-flex items-center gap-2 text-xs sm:text-sm text-blue-600 font-semibold hover:text-blue-700 transition-colors">
             ← {t.common.backToList}
           </a>
         </div>

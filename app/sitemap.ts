@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next'
-import { languages } from '../i18n/config'
+import { languages, type Language } from '../i18n/config'
 import { getAllCourses } from '../data/courses'
 import { getPublishedPosts } from '../data/posts'
 import { getOpenVacancies } from '../data/vacancies'
+import { getRoutePath, getDetailRoutePath } from '../lib/routes'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
@@ -17,37 +18,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/${lang}/home`,
+      url: `${baseUrl}${getRoutePath(lang as Language, 'home')}`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/${lang}/kurzy`,
+      url: `${baseUrl}${getRoutePath(lang as Language, 'courses')}`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/${lang}/o-nas`,
+      url: `${baseUrl}${getRoutePath(lang as Language, 'about')}`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/${lang}/blog`,
+      url: `${baseUrl}${getRoutePath(lang as Language, 'blog')}`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/${lang}/kontakt`,
+      url: `${baseUrl}${getRoutePath(lang as Language, 'contact')}`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/${lang}/volne-pozice`,
+      url: `${baseUrl}${getRoutePath(lang as Language, 'vacancies')}`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.6,
@@ -59,7 +60,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     getAllCourses(lang)
       .filter(c => c.status === 'active')
       .map(c => ({
-        url: `${baseUrl}/${lang}/kurzy/${c.slug}`,
+        url: `${baseUrl}${getDetailRoutePath(lang as Language, 'courses', c.slug)}`,
         lastModified: currentDate,
         changeFrequency: 'weekly',
         priority: 0.6,
@@ -69,7 +70,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Blog entries for all languages
   const blogEntries: MetadataRoute.Sitemap = languages.flatMap(lang =>
     getPublishedPosts().map(p => ({
-      url: `${baseUrl}/${lang}/blog/${p.slug}`,
+      url: `${baseUrl}${getDetailRoutePath(lang as Language, 'blog', p.slug)}`,
       lastModified: p.updated ? new Date(p.updated) : new Date(p.date),
       changeFrequency: 'monthly',
       priority: 0.5,
@@ -79,7 +80,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Vacancy entries for all languages
   const vacancyEntries: MetadataRoute.Sitemap = languages.flatMap(lang =>
     getOpenVacancies().map(v => ({
-      url: `${baseUrl}/${lang}/volne-pozice/${v.slug}`,
+      url: `${baseUrl}${getDetailRoutePath(lang as Language, 'vacancies', v.slug)}`,
       lastModified: v.updated ? new Date(v.updated) : new Date(v.postedAt),
       changeFrequency: 'weekly',
       priority: 0.5,

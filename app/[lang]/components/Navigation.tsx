@@ -1,7 +1,9 @@
 "use client"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { languages, langLabels, isValidLanguage } from "@/i18n/config"
+import { usePathname } from "next/navigation"
+import { languages, langLabels, isValidLanguage, type Language } from "@/i18n/config"
+import { getRoutePath, getPublicPath } from "@/lib/routes"
 
 interface NavigationProps {
   activePage?: string
@@ -13,15 +15,16 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
   const langMenuRef = useRef<HTMLDivElement>(null)
-  const currentLang = isValidLanguage(lang) ? lang : 'cs'
+  const pathname = usePathname()
+  const currentLang = (isValidLanguage(lang) ? lang : 'cs') as Language
 
   const navLinks = [
-    { href: `/${currentLang}/home`, label: t.common.home },
-    { href: `/${currentLang}/kurzy`, label: t.common.courses },
-    { href: `/${currentLang}/o-nas`, label: t.common.about },
-    { href: `/${currentLang}/kontakt`, label: t.common.contact },
-    { href: `/${currentLang}/volne-pozice`, label: t.common.vacancies },
-    { href: `/${currentLang}/blog`, label: t.common.blog },
+    { href: getRoutePath(currentLang, 'home'), label: t.common.home },
+    { href: getRoutePath(currentLang, 'courses'), label: t.common.courses },
+    { href: getRoutePath(currentLang, 'about'), label: t.common.about },
+    { href: getRoutePath(currentLang, 'contact'), label: t.common.contact },
+    { href: getRoutePath(currentLang, 'vacancies'), label: t.common.vacancies },
+    { href: getRoutePath(currentLang, 'blog'), label: t.common.blog },
   ]
 
   // Close language menu when clicking outside
@@ -78,9 +81,11 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
             {langMenuOpen && (
               <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[120px]">
                 {languages.map(l => {
-                  // Handle language switching - preserve current path
-                  const currentPath = activePage || `/${currentLang}`
-                  const newPath = currentPath.replace(`/${currentLang}`, `/${l}`)
+                  // Use actual pathname from Next.js router, fallback to activePage prop
+                  // Note: pathname may return internal route after rewrite, so we convert it
+                  const currentPath = pathname || activePage || `/${currentLang}`
+                  // Convert internal route to public route for target language
+                  const newPath = getPublicPath(currentPath, l as Language)
                   return (
                     <Link
                       key={l}

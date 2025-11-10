@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { Course } from "@/types/course"
 import { COURSE_STATUS_CONFIG, COURSE_LEVEL_CONFIG } from "@/lib/course-constants"
+import { getDetailRoutePath } from "@/lib/routes"
+import { type Language } from "@/i18n/config"
 
 interface CourseCardProps {
   course: Course
@@ -69,7 +71,7 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
       <p className="text-xs sm:text-sm text-gray-600 mb-3 leading-relaxed flex-grow">{course.description}</p>
       {course.status === 'active' ? (
         <Link
-          href={`/${lang}/kurzy/${course.slug}`}
+          href={getDetailRoutePath(lang as Language, 'courses', course.slug)}
           className="text-sm sm:text-base text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-2"
         >
           {lang === 'cs' ? 'Více informací' : lang === 'en' ? 'More information' : 'Подробнее'} →
