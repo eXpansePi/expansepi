@@ -41,7 +41,8 @@ export async function generateMetadata({ params }: BlogDetailProps): Promise<Met
       languages: {
         'cs': `${baseUrl}${allRoutes.cs}`,
         'en': `${baseUrl}${allRoutes.en}`,
-        'ru': `${baseUrl}${allRoutes.ru}`
+        'ru': `${baseUrl}${allRoutes.ru}`,
+        'x-default': `${baseUrl}${allRoutes.cs}`
       }
     },
     openGraph: {

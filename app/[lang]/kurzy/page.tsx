@@ -18,28 +18,37 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
   const coursesUrl = `${baseUrl}${getRoutePath(lang, 'courses')}`
   const allRoutes = getAllRoutePaths('courses')
   
+  // Enhanced SEO description
+  const seoDescription = lang === 'cs' 
+    ? 'IT kurzy plně hrazené Úřadem práce ČR. Rekvalifikační IT kurzy - Python, datová analýza, web development. Naučte se programovat s experty z Matfyzu UK a ČVUT.'
+    : lang === 'en'
+    ? 'IT courses fully funded by the Czech Labour Office. IT reskilling courses - Python, data analysis, web development. Learn programming with experts from Charles University and Czech Technical University.'
+    : 'IT курсы, полностью финансируемые Чешским центром занятости. Курсы переквалификации IT - Python, анализ данных, веб-разработка. Изучите программирование с экспертами из Карлова университета и Чешского технического университета.'
+
   return {
-    title: t.courses.title,
-    description: lang === 'cs' 
-      ? 'Prohlédněte si naše IT kurzy - Python, datová analýza, web development a další. Rekvalifikační kurzy s experty z Matfyzu UK a ČVUT.'
+    title: lang === 'cs' ? 'IT Kurzy eXpansePi - Rekvalifikační kurzy plně hrazené Úřadem práce' : t.courses.title,
+    description: seoDescription,
+    keywords: lang === 'cs'
+      ? ['rekvalifikační IT kurzy', 'Python kurz', 'datová analýza', 'web development', 'Úřad práce', 'IT vzdělávání', 'rekvalifikace IT']
       : lang === 'en'
-      ? 'Browse our IT courses - Python, data analysis, web development and more. Reskilling courses with experts from Charles University and Czech Technical University.'
-      : 'Просмотрите наши IT курсы - Python, анализ данных, веб-разработка и многое другое. Курсы переквалификации с экспертами из Карлова университета и Чешского технического университета.',
+      ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
+      : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
     alternates: {
       canonical: coursesUrl,
       languages: {
         'cs': `${baseUrl}${allRoutes.cs}`,
         'en': `${baseUrl}${allRoutes.en}`,
-        'ru': `${baseUrl}${allRoutes.ru}`
+        'ru': `${baseUrl}${allRoutes.ru}`,
+        'x-default': `${baseUrl}${allRoutes.cs}`
       }
     },
     openGraph: {
-      title: t.courses.title,
+      title: lang === 'cs' ? 'IT Kurzy eXpansePi' : t.courses.title,
       description: lang === 'cs' 
-        ? 'Prohlédněte si naše IT kurzy - Python, datová analýza, web development a další.'
+        ? 'Rekvalifikační IT kurzy plně hrazené Úřadem práce ČR. Naučte se Python, datovou analýzu, web development.'
         : lang === 'en'
-        ? 'Browse our IT courses - Python, data analysis, web development and more.'
-        : 'Просмотрите наши IT курсы - Python, анализ данных, веб-разработка и многое другое.',
+        ? 'IT reskilling courses fully funded by the Czech Labour Office. Learn Python, data analysis, web development.'
+        : 'Курсы переквалификации IT, полностью финансируемые Чешским центром занятости. Изучите Python, анализ данных, веб-разработку.',
       url: coursesUrl,
       siteName: 'eXpansePi',
       locale: lang === 'cs' ? 'cs_CZ' : lang === 'en' ? 'en_US' : 'ru_RU',
@@ -49,18 +58,14 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
           url: `${baseUrl}/og-image.jpg`,
           width: 1200,
           height: 630,
-          alt: t.courses.title,
+          alt: lang === 'cs' ? 'IT Kurzy eXpansePi' : t.courses.title,
         }
       ]
     },
     twitter: {
       card: 'summary_large_image',
-      title: t.courses.title,
-      description: lang === 'cs' 
-        ? 'Prohlédněte si naše IT kurzy - Python, datová analýza, web development a další.'
-        : lang === 'en'
-        ? 'Browse our IT courses - Python, data analysis, web development and more.'
-        : 'Просмотрите наши IT курсы - Python, анализ данных, веб-разработка и многое другое.',
+      title: lang === 'cs' ? 'IT Kurzy eXpansePi' : t.courses.title,
+      description: seoDescription,
       images: [`${baseUrl}/og-image.jpg`],
     }
   }

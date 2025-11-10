@@ -18,25 +18,53 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
   const homeUrl = `${baseUrl}${getRoutePath(lang, 'home')}`
   const allRoutes = getAllRoutePaths('home')
   
+  const seoDescription = lang === 'cs'
+    ? 'IT kurzy plně hrazené Úřadem práce ČR. Rekvalifikační IT kurzy - Python, datová analýza, web development. Naučte se programovat s experty z Matfyzu UK a ČVUT.'
+    : lang === 'en'
+    ? 'IT courses fully funded by the Czech Labour Office. IT reskilling courses - Python, data analysis, web development. Learn programming with experts from Charles University and Czech Technical University.'
+    : 'IT курсы, полностью финансируемые Чешским центром занятости. Курсы переквалификации IT - Python, анализ данных, веб-разработка. Изучите программирование с экспертами из Карлова университета и Чешского технического университета.'
+
   return {
-    title: t.home.title,
-    description: t.home.heroDescription,
+    title: lang === 'cs' ? 'IT Kurzy eXpansePi - Rekvalifikační kurzy plně hrazené Úřadem práce' : t.home.title,
+    description: seoDescription,
+    keywords: lang === 'cs'
+      ? ['rekvalifikační IT kurzy', 'Python kurz', 'datová analýza', 'web development', 'Úřad práce', 'IT vzdělávání']
+      : lang === 'en'
+      ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
+      : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
     alternates: {
       canonical: homeUrl,
       languages: {
         'cs': `${baseUrl}${allRoutes.cs}`,
         'en': `${baseUrl}${allRoutes.en}`,
-        'ru': `${baseUrl}${allRoutes.ru}`
+        'ru': `${baseUrl}${allRoutes.ru}`,
+        'x-default': `${baseUrl}${allRoutes.cs}`
       }
     },
     openGraph: {
-      title: t.home.title,
-      description: t.home.heroDescription,
+      title: lang === 'cs' ? 'IT Kurzy eXpansePi' : t.home.title,
+      description: lang === 'cs'
+        ? 'Rekvalifikační IT kurzy plně hrazené Úřadem práce ČR. Naučte se Python, datovou analýzu, web development.'
+        : seoDescription,
       url: homeUrl,
       siteName: 'eXpansePi',
       locale: lang === 'cs' ? 'cs_CZ' : lang === 'en' ? 'en_US' : 'ru_RU',
       type: 'website',
+      images: [
+        {
+          url: `${baseUrl}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: lang === 'cs' ? 'IT Kurzy eXpansePi' : t.home.title,
+        }
+      ]
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: lang === 'cs' ? 'IT Kurzy eXpansePi' : t.home.title,
+      description: seoDescription,
+      images: [`${baseUrl}/og-image.jpg`],
+    }
   }
 }
 

@@ -48,7 +48,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       languages: {
         'cs': 'https://expansepi.com/cs',
         'en': 'https://expansepi.com/en',
-        'ru': 'https://expansepi.com/ru'
+        'ru': 'https://expansepi.com/ru',
+        'x-default': 'https://expansepi.com/cs'
       }
     },
     openGraph: {

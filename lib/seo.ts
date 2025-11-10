@@ -126,8 +126,12 @@ export function getCourseSchema(
     slug: string
     level?: string
     duration?: string
+    accreditation?: string
+    certification?: string
+    funding?: string
   },
-  lang: string
+  lang: string,
+  courseUrl: string
 ): CourseSchema {
   const langMap: Record<string, string> = {
     cs: "cs-CZ",
@@ -149,7 +153,20 @@ export function getCourseSchema(
     educationalLevel: course.level || "Beginner",
     timeRequired: course.duration || "P8W", // ISO 8601 duration
     inLanguage: langMap[lang] || "cs-CZ",
-    url: `${baseUrl}/${lang}/kurzy/${course.slug}`,
+    url: courseUrl,
+    // Add additional properties for better SEO
+    ...(course.accreditation && {
+      educationalCredentialAwarded: course.certification || "Certificate",
+    }),
+    ...(course.funding && {
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "CZK",
+        availability: "https://schema.org/InStock",
+        description: course.funding,
+      },
+    }),
   }
 }
 

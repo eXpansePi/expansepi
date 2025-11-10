@@ -81,20 +81,37 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
   const courseUrl = `${baseUrl}${getDetailRoutePath(lang, 'courses', resolvedParams.slug)}`
   const allRoutes = getAllDetailRoutePaths('courses', resolvedParams.slug)
 
+  // Enhanced SEO description
+  const seoDescription = lang === 'cs'
+    ? `${courseData.description} ${courseData.funding ? courseData.funding + '.' : ''} Rekvalifikační IT kurzy plně hrazené Úřadem práce ČR.`
+    : lang === 'en'
+    ? `${courseData.description} ${courseData.funding ? courseData.funding + '.' : ''} IT reskilling courses fully funded by the Czech Labour Office.`
+    : `${courseData.description} ${courseData.funding ? courseData.funding + '.' : ''} IT курсы переквалификации, полностью финансируемые Чешским центром занятости.`
+
   return {
     title: courseData.title,
-    description: courseData.description,
+    description: seoDescription,
+    keywords: lang === 'cs' 
+      ? ['rekvalifikační IT kurzy', 'Python kurz', 'datová analýza', 'web development', 'Úřad práce', 'IT vzdělávání']
+      : lang === 'en'
+      ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
+      : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
     alternates: {
       canonical: courseUrl,
       languages: {
         'cs': `${baseUrl}${allRoutes.cs}`,
         'en': `${baseUrl}${allRoutes.en}`,
-        'ru': `${baseUrl}${allRoutes.ru}`
+        'ru': `${baseUrl}${allRoutes.ru}`,
+        'x-default': `${baseUrl}${allRoutes.cs}`
       }
     },
     openGraph: {
-      title: courseData.title,
-      description: courseData.description,
+      title: lang === 'cs' ? `IT Kurzy eXpansePi - ${courseData.title}` : courseData.title,
+      description: lang === 'cs' 
+        ? 'Rekvalifikační IT kurzy plně hrazené Úřadem práce ČR. Naučte se Python, datovou analýzu, web development.'
+        : lang === 'en'
+        ? 'IT reskilling courses fully funded by the Czech Labour Office. Learn Python, data analysis, web development.'
+        : 'Курсы переквалификации IT, полностью финансируемые Чешским центром занятости. Изучите Python, анализ данных, веб-разработку.',
       url: courseUrl,
       siteName: 'eXpansePi',
       locale: lang === 'cs' ? 'cs_CZ' : lang === 'en' ? 'en_US' : 'ru_RU',
@@ -111,7 +128,7 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
     twitter: {
       card: 'summary_large_image',
       title: courseData.title,
-      description: courseData.description,
+      description: seoDescription,
       images: [`${baseUrl}/og-image.jpg`],
     }
   }
@@ -140,8 +157,37 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
   const courseUrl = `${baseUrl}${getDetailRoutePath(lang, 'courses', resolvedParams.slug)}`
 
+  // Generate Course schema for structured data
+  const courseSchema = getCourseSchema(
+    {
+      title: courseData.title,
+      description: courseData.description,
+      slug: resolvedParams.slug,
+      level: courseData.level,
+      duration: courseData.duration,
+      accreditation: courseData.accreditation,
+      certification: courseData.certification,
+      funding: courseData.funding,
+    },
+    lang,
+    courseUrl
+  )
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: t.common.home, url: `${baseUrl}/${lang}` },
+    { name: t.common.courses, url: `${baseUrl}${getRoutePath(lang, 'courses')}` },
+    { name: courseData.title, url: courseUrl },
+  ])
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Navigation activePage={getRoutePath(lang, 'courses')} lang={lang} t={t} />
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
