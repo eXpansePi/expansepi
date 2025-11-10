@@ -1,0 +1,46 @@
+{
+  "id": "/",
+  "name": "eXpansePi - IT Education",
+  "short_name": "eXpansePi",
+  "description": "IT education platform for everyone",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "lang": "cs",
+  "dir": "ltr",
+  "categories": ["education", "technology"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/apple-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Courses",
+      "url": "/kurzy",
+      "icons": [{ "src": "/icon.svg", "type": "image/svg+xml", "sizes": "any" }]
+    },
+    {
+      "name": "About",
+      "url": "/o-nas",
+      "icons": [{ "src": "/icon.svg", "type": "image/svg+xml", "sizes": "any" }]
+    }
+  ]
+}
+

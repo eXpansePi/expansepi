@@ -8,7 +8,8 @@ export function proxy(request: NextRequest) {
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
-    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp)$/)
+    pathname === '/manifest.json' ||
+    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|json)$/)
   ) {
     return NextResponse.next()
   }
