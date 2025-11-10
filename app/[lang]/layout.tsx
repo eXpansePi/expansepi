@@ -43,6 +43,17 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       address: false,
       telephone: false,
     },
+    icons: {
+      icon: [
+        { url: '/icon.svg', type: 'image/svg+xml', sizes: 'any' },
+        { url: '/favicon.svg', type: 'image/svg+xml' },
+      ],
+      apple: [
+        { url: '/apple-icon.svg', type: 'image/svg+xml', sizes: '180x180' },
+        { url: '/icon.svg', type: 'image/svg+xml' },
+      ],
+      shortcut: '/icon.svg',
+    },
     alternates: {
       canonical: `https://expansepi.com/${lang}`,
       languages: {
