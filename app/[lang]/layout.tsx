@@ -45,6 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     },
     icons: {
       icon: [
+        { url: '/favicon.ico', sizes: 'any' },
         { url: '/icon.svg', type: 'image/svg+xml', sizes: 'any' },
         { url: '/favicon.svg', type: 'image/svg+xml' },
       ],
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
         { url: '/apple-icon.svg', type: 'image/svg+xml', sizes: '180x180' },
         { url: '/icon.svg', type: 'image/svg+xml' },
       ],
-      shortcut: '/icon.svg',
+      shortcut: '/favicon.ico',
     },
     alternates: {
       canonical: `https://expansepi.com/${lang}`,

@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://expansepi.com"),
   icons: {
     icon: [
+      { url: '/favicon.ico', sizes: 'any' },
       { url: '/icon.svg', type: 'image/svg+xml', sizes: 'any' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
     ],
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
       { url: '/apple-icon.svg', type: 'image/svg+xml', sizes: '180x180' },
       { url: '/icon.svg', type: 'image/svg+xml' },
     ],
-    shortcut: '/icon.svg',
+    shortcut: '/favicon.ico',
   },
   manifest: '/manifest.json',
 }
