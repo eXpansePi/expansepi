@@ -79,7 +79,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Vacancy entries for all languages
   const vacancyEntries: MetadataRoute.Sitemap = languages.flatMap(lang =>
-    getOpenVacancies().map(v => ({
+    getOpenVacancies(lang).map(v => ({
       url: `${baseUrl}${getDetailRoutePath(lang as Language, 'vacancies', v.slug)}`,
       lastModified: v.updated ? new Date(v.updated) : new Date(v.postedAt),
       changeFrequency: 'weekly',

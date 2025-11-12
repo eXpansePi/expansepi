@@ -24,7 +24,7 @@ export default async function VacanciesPage({ params }: VacanciesPageProps) {
   const resolvedParams = await params
   const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
-  const openVacancies = getOpenVacancies()
+  const openVacancies = getOpenVacancies(lang)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -42,7 +42,7 @@ export default async function VacanciesPage({ params }: VacanciesPageProps) {
             </div>
           ) : (
             <div className="text-center py-8 sm:py-10">
-              <p className="text-base text-gray-600">{t.vacancies.notOpen}</p>
+              <p className="text-base sm:text-lg text-gray-600">{t.vacancies.noVacancies}</p>
             </div>
           )}
         </div>

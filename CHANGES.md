@@ -158,46 +158,90 @@ Zahrnuje:
 
 ---
 
-## 👔 Volné pozice (dynamické)
+## 👔 Volné pozice (dynamické, multijazyčné)
 
 ### Co přibylo
 ```
 ✓ types/vacancy.ts              - Typy pro pozice
-✓ data/vacancies.json           - Zdrojová data (open/draft/closed)
-✓ data/vacancies.ts             - Data access layer (filtrování, validace, sort)
-✓ app/volne-pozice/components/  - VacancyCard komponenta
-✓ app/volne-pozice/[slug]/page.tsx - Detail pozice s JobPosting JSON-LD
-~ app/volne-pozice/page.tsx     - Refaktor na dynamická data + sekce draft/closed
-~ app/sitemap.ts                - Přidání otevřených pozic do sitemap
+✓ data/vacancies.json           - Multijazyčná zdrojová data (open/draft/closed)
+✓ data/vacancies.ts             - Data access layer s podporou jazyků
+✓ app/[lang]/volne-pozice/components/  - VacancyCard komponenta
+✓ app/[lang]/volne-pozice/[slug]/page.tsx - Detail pozice s JobPosting JSON-LD
+✓ app/[lang]/volne-pozice/page.tsx - Seznam otevřených pozic + zpráva "žádné pozice"
+✓ app/sitemap.ts                - Přidání otevřených pozic do sitemap (všechny jazyky)
+✓ i18n/locales/*.json          - Přidána zpráva "noVacancies" pro všechny jazyky
 ```
 
 ### Statusy
-- open: veřejně viditelná + detail
-- draft: připravujeme (list, bez detailu)
-- closed: ukončená (list, bez CTA)
+- **`open`**: Veřejně viditelná + detail stránka
+- **`draft`**: Připravujeme (neviditelná na veřejné stránce)
+- **`closed`**: Ukončená (neviditelná na veřejné stránce)
 
-### Vlastnosti pozice
-`employmentType`, `workMode`, `department`, `tags`, `validThrough`
+**Poznámka:** Aktuálně se zobrazují pouze pozice se statusem `"open"`. Pokud nejsou žádné otevřené pozice, zobrazí se lokalizovaná zpráva "Momentálně nehledáme nové kolegy...".
 
-### Jak přidat pozici
+### Multijazyčná struktura
+
+Pozice nyní podporují stejnou multijazyčnou strukturu jako kurzy:
+
 ```json
 {
   "slug": "junior-backend-developer",
-  "title": "Junior Backend Developer",
-  "description": "Pomoc s vývojem backend služeb v Pythonu.",
-  "location": "Remote",
+  "languages": {
+    "cs": {
+      "title": "Junior Backend Developer",
+      "description": "Pomoc s vývojem backend služeb v Pythonu.",
+      "details": "# Junior Backend Developer\n\nBudete pracovat na...",
+      "location": "Remote"
+    },
+    "en": {
+      "title": "Junior Backend Developer",
+      "description": "Help with backend services development in Python.",
+      "details": "# Junior Backend Developer\n\nYou will work on...",
+      "location": "Remote"
+    },
+    "ru": {
+      "title": "Junior Backend Developer",
+      "description": "Помощь в разработке backend сервисов на Python.",
+      "details": "# Junior Backend Developer\n\nВы будете работать над...",
+      "location": "Удаленно"
+    }
+  },
   "workMode": "remote",
   "employmentType": "FULL_TIME",
-  "status": "draft",
+  "status": "open",
   "postedAt": "2025-11-09"
 }
 ```
-→ Změň `status` na `open` pro zveřejnění.
+
+### Data access API
+
+Všechny funkce nyní podporují parametr `lang`:
+
+```ts
+getAllVacancies(lang?: string)              // Všechny pozice
+getOpenVacancies(lang?: string)              // Jen otevřené
+getDraftVacancies(lang?: string)           // Jen draft
+getClosedVacancies(lang?: string)          // Jen uzavřené
+getVacancyBySlug(slug: string, lang?: string)  // Konkrétní pozice
+getVacanciesByTag(tag: string, lang?: string)  // Podle tagu
+getRecentVacancies(limit?: number, lang?: string)  // Posledních N
+```
+
+### Vlastnosti pozice
+`employmentType`, `workMode`, `department`, `tags`, `validThrough`, `updated`
+
+### Zpráva "Žádné pozice"
+
+Když nejsou žádné otevřené pozice, zobrazí se lokalizovaná zpráva:
+- **Česky**: "Momentálně nehledáme nové kolegy. Aktuálně nemáme žádné volné pozice."
+- **Anglicky**: "We are not currently looking for anyone. No available positions at the moment."
+- **Rusky**: "В настоящее время мы не ищем сотрудников. На данный момент нет доступных вакансий."
 
 ### Další kroky (doporučení)
 - Přidat platové rozpětí (salaryMin, salaryMax, currency)
 - Přihláškový formulář + e-mail notifikace
 - Filtrování a tag cloud
 - Integrace s ATS nebo Google Jobs feed
+- Sekce pro draft/closed pozice (aktuálně se zobrazují jen open)
 
-**Poslední update:** Dynamické pozice hotové.
+**Poslední update:** Multijazyčné pozice hotové, struktura stejná jako u kurzů.

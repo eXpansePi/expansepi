@@ -91,6 +91,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       index: true,
       follow: true,
     },
+    manifest: '/manifest.webmanifest',
   }
 }
 

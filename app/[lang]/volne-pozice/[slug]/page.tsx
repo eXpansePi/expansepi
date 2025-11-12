@@ -11,19 +11,22 @@ interface VacancyDetailProps {
 }
 
 export function generateStaticParams() {
-  return getOpenVacancies().flatMap(vacancy =>
-    ['cs', 'en', 'ru'].map(lang => ({
-      lang,
-      slug: vacancy.slug
-    }))
-  )
+  // Generate params for all languages - we need to check each language separately
+  const allParams: { lang: string; slug: string }[] = []
+  for (const lang of ['cs', 'en', 'ru'] as const) {
+    const vacancies = getOpenVacancies(lang)
+    for (const vacancy of vacancies) {
+      allParams.push({ lang, slug: vacancy.slug })
+    }
+  }
+  return allParams
 }
 
 export async function generateMetadata({ params }: VacancyDetailProps): Promise<Metadata> {
   const resolvedParams = await params
   const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
-  const vacancy = getVacancyBySlug(resolvedParams.slug)
+  const vacancy = getVacancyBySlug(resolvedParams.slug, lang)
 
   if (!vacancy || vacancy.status !== 'open') {
     return { title: t.common.notFound }
@@ -74,7 +77,7 @@ export default async function VacancyDetail({ params }: VacancyDetailProps) {
   const resolvedParams = await params
   const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
-  const vacancy = getVacancyBySlug(resolvedParams.slug)
+  const vacancy = getVacancyBySlug(resolvedParams.slug, lang)
 
   if (!vacancy || vacancy.status !== 'open') {
     return (

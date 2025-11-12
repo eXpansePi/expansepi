@@ -48,11 +48,13 @@ Kurzy mají dva stavy:
 ```typescript
 import { isActiveCourse, getActiveCourses } from '@/data/courses'
 
-const course = getCourseBySlug('python-pro-zacatecniky')
+const course = getCourseBySlug('python-pro-zacatecniky', 'cs')
 if (isActiveCourse(course)) {
   // Zobraz plný obsah
 }
 ```
+
+**Poznámka:** Všechny funkce podporují parametr `lang` pro multijazyčnost (default: `'cs'`).
 
 ### 2. **Reusable Components**
 
@@ -73,23 +75,30 @@ import { CourseCard, CourseStatusBadge } from './components'
 
 ### 3. **Data Access Layer**
 
-Veškerý přístup k datům přes `data/courses.ts`:
+Veškerý přístup k datům přes `data/courses.ts` a `data/vacancies.ts`:
 
 ```typescript
 import { 
-  getAllCourses,        // Všechny kurzy
-  getActiveCourses,     // Jen aktivní
-  getUpcomingCourses,   // Jen připravované
-  getCourseBySlug,      // Jeden kurz podle slug
+  getAllCourses,        // Všechny kurzy (lang?: string)
+  getActiveCourses,     // Jen aktivní (lang?: string)
+  getUpcomingCourses,   // Jen připravované (lang?: string)
+  getCourseBySlug,      // Jeden kurz podle slug (slug, lang?: string)
   isActiveCourse        // Helper pro status check
 } from '@/data/courses'
+
+import {
+  getAllVacancies,     // Všechny pozice (lang?: string)
+  getOpenVacancies,    // Jen otevřené (lang?: string)
+  getVacancyBySlug,    // Jedna pozice podle slug (slug, lang?: string)
+} from '@/data/vacancies'
 ```
 
 **Funkce:**
 - Runtime validace dat (TypeScript type guards)
-- Caching (pouze jedno čtení JSON)
+- Caching per jazyk (pouze jedno čtení JSON na jazyk)
 - Centralizovaná error handling
 - JSDoc dokumentace
+- Multijazyčná podpora s automatickým fallbackem
 
 ### 4. **Type Safety**
 
@@ -118,6 +127,35 @@ export interface Course {
 
 ### Krok 1: Přidej do `data/courses.json`
 
+**Multijazyčná struktura (doporučeno):**
+```json
+{
+  "slug": "nova-technologie",
+  "languages": {
+    "cs": {
+      "title": "Nová technologie",
+      "description": "Popis kurzu...",
+      "duration": "6 týdnů",
+      "level": "Začátečníci"
+    },
+    "en": {
+      "title": "New Technology",
+      "description": "Course description...",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    },
+    "ru": {
+      "title": "Новая технология",
+      "description": "Описание курса...",
+      "duration": "6 недель",
+      "level": "Начальный"
+    }
+  },
+  "status": "upcoming"  // nebo "active"
+}
+```
+
+**Starší struktura (stále podporována):**
 ```json
 {
   "slug": "nova-technologie",
@@ -125,7 +163,7 @@ export interface Course {
   "description": "Popis kurzu...",
   "duration": "6 týdnů",
   "level": "Začátečníci",
-  "status": "upcoming"  // nebo "active"
+  "status": "upcoming"
 }
 ```
 
@@ -352,26 +390,62 @@ Možné přidat pole `featured: boolean` a vytvořit sekci doporučených: `getP
 
 ---
 
-## 👔 Volné pozice (dynamické)
+## 👔 Volné pozice (dynamické, multijazyčné)
 
 ### Struktura
 ```
-data/vacancies.json            # Zdroje pozic (open/draft/closed)
-data/vacancies.ts              # Data access layer
+data/vacancies.json            # Zdroje pozic (multijazyčné, open/draft/closed)
+data/vacancies.ts              # Data access layer s podporou jazyků
 types/vacancy.ts               # Typy (Vacancy, JobStatus, EmploymentType, WorkMode)
-app/volne-pozice/page.tsx      # Seznam pozic (sekce Open/Draft/Closed)
-app/volne-pozice/[slug]/page.tsx # Detail pozice
-app/volne-pozice/components/   # VacancyCard
+app/[lang]/volne-pozice/page.tsx      # Seznam pozic (jen open pozice)
+app/[lang]/volne-pozice/[slug]/page.tsx # Detail pozice
+app/[lang]/volne-pozice/components/   # VacancyCard
+```
+
+### Multijazyčná struktura JSON
+
+Pozice podporují stejnou multijazyčnou strukturu jako kurzy:
+
+```json
+{
+  "slug": "senior-python-developer",
+  "languages": {
+    "cs": {
+      "title": "Senior Python Developer",
+      "description": "Hledáme zkušeného Python vývojáře...",
+      "details": "# Senior Python Developer\n\nBudete pracovat na...",
+      "location": "Praha / Remote"
+    },
+    "en": {
+      "title": "Senior Python Developer",
+      "description": "We are looking for an experienced Python developer...",
+      "details": "# Senior Python Developer\n\nYou will work on...",
+      "location": "Prague / Remote"
+    },
+    "ru": {
+      "title": "Senior Python Developer",
+      "description": "Мы ищем опытного разработчика Python...",
+      "details": "# Senior Python Developer\n\nВы будете работать над...",
+      "location": "Прага / Удаленно"
+    }
+  },
+  "workMode": "hybrid",
+  "employmentType": "FULL_TIME",
+  "department": "Engineering",
+  "tags": ["python", "backend"],
+  "status": "open",
+  "postedAt": "2024-01-12"
+}
 ```
 
 ### Typ `Vacancy`
 ```ts
 export interface Vacancy {
   slug: string
-  title: string
-  description: string
-  details?: string
-  location: string
+  title: string                    // Lokalizovaný název
+  description: string              // Lokalizovaný popis
+  details?: string                 // Lokalizovaný detail (markdown)
+  location: string                 // Lokalizovaná lokace
   workMode: 'onsite' | 'remote' | 'hybrid'
   employmentType: 'FULL_TIME' | 'PART_TIME' | 'CONTRACT' | 'INTERN'
   department?: string
@@ -384,31 +458,69 @@ export interface Vacancy {
 ```
 
 ### Data access API
+
+Všechny funkce podporují parametr `lang` (default: `'cs'`):
+
 ```ts
-getAllVacancies()
-getOpenVacancies()
-getDraftVacancies()
-getClosedVacancies()
-getVacancyBySlug(slug)
-getVacanciesByTag(tag)
-getRecentVacancies(limit)
+getAllVacancies(lang?: string)              // Všechny pozice (seřazené podle data)
+getOpenVacancies(lang?: string)             // Jen otevřené pozice
+getDraftVacancies(lang?: string)            // Jen draft pozice
+getClosedVacancies(lang?: string)           // Jen uzavřené pozice
+getVacancyBySlug(slug: string, lang?: string)  // Konkrétní pozice
+getVacanciesByTag(tag: string, lang?: string)  // Filtrované podle tagu
+getRecentVacancies(limit?: number, lang?: string) // Posledních N otevřených
+```
+
+**Použití:**
+```tsx
+// V komponentě
+const lang = 'cs' // nebo 'en', 'ru'
+const openVacancies = getOpenVacancies(lang)
+const vacancy = getVacancyBySlug('senior-python-developer', lang)
 ```
 
 ### Přidání/úprava pozice
-1) Otevři `data/vacancies.json`
-2) Přidej/změň objekt a nastav `status: "open" | "draft" | "closed"`
-3) Otevřené pozice se zobrazí v seznamu a mají detailovou stránku
+
+1. Otevři `data/vacancies.json`
+2. Přidej nový objekt s multijazyčnou strukturou:
+   ```json
+   {
+     "slug": "nova-pozice",
+     "languages": {
+       "cs": { "title": "...", "description": "...", "location": "..." },
+       "en": { "title": "...", "description": "...", "location": "..." },
+       "ru": { "title": "...", "description": "...", "location": "..." }
+     },
+     "workMode": "remote",
+     "employmentType": "FULL_TIME",
+     "status": "open",
+     "postedAt": "2024-01-15"
+   }
+   ```
+3. Nastav `status: "open"` pro zveřejnění
+4. Otevřené pozice se automaticky zobrazí v seznamu a mají detailovou stránku
+
+### Zobrazení "Žádné pozice"
+
+Když nejsou žádné otevřené pozice (`status: "open"`), zobrazí se lokalizovaná zpráva:
+- **Česky**: "Momentálně nehledáme nové kolegy. Aktuálně nemáme žádné volné pozice."
+- **Anglicky**: "We are not currently looking for anyone. No available positions at the moment."
+- **Rusky**: "В настоящее время мы не ищем сотрудников. На данный момент нет доступных вакансий."
+
+Zpráva je definována v `i18n/locales/*.json` pod klíčem `vacancies.noVacancies`.
 
 ### SEO
 - Seznam: `ItemList` se seznamem `JobPosting`
 - Detail: `JobPosting` JSON-LD s title/description/datePosted/employmentType
-- Sitemap: zahrnuti pouze `open` pozic
+- Sitemap: zahrnuti pouze `open` pozic pro všechny jazyky
+- Hreflang: automaticky generováno pro všechny jazykové varianty
 
 ### Možná rozšíření
 - Přidat salary range, seniority level
 - Formulář přihlášky (e-mail/ATS integrace)
 - Filtrování podle lokality/typu/oddělení
 - RSS/Atom feed pro pozice
+- Sekce pro draft/closed pozice (aktuálně se zobrazují jen open)
 
 ---
 
