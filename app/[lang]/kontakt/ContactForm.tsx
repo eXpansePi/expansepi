@@ -79,7 +79,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
             onChange={handleChange}
             required
             placeholder={t.contact.form.namePlaceholder}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 placeholder:text-gray-400"
           />
         </div>
 
@@ -95,7 +95,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
             onChange={handleChange}
             required
             placeholder={t.contact.form.emailPlaceholder}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 placeholder:text-gray-400"
           />
         </div>
 
@@ -111,7 +111,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
             onChange={handleChange}
             required
             placeholder={t.contact.form.subjectPlaceholder}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 placeholder:text-gray-400"
           />
         </div>
 
@@ -127,7 +127,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
             required
             rows={6}
             placeholder={t.contact.form.messagePlaceholder}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none text-gray-900 placeholder:text-gray-400"
           />
         </div>
 
