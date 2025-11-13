@@ -7,15 +7,15 @@
       "role": "founder",
       "languages": {
         "cs": {
-          "description": "Zakladatel",
+          "description": "Zakladatel eXpansePi",
           "specializations": ["Python", "Umělá inteligence", "Java", "SpringBoot", "JavaScript", "C#", "Algoritmy a datové struktury"]
         },
         "en": {
-          "description": "Founder",
+          "description": "Founder of eXpansePi",
           "specializations": ["Python", "Artificial intelligence", "Java", "SpringBoot", "JavaScript", "C#", "Algorithms and data structures"]
         },
         "ru": {
-          "description": "Основатель компании",
+          "description": "Основатель компании eXpansePi",
           "specializations": ["Python", "Искусственный интеллект", "Java", "SpringBoot", "JavaScript", "C#", "Алгоритмы и структуры данных"]
         }
       }
@@ -30,15 +30,15 @@
       "languages": {
         "cs": {
           "specializations": ["Python", "Automatizace", "Django", "Robot Framework", "Algoritmy a datové struktury"],
-          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+          "description": "Absolvent obecné informatiky na MFF UK a zkušený vývojář v Pythonu. Zaměřuje se na automatizaci procesů, tvorbu datových nástrojů a efektivní backendová řešení. Má silné technické zázemí a cit pro čistý, udržitelný kód. Jako lektor programování má bohaté zkušenosti s vedením kurzů i individuálním mentoringem a dokáže naučit moderní vývojové principy jasně, strukturovaně a prakticky."
         },
         "en": {
           "specializations": ["Python", "Automation", "Django", "Robot Framework", "Algorithms and data structures"],
-          "description": "Experienced lecturer with practical experience in web application development."
+          "description": "A graduate of General Computer Science at the Faculty of Mathematics and Physics, Charles University, and an experienced Python developer. He focuses on process automation, building data tools, and creating efficient backend solutions. He has a strong technical foundation and an eye for clean, maintainable code. As a programming instructor, he has extensive experience with courses and individual mentoring, explaining modern development principles clearly, logically, and with practical relevance."
         },
         "ru": {
           "specializations": ["Python", "Автоматизация", "Django", "Robot Framework", "Алгоритмы и структуры данных"],
-          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+          "description": "Выпускник направления «Общая информатика» на факультете математики и физики Карлова университета и опытный разработчик на Python. Специализируется на автоматизации процессов, создании инструментов для работы с данными и эффективных backend-решений. Обладает сильной технической базой и вниманием к чистому, поддерживаемому коду. Как преподаватель программирования имеет большой опыт проведения курсов и индивидуального менторства, объясняя современные принципы разработки ясно, структурированно и с практическим уклоном."
         }
       }
     },
@@ -50,35 +50,35 @@
       "languages": {
         "cs": {
           "specializations": ["Golang", "Python", "C/C++", "Backend", "Algoritmy a datové struktury"],
-          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+          "description": "Seniorní vývojář v Rapid7, specializující se na antivirové a cloudové technologie s důrazem na vysoký výkon a robustní backendový vývoj. Absolvent obecné informatiky na MFF UK (Theoretical Computer Science). Ve své práci se zaměřuje na škálovatelnou architekturu, optimalizaci a spolehlivé zpracování dat. Jako lektor dokáže složité technické principy vysvětlit jasně a prakticky, s důrazem na reálné scénáře z profesionálního vývoje."
         },
         "en": {
           "specializations": ["Golang", "Python", "C/C++", "Backend", "Algorithms and data structures"],
-          "description": "Experienced lecturer with practical experience in web application development."
+          "description": "A senior developer at Rapid7, focusing on antivirus and cloud technologies with an emphasis on high performance and robust backend engineering. He holds a degree in General Computer Science (Theoretical Computer Science) from the Faculty of Mathematics and Physics, Charles University. His work centers on scalable architecture, performance optimization, and reliable data processing. As an instructor, he explains complex technical concepts clearly and practically, drawing on real-world experience from professional software development."
         },
         "ru": {
           "specializations": ["Golang", "Python", "C/C++", "Backend", "Алгоритмы и структуры данных"],
-          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+          "description": "Senior разработчик в Rapid7, специализирующийся на антивирусных и облачных технологиях с упором на высокую производительность и надёжную backend-разработку. Окончил направление теоретической информатики на факультете математики и физики Карлова университета. В работе сосредоточен на масштабируемой архитектуре, оптимизации производительности и надёжной обработке данных. Как преподаватель, он ясно и практично объясняет сложные технические принципы, опираясь на реальный опыт профессиональной разработки."
         }
       }
     },
     {
       "id": 3,
       "name": "Kostiantyn Agapov",
-      "title": "Senior Software Engineer, Rapid7",
+      "title": "Senior Software Engineer, Rapid7\n\n",
       "photo": "",
       "languages": {
         "cs": {
           "specializations": ["C/C++", "Operační systémy", "Architektura", "Algoritmy a datové struktury"],
-          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+          "description": "Seniorní vývojář v oblasti kybernetické bezpečnosti s více než 10 lety zkušeností. V Rapid7 pracuje na vývoji antivirových a endpoint bezpečnostních technologií. Dříve působil v Samsungu a několika startupech, z nichž jeden byl následně koupen společností Google. Specializuje se na nízkoúrovňový vývoj v C/C++, práci s endpoint systémy a tvorbu výkonných a spolehlivých bezpečnostních řešení."
         },
         "en": {
           "specializations": ["C/C++", "Operating systems", "Architecture", "Algorithms and data structures"],
-          "description": "Experienced lecturer with practical experience in web application development."
+          "description": "A senior cybersecurity developer with more than 10 years of experience. At Rapid7, he works on antivirus and endpoint security technologies. He previously worked at Samsung and several startups, one of which was later acquired by Google. He specializes in low-level development in C/C++, endpoint system engineering, and building high-performance, reliable security solutions."
         },
         "ru": {
           "specializations": ["C/C++", "Oперационные системы", "Архитектура", "Алгоритмы и структуры данных"],
-          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+          "description": "Senior разработчик в области кибербезопасности с более чем 10-летним опытом. В Rapid7 работает над антивирусными и endpoint-технологиями. Ранее работал в Samsung и нескольких стартапах, один из которых позже был приобретён компанией Google. Специализируется на низкоуровневой разработке на C/C++, работе с endpoint-системами и создании высокопроизводительных и надёжных решений в сфере безопасности."
         }
       }
     },
@@ -90,15 +90,15 @@
       "languages": {
         "cs": {
           "specializations": ["C#", "Unity", "ASP.NET", "Algoritmy a datové struktury"],
-          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+          "description": "Student game developmentu na Matfyzu a aktivní lektor programování. Zaměřuje se na vývoj her v C#, práci s grafikou a tvorbu webových aplikací v .NET ekosystému. Má cit pro vizuální stránku projektů a dokáže propojit technickou stránku vývoje s praktickým designem. Ve výuce klade důraz na pochopitelné vysvětlení principů a skutečné použití technologií v praxi."
         },
         "en": {
           "specializations": ["C#", "Unity", "ASP.NET", "Algorithms and data structures"],
-          "description": "Experienced lecturer with practical experience in web application development."
+          "description": "A game development student at the Faculty of Mathematics and Physics, Charles University, and an active programming instructor. He focuses on C# game development, graphics, and building web applications in the .NET ecosystem. He has a strong sense for visual design and combines the technical side of development with clear, functional interfaces. In his teaching, he emphasizes understandable explanations and practical use of technologies."
         },
         "ru": {
           "specializations": ["C#", "Unity", "ASP.NET", "Алгоритмы и структуры данных"],
-          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+          "description": "Студент разработки игр на факультете математики и физики Карлова университета и действующий преподаватель программирования. Специализируется на разработке игр на C#, работе с графикой и создании веб-приложений в экосистеме .NET. Обладает хорошим визуальным чувством и умеет сочетать техническую часть разработки с понятным и функциональным дизайном. В обучении делает упор на ясное объяснение принципов и практическое применение технологий."
         }
       }
     },
@@ -109,16 +109,36 @@
       "photo": "",
       "languages": {
         "cs": {
-          "specializations": ["Python", "Django", "Web Development", "Algoritmy a datové struktury"],
-          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+          "specializations": ["Python", "Django", "Web Development", "Power BI", "Algoritmy a datové struktury"],
+          "description": "Student teoretické informatiky na MFF UK a zkušený lektor programování. Má zkušenosti s webovým vývojem, datovou analýzou i IT consultingem. V Grant Thornton automatizuje firemní procesy v Pythonu a Power BI. Do výuky přenáší praktické znalosti moderních technologií, práce s daty a reálných firemních projektů."
         },
         "en": {
-          "specializations": ["Python", "Django", "Web Development", "Algorithms and data structures"],
-          "description": "Experienced lecturer with practical experience in web application development."
+          "specializations": ["Python", "Django", "Web Development", "Power BI", "Algorithms and data structures"],
+          "description": "A student of Theoretical Computer Science at the Faculty of Mathematics and Physics, Charles University, and an experienced programming instructor. He has experience in web development, data analysis, and IT consulting. At Grant Thornton, he automates business processes using Python and Power BI. He brings practical knowledge of modern technologies, data work, and real-world corporate projects into his teaching."
         },
         "ru": {
-          "specializations": ["Python", "Django", "Web Development", "Алгоритмы и структуры данных"],
-          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+          "specializations": ["Python", "Django", "Web Development", "Power BI", "Алгоритмы и структуры данных"],
+          "description": "Студент теоретической информатики на факультете математики и физики Карлова университета и опытный преподаватель программирования. Имеет опыт в веб-разработке, анализе данных и IT-консалтинге. В Grant Thornton автоматизирует бизнес-процессы с помощью Python и Power BI. В обучении использует практические знания современных технологий, работы с данными и реальных корпоративных проектов."
+        }
+      }
+    },
+    {
+      "id": 6,
+      "name": "Anton Voznia",
+      "title": "Senior Software Engineer, Azul Systems\nČVUT",
+      "photo": "",
+      "languages": {
+        "cs": {
+          "specializations": ["C/C++", "JavaScript", "Mobilní apikace", "Desktopové aplikace"],
+          "description": "Seniorní C/C++ vývojář, který aktuálně pracuje v Azul Systems na vývoji Java JDK. Dříve působil v Oracle, kde se věnoval vývoji operačního systému Solaris. Absolvoval ČVUT v oboru Software Engineering. Má rozsáhlé zkušenosti s nízkoúrovňovým programováním, optimalizací výkonu a vývojem mobilních i desktopových aplikací. Do výuky přináší praktické zkušenosti z reálných projektů a moderní postupy profesionálního softwarového inženýrství."
+        },
+        "en": {
+          "specializations": ["C/C++", "JavaScript", "Mobile Apps", "Desktop Apps"],
+          "description": "A senior C/C++ developer currently working at Azul Systems on the development of the Java JDK. Previously worked at Oracle, contributing to the Solaris operating system. He holds a degree in Software Engineering from CTU. He has extensive experience in low-level programming, performance optimization, and the development of mobile and desktop applications. His teaching is based on real-world engineering practice and modern software development techniques."
+        },
+        "ru": {
+          "specializations": ["C/C++", "JavaScript", "Мобильные приложения", "Настольные приложения"],
+          "description": "Старший разработчик C/C++, который сейчас работает в компании Azul Systems над разработкой Java JDK. Ранее работал в Oracle, где участвовал в разработке операционной системы Solaris. Окончил ЧВУТ по специальности «Software Engineering». Обладает большим опытом в низкоуровневом программировании, оптимизации производительности и разработке мобильных и настольных приложений. В обучении опирается на практический опыт реальных проектов и современные методы профессиональной разработки ПО."
         }
       }
     }
