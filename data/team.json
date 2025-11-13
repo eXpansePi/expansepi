@@ -1,0 +1,127 @@
+{
+  "teamMembers": [
+    {
+      "id": "example-founder",
+      "name": "Ali",
+      "title": "Zakladatel\nSoftware Engineer, Rapid7\nMFF UK",
+      "role": "founder",
+      "languages": {
+        "cs": {
+          "description": "Zakladatel",
+          "specializations": ["Python", "Umělá inteligence", "Java", "SpringBoot", "JavaScript", "C#", "Algoritmy a datové struktury"]
+        },
+        "en": {
+          "description": "Founder",
+          "specializations": ["Python", "Artificial intelligence", "Java", "SpringBoot", "JavaScript", "C#", "Algorithms and data structures"]
+        },
+        "ru": {
+          "description": "Основатель компании",
+          "specializations": ["Python", "Искусственный интеллект", "Java", "SpringBoot", "JavaScript", "C#", "Алгоритмы и структуры данных"]
+        }
+      }
+    }
+  ],
+  "lecturers": [
+    {
+      "id": 1,
+      "name": "Aleš Prokop",
+      "title": "Software Engineer, Rapid7\nMFF UK",
+      "photo": "",
+      "languages": {
+        "cs": {
+          "specializations": ["Python", "Automatizace", "Django", "Robot Framework", "Algoritmy a datové struktury"],
+          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+        },
+        "en": {
+          "specializations": ["Python", "Automation", "Django", "Robot Framework", "Algorithms and data structures"],
+          "description": "Experienced lecturer with practical experience in web application development."
+        },
+        "ru": {
+          "specializations": ["Python", "Автоматизация", "Django", "Robot Framework", "Алгоритмы и структуры данных"],
+          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "Eldar Urmanov",
+      "title": "Senior Software Engineer, Rapid7\nMFF UK",
+      "photo": "",
+      "languages": {
+        "cs": {
+          "specializations": ["Golang", "Python", "C/C++", "Backend", "Algoritmy a datové struktury"],
+          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+        },
+        "en": {
+          "specializations": ["Golang", "Python", "C/C++", "Backend", "Algorithms and data structures"],
+          "description": "Experienced lecturer with practical experience in web application development."
+        },
+        "ru": {
+          "specializations": ["Golang", "Python", "C/C++", "Backend", "Алгоритмы и структуры данных"],
+          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "name": "Kostiantyn Agapov",
+      "title": "Senior Software Engineer, Rapid7",
+      "photo": "",
+      "languages": {
+        "cs": {
+          "specializations": ["C/C++", "Operační systémy", "Architektura", "Algoritmy a datové struktury"],
+          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+        },
+        "en": {
+          "specializations": ["C/C++", "Operating systems", "Architecture", "Algorithms and data structures"],
+          "description": "Experienced lecturer with practical experience in web application development."
+        },
+        "ru": {
+          "specializations": ["C/C++", "Oперационные системы", "Архитектура", "Алгоритмы и структуры данных"],
+          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+        }
+      }
+    },
+    {
+      "id": 4,
+      "name": "Vít Dvořák",
+      "title": "Freelance Software Engineer\nMFF UK",
+      "photo": "",
+      "languages": {
+        "cs": {
+          "specializations": ["C#", "Unity", "ASP.NET", "Algoritmy a datové struktury"],
+          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+        },
+        "en": {
+          "specializations": ["C#", "Unity", "ASP.NET", "Algorithms and data structures"],
+          "description": "Experienced lecturer with practical experience in web application development."
+        },
+        "ru": {
+          "specializations": ["C#", "Unity", "ASP.NET", "Алгоритмы и структуры данных"],
+          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+        }
+      }
+    },
+    {
+      "id": 5,
+      "name": "Vlad Karpenko",
+      "title": "Software Engineer, Grant Thornton\nMFF UK",
+      "photo": "",
+      "languages": {
+        "cs": {
+          "specializations": ["Python", "Django", "Web Development", "Algoritmy a datové struktury"],
+          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+        },
+        "en": {
+          "specializations": ["Python", "Django", "Web Development", "Algorithms and data structures"],
+          "description": "Experienced lecturer with practical experience in web application development."
+        },
+        "ru": {
+          "specializations": ["Python", "Django", "Web Development", "Алгоритмы и структуры данных"],
+          "description": "Опытный лектор с практическим опытом разработки веб-приложений."
+        }
+      }
+    }
+  ]
+}
+

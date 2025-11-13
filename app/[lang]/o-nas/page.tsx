@@ -4,7 +4,8 @@ import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
 import { getAllTeamMembers, getAllLecturers } from "@/data/team"
-import { TeamMemberCard, LecturerCard } from "./components"
+import TeamMemberCard from "./components/TeamMemberCard"
+import LecturerCard from "./components/LecturerCard"
 
 interface AboutPageProps {
   params: Promise<{ lang: string }>
