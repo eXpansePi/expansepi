@@ -96,7 +96,10 @@
   },
   "about": {
     "title": "O nás",
-    "description": "Poznáte náš tým a vizi"
+    "description": "Poznáte náš tým a vizi",
+    "teamTitle": "Náš tým",
+    "lecturersTitle": "Lektoři",
+    "lecturerDefinition": "Naši lektoři jsou zkušení odborníci s praktickými zkušenostmi v oblasti IT."
   },
   "contact": {
     "title": "Kontakt",

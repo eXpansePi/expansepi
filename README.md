@@ -51,6 +51,7 @@ expansepi/
 │   ├── courses.json        # Course data (multilingual)
 │   ├── posts.json          # Blog posts
 │   ├── vacancies.json      # Job vacancies (multilingual)
+│   ├── team.json           # Team members and lecturers
 │   └── *.ts                # Data access layers
 ├── types/                   # TypeScript type definitions
 ├── lib/                     # Utility functions
@@ -92,6 +93,7 @@ Content is structured in JSON files with language-specific data:
 - **Courses**: Add/edit in `data/courses.json`
 - **Blog Posts**: Add/edit in `data/posts.json`
 - **Vacancies**: Add/edit in `data/vacancies.json`
+- **Team Members & Lecturers**: Add/edit in `data/team.json`
 
 All data is validated at runtime with TypeScript type guards.
 
@@ -117,6 +119,7 @@ See [DEVELOPMENT.md](./DEVELOPMENT.md) for detailed instructions on:
 - Adding new courses
 - Publishing blog posts
 - Managing job vacancies
+- Adding team members and lecturers
 - Customizing styles
 
 ## 📖 Learn More

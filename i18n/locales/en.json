@@ -96,7 +96,10 @@
   },
   "about": {
     "title": "About",
-    "description": "Meet our team and vision"
+    "description": "Meet our team and vision",
+    "teamTitle": "Our Team",
+    "lecturersTitle": "Lecturers",
+    "lecturerDefinition": "Our lecturers are experienced professionals with practical experience in IT."
   },
   "contact": {
     "title": "Contact",

@@ -526,5 +526,258 @@ Zpráva je definována v `i18n/locales/*.json` pod klíčem `vacancies.noVacanci
 
 ---
 
+## 👥 Tým a lektoři (O nás stránka)
+
+### Struktura
+```
+data/team.json              # Zdroje týmových členů a lektorů
+data/team.ts                # Data access layer
+types/team.ts               # Typy (TeamMember, Lecturer, TeamMemberRole)
+app/[lang]/o-nas/page.tsx   # O nás stránka s týmem a lektory
+app/[lang]/o-nas/components/ # TeamMemberCard, LecturerCard
+```
+
+### Typy
+
+**TeamMember:**
+```ts
+export interface TeamMember {
+  id: string                // Unikátní identifikátor
+  name: string              // Jméno
+  title: string             // Pozice/titul
+  description?: string       // Volitelný popis
+  specializations?: string[] // Volitelné specializace (pole řetězců)
+  photo?: string            // Volitelná URL fotky
+  role: 'founder' | 'hr' | 'other'  // Role v organizaci
+}
+```
+
+**Lecturer:**
+```ts
+export interface Lecturer {
+  id: string                // Unikátní identifikátor
+  name: string              // Jméno
+  title: string             // Titul/pozice
+  description: string      // Popis (povinný)
+  specializations?: string[] // Volitelné specializace (pole řetězců)
+  photo?: string            // Volitelná URL fotky
+}
+```
+
+### Struktura JSON
+
+Otevři `data/team.json` a přidej týmové členy a lektory. Podporuje multijazyčné popisy (cs, en, ru):
+
+**Multijazyčná struktura (doporučeno):**
+```json
+{
+  "teamMembers": [
+    {
+      "id": "jan-novak",
+      "name": "Jan Novák",
+      "title": "Zakladatel",
+      "role": "founder",
+      "photo": "/images/team/jan-novak.jpg",
+      "languages": {
+        "cs": {
+          "description": "Zakladatel společnosti s více než 10 lety zkušeností v IT."
+        },
+        "en": {
+          "description": "Founder of the company with over 10 years of experience in IT."
+        },
+        "ru": {
+          "description": "Основатель компании с более чем 10-летним опытом в IT."
+        }
+      }
+    },
+    {
+      "id": "marie-svobodova",
+      "name": "Marie Svobodová",
+      "title": "HR Manager",
+      "role": "hr",
+      "languages": {
+        "cs": {
+          "description": "Specialistka na nábor a rozvoj talentů."
+        },
+        "en": {
+          "description": "Specialist in recruitment and talent development."
+        },
+        "ru": {
+          "description": "Специалист по найму и развитию талантов."
+        }
+      }
+    }
+  ],
+  "lecturers": [
+    {
+      "id": "petr-svoboda",
+      "name": "Petr Svoboda",
+      "title": "Senior Python Developer",
+      "photo": "/images/lecturers/petr-svoboda.jpg",
+      "languages": {
+        "cs": {
+          "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací. Absolvent Matfyzu UK.",
+          "specializations": ["Python", "Django", "Web Development"]
+        },
+        "en": {
+          "description": "Experienced lecturer with practical experience in web application development. Graduate of Charles University.",
+          "specializations": ["Python", "Django", "Web Development"]
+        },
+        "ru": {
+          "description": "Опытный лектор с практическим опытом разработки веб-приложений. Выпускник Карлова университета.",
+          "specializations": ["Python", "Django", "Веб-разработка"]
+        }
+      }
+    }
+  ]
+}
+```
+
+**Starší struktura (stále podporována):**
+```json
+{
+  "teamMembers": [
+    {
+      "id": "jan-novak",
+      "name": "Jan Novák",
+      "title": "Zakladatel",
+      "description": "Zakladatel společnosti s více než 10 lety zkušeností v IT.",
+      "role": "founder"
+    }
+  ],
+  "lecturers": [
+    {
+      "id": "petr-svoboda",
+      "name": "Petr Svoboda",
+      "title": "Senior Python Developer",
+      "description": "Zkušený lektor s praktickými zkušenostmi z vývoje webových aplikací."
+    }
+  ]
+}
+```
+
+### Přidání nového týmového člena
+
+1. Otevři `data/team.json`
+2. Přidej nový objekt do pole `teamMembers` s multijazyčnou strukturou:
+   ```json
+   {
+     "id": "unikatni-id",
+     "name": "Jméno Příjmení",
+     "title": "Pozice",
+     "role": "founder",  // nebo "hr", "other"
+     "photo": "/images/team/foto.jpg",  // volitelné
+     "languages": {
+       "cs": {
+         "description": "Popis v češtině (volitelné)",
+         "specializations": ["Specializace 1", "Specializace 2"]
+       },
+       "en": {
+         "description": "Description in English (optional)",
+         "specializations": ["Specialization 1", "Specialization 2"]
+       },
+       "ru": {
+         "description": "Описание на русском (необязательно)",
+         "specializations": ["Специализация 1", "Специализация 2"]
+       }
+     }
+     // Nebo jednoduše mimo languages objekt:
+     // "specializations": ["Python", "Django", "Web Development"]
+   }
+   ```
+3. Týmový člen se automaticky zobrazí v sekci "Náš tým" na stránce O nás s popisem v aktuálním jazyce
+
+### Přidání nového lektora
+
+1. Otevři `data/team.json`
+2. Přidej nový objekt do pole `lecturers` s multijazyčnou strukturou:
+   ```json
+   {
+     "id": "unikatni-id",
+     "name": "Jméno Příjmení",
+     "title": "Titul/Pozice",
+     "photo": "/images/lecturers/foto.jpg",  // volitelné
+     "languages": {
+       "cs": {
+         "description": "Popis lektora v češtině (povinný)",
+         "specializations": ["Python", "Django", "Web Development"]
+       },
+       "en": {
+         "description": "Lecturer description in English (required)",
+         "specializations": ["Python", "Django", "Web Development"]
+       },
+       "ru": {
+         "description": "Описание лектора на русском (обязательно)",
+         "specializations": ["Python", "Django", "Веб-разработка"]
+       }
+     }
+     // Nebo jednoduše mimo languages objekt:
+     // "specializations": ["Python", "Django", "Web Development"]
+   }
+   ```
+3. Lektor se automaticky zobrazí v sekci "Lektoři" na stránce O nás s popisem v aktuálním jazyce
+
+### Data access API
+
+Všechny funkce podporují parametr `lang` (default: `'cs'`) pro multijazyčné popisy:
+
+```ts
+import {
+  getAllTeamMembers,           // Všechny týmové členy (lang?: string)
+  getAllLecturers,              // Všechny lektory (lang?: string)
+  getTeamMembersByRole         // Filtrované podle role (role, lang?: string)
+} from '@/data/team'
+
+// Použití
+const lang = 'cs' // nebo 'en', 'ru'
+const allMembers = getAllTeamMembers(lang)
+const founders = getTeamMembersByRole('founder', lang)
+const lecturers = getAllLecturers(lang)
+```
+
+### Zobrazení na stránce
+
+Stránka `/o-nas` automaticky zobrazuje:
+- **Sekce "Náš tým"** - všechny týmové členy v grid layoutu
+- **Sekce "Lektoři"** - definici lektora + všechny lektory v grid layoutu
+
+Každá karta má:
+- Modrý glow efekt (stejný jako u kurzů)
+- Fotku (pokud je poskytnuta, jinak se nezobrazí žádný placeholder)
+- Jméno a titul (podporuje víceřádkový text pomocí `\n`)
+- Specializace jako modré tagy/badges (pokud jsou poskytnuty)
+- Popis
+
+### Lokalizace
+
+Texty sekcí jsou lokalizované v `i18n/locales/*.json`:
+```json
+{
+  "about": {
+    "title": "O nás",
+    "description": "Poznáte náš tým a vizi",
+    "teamTitle": "Náš tým",
+    "lecturersTitle": "Lektoři",
+    "lecturerDefinition": "Naši lektoři jsou zkušení odborníci s praktickými zkušenostmi v oblasti IT."
+  }
+}
+```
+
+### Poznámky
+
+- **Multijazyčnost**: Popisy podporují tři jazyky (cs, en, ru) pomocí `languages` objektu. Starší struktura s přímým `description` je stále podporována pro zpětnou kompatibilitu.
+- **Specializace**: Pole `specializations` může být:
+  - V `languages` objektu (multijazyčné) - každý jazyk má své specializace
+  - Přímo na objektu (jednoduché) - stejné specializace pro všechny jazyky
+  - Zobrazují se jako modré tagy/badges pod titulem
+- **Fotky**: Pokud není poskytnuta `photo` nebo je prázdný řetězec, karta se zobrazí bez obrázku (žádný placeholder)
+- **Role**: Týmoví členi mohou mít role: `founder`, `hr`, nebo `other`
+- **Popis**: U lektorů je popis povinný (v alespoň jednom jazyce), u týmových členů volitelný
+- **Grid layout**: Automaticky se přizpůsobí počtu členů (1-3 sloupce podle velikosti obrazovky)
+- **Fallback**: Pokud není k dispozici popis v požadovaném jazyce, systém automaticky použije cs → en → ru → první dostupný jazyk
+- **ID**: Podporuje jak string, tak number ID (automaticky se převede na string)
+
+---
+
 **Autor:** eXpansePi Team  
 **Poslední aktualizace:** Listopad 2025
