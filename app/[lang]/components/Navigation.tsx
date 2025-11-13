@@ -14,35 +14,48 @@ interface NavigationProps {
 export default function Navigation({ activePage, lang, t }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
+  const [aboutMenuOpen, setAboutMenuOpen] = useState(false)
   const langMenuRef = useRef<HTMLDivElement>(null)
+  const aboutMenuRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const currentLang = (isValidLanguage(lang) ? lang : 'cs') as Language
 
   const navLinks = [
     { href: getRoutePath(currentLang, 'home'), label: t.common.home },
     { href: getRoutePath(currentLang, 'courses'), label: t.common.courses },
-    { href: getRoutePath(currentLang, 'about'), label: t.common.about },
+    { 
+      href: getRoutePath(currentLang, 'about'), 
+      label: t.common.about,
+      hasDropdown: true,
+      dropdownItems: [
+        { href: getRoutePath(currentLang, 'about'), label: (t.about as any)?.whoWeAre || (currentLang === 'cs' ? 'Kdo jsme' : currentLang === 'en' ? 'Who We Are' : 'Кто мы') },
+        { href: `${getRoutePath(currentLang, 'about')}#team`, label: currentLang === 'cs' ? 'Náš tým a lektoři' : currentLang === 'en' ? 'Our Team and Lecturers' : 'Наша команда и лекторы' },
+      ]
+    },
     { href: getRoutePath(currentLang, 'contact'), label: t.common.contact },
     { href: getRoutePath(currentLang, 'vacancies'), label: t.common.vacancies },
     { href: getRoutePath(currentLang, 'blog'), label: t.common.blog },
   ]
 
-  // Close language menu when clicking outside
+  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
         setLangMenuOpen(false)
       }
+      if (aboutMenuRef.current && !aboutMenuRef.current.contains(event.target as Node)) {
+        setAboutMenuOpen(false)
+      }
     }
 
-    if (langMenuOpen) {
+    if (langMenuOpen || aboutMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [langMenuOpen])
+  }, [langMenuOpen, aboutMenuOpen])
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
@@ -53,19 +66,61 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6 lg:space-x-8 text-gray-800">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`transition-colors ${
-                activePage === link.href 
-                  ? "text-blue-600 font-bold" 
-                  : "font-normal hover:text-blue-600"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            if ((link as any).hasDropdown) {
+              return (
+                <div key={link.href} className="relative" ref={aboutMenuRef}>
+                  <button
+                    onClick={() => setAboutMenuOpen(!aboutMenuOpen)}
+                    className={`transition-colors ${
+                      activePage === link.href 
+                        ? "text-blue-600 font-bold" 
+                        : "font-normal hover:text-blue-600"
+                    } flex items-center gap-1`}
+                  >
+                    {link.label}
+                    <svg
+                      className={`w-4 h-4 transition-transform duration-200 ${aboutMenuOpen ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {aboutMenuOpen && (
+                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[200px]">
+                      {(link as any).dropdownItems.map((item: any) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setAboutMenuOpen(false)}
+                          className={`block px-4 py-2 text-sm font-semibold hover:bg-blue-50 transition-colors ${
+                            activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`transition-colors ${
+                  activePage === link.href 
+                    ? "text-blue-600 font-bold" 
+                    : "font-normal hover:text-blue-600"
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </div>
 
         {/* Language Switcher + Mobile Menu */}
@@ -135,20 +190,65 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
         }`}
       >
         <div className="px-4 py-4 space-y-3 bg-white/98 backdrop-blur-md border-t border-gray-200 shadow-lg">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`block transition-colors ${
-                activePage === link.href 
-                  ? "text-blue-600 font-bold" 
-                  : "text-gray-800 font-normal hover:text-blue-600"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            if ((link as any).hasDropdown) {
+              return (
+                <div key={link.href}>
+                  <button
+                    onClick={() => setAboutMenuOpen(!aboutMenuOpen)}
+                    className={`w-full text-left transition-colors ${
+                      activePage === link.href 
+                        ? "text-blue-600 font-bold" 
+                        : "text-gray-800 font-normal hover:text-blue-600"
+                    } flex items-center justify-between`}
+                  >
+                    {link.label}
+                    <svg
+                      className={`w-4 h-4 transition-transform duration-200 ${aboutMenuOpen ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {aboutMenuOpen && (
+                    <div className="pl-4 mt-2 space-y-2">
+                      {(link as any).dropdownItems.map((item: any) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => {
+                            setAboutMenuOpen(false)
+                            setMobileMenuOpen(false)
+                          }}
+                          className={`block text-sm transition-colors ${
+                            activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-700 hover:text-blue-600'
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block transition-colors ${
+                  activePage === link.href 
+                    ? "text-blue-600 font-bold" 
+                    : "text-gray-800 font-normal hover:text-blue-600"
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </div>
       </div>
     </nav>

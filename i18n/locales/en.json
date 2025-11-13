@@ -97,6 +97,18 @@
   "about": {
     "title": "About",
     "description": "Meet our team and vision",
+    "whoWeAre": "Who We Are",
+    "content": [
+      "**We went through MFF, CTU and years of industry practice so YOU don't have to.**",
+      "We are a team of developers who turned complex knowledge into courses designed for complete beginners. Our teaching is clear, practical, and step-by-step, without unnecessary academic overload.",
+      "Our courses make sense even for people who have never programmed before. We use real examples, explain everything simply, and teach only **the essential foundations** you truly need to start in IT.",
+      "Our instructors have experience in cybersecurity, cloud systems, backend engineering, and application development, yet we teach in a simple and approachable way. We show you **the same principles we use every day**, without stress and without academic pain."
+    ],
+    "goalTitle": "Our Goal",
+    "goalContent": [
+      "By the end of our courses, you will program **confidently** and **independently**.",
+      "Starting is the hardest part. We'll handle the rest together."
+    ],
     "teamTitle": "Our Team",
     "lecturersTitle": "Lecturers",
     "lecturerDefinition": "Our lecturers are experienced professionals with practical experience in IT."

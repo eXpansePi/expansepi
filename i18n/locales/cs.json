@@ -97,6 +97,18 @@
   "about": {
     "title": "O nás",
     "description": "Poznáte náš tým a vizi",
+    "whoWeAre": "Kdo jsme",
+    "content": [
+      "**Prošli jsme si Matfyzem, ČVUT a roky praxe,\nabyste VY nemuseli.**",
+      "Jsme tým vývojářů, kteří složité věci převedli do kurzů, které zvládne i úplný začátečník. Učíme srozumitelně, prakticky a krok za krokem, bez akademických zbytečností.",
+      "Naše kurzy dávají smysl i lidem, kteří nikdy neprogramovali. Využíváme reálné příklady, vysvětlujeme lidsky a učíme jen **to nejdůležitější**, co budete v IT skutečně potřebovat.",
+      "Naši lektoři mají praxi v kyberbezpečnosti, cloudu, backendu i vývoji aplikací, ale ve výuce mluví jednoduše a přístupně. Naučíme vás **principy, které sami používáme každý den**, bez stresu a bez matfyzácké bolesti učení."
+    ],
+    "goalTitle": "Náš cíl",
+    "goalContent": [
+      "Po absolvování budete programovat **sebevědomě** a **samostatně**.",
+      "Začít je nejtěžší. Zbytek projdeme spolu."
+    ],
     "teamTitle": "Náš tým",
     "lecturersTitle": "Lektoři",
     "lecturerDefinition": "Naši lektoři jsou zkušení odborníci s praktickými zkušenostmi v oblasti IT."
