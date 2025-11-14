@@ -32,7 +32,7 @@ export default function TeamMemberCard({ member }: TeamMemberCardProps) {
         </div>
       )}
       {member.description && (
-        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{member.description}</p>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{member.description}</p>
       )}
     </article>
   )

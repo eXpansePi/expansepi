@@ -31,7 +31,7 @@ export default function LecturerCard({ lecturer }: LecturerCardProps) {
           ))}
         </div>
       )}
-      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{lecturer.description}</p>
+      <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{lecturer.description}</p>
     </article>
   )
 }

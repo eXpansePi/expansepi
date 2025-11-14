@@ -5,6 +5,7 @@ import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getActiveCourses } from "@/data/courses"
 import { getRoutePath, getDetailRoutePath, getAllRoutePaths } from "@/lib/routes"
+import SalaryShowcase from "./components/SalaryShowcase"
 
 interface HomePageProps {
   params: Promise<{ lang: string }>
@@ -132,6 +133,9 @@ export default async function HomePage({ params }: HomePageProps) {
               {t.home.heroDescription}
             </p>
           </div>
+
+          {/* Salary Showcase */}
+          <SalaryShowcase lang={lang} />
 
           {/* Benefits */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-12">

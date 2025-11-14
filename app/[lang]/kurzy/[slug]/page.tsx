@@ -224,7 +224,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
 
           {/* Description */}
           <div className="prose prose-sm sm:prose-base prose-gray max-w-none mb-6 sm:mb-8">
-            <p className="text-sm sm:text-base leading-relaxed text-gray-700">{courseData.description}</p>
+            <p className="text-base sm:text-lg leading-relaxed text-gray-700">{courseData.description}</p>
           </div>
 
           {/* Highlights */}
@@ -239,7 +239,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
                     <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-xs sm:text-sm text-gray-700 leading-relaxed">{highlight}</span>
+                    <span className="text-sm sm:text-base text-gray-700 leading-relaxed">{highlight}</span>
                   </div>
                 ))}
               </div>
@@ -264,7 +264,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
                     {lang === 'cs' ? 'Forma výuky' : lang === 'en' ? 'Course Format' : 'Формат курса'}
                   </h3>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{courseData.form}</p>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{courseData.form}</p>
               </div>
             )}
 
@@ -279,7 +279,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
                     {lang === 'cs' ? 'Zkouška' : lang === 'en' ? 'Examination' : 'Экзамен'}
                   </h3>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{courseData.exam}</p>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{courseData.exam}</p>
               </div>
             )}
 
@@ -294,7 +294,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
                     {lang === 'cs' ? 'Certifikace' : lang === 'en' ? 'Certification' : 'Сертификация'}
                   </h3>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{courseData.certification}</p>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{courseData.certification}</p>
               </div>
             )}
 
@@ -309,7 +309,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
                     {lang === 'cs' ? 'Financování' : lang === 'en' ? 'Funding' : 'Финансирование'}
                   </h3>
                 </div>
-                <p className="text-xs sm:text-sm text-green-700 leading-relaxed font-semibold">{courseData.funding}</p>
+                <p className="text-sm sm:text-base text-green-700 leading-relaxed font-semibold">{courseData.funding}</p>
               </div>
             )}
           </div>
