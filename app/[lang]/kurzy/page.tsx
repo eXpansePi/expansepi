@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Navigation from "../components/Navigation"
+import Footer from "../components/Footer"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getActiveCourses, getUpcomingCourses } from "@/data/courses"
@@ -80,9 +81,9 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
   const upcomingCourses = getUpcomingCourses(lang)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
       <Navigation activePage={getRoutePath(lang, 'courses')} lang={lang} t={t} />
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
+      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6 flex-grow">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">{t.courses.title}</h1>
           <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8">{t.courses.title}</p>
@@ -110,6 +111,7 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
           )}
         </div>
       </main>
+      <Footer lang={lang} t={t} />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import Navigation from "../components/Navigation"
+import Footer from "../components/Footer"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getActiveCourses } from "@/data/courses"
@@ -121,9 +122,9 @@ export default async function HomePage({ params }: HomePageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
       <Navigation activePage={getRoutePath(lang, 'home')} lang={lang} t={t} />
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
+      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6 flex-grow">
         <div className="max-w-5xl mx-auto w-full">
           <div className="text-center mb-8 sm:mb-12">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
@@ -267,6 +268,7 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </div>
       </main>
+      <Footer lang={lang} t={t} />
     </div>
   )
 }

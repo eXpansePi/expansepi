@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Navigation from "../components/Navigation"
+import Footer from "../components/Footer"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
@@ -94,9 +95,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const regularContent = content && content.length > 1 ? content.slice(1) : undefined
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
       <Navigation activePage={getRoutePath(lang, 'about')} lang={lang} t={t} />
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
+      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6 flex-grow">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-8 sm:mb-10">{t.about.title}</h1>
           
@@ -188,6 +189,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
           )}
         </div>
       </main>
+      <Footer lang={lang} t={t} />
     </div>
   )
 }
