@@ -25,7 +25,7 @@
     "readyToStart": "Připraveni začít?",
     "contact": "Kontakt",
     "courses": "Kurzy",
-    "heroTitle": "Rekvalifikační kurzy, které změní vaši kariéru",
+    "heroTitle": "Rekvalifikační kurzy, které změní Vaši kariéru",
     "heroDescription": "Naučte se Python, datovou analýzu, web development a další dovednosti.",
     "ourCourses": "Naše kurzy",
     "benefits": {
@@ -138,6 +138,8 @@
     "phone": "Telefon",
     "address": "Sídlo",
     "addressValue": "Rybná 716/24, Staré Město, 110 00 Praha",
+    "teachingLocation": "Místo výuky",
+    "teachingLocationValue": "Seifertova 327/85, 130 00 Praha 3",
     "ico": "IČO",
     "icoValue": "19145535",
     "bankAccount": "Bankovní spojení",

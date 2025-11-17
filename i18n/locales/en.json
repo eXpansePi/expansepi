@@ -142,6 +142,8 @@
     "phone": "Phone",
     "address": "Registered Office",
     "addressValue": "Rybná 716/24, Staré Město, 110 00 Prague",
+    "teachingLocation": "Teaching Location",
+    "teachingLocationValue": "Seifertova 327/85, 130 00 Prague 3",
     "ico": "Company ID",
     "icoValue": "19145535",
     "bankAccount": "Bank Account",
