@@ -6,7 +6,7 @@ import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
 import SalaryStats from "./components/SalaryStats"
-import SalaryCard from "./components/SalaryCard"
+import SalaryShowcase from "./components/SalaryShowcase"
 
 interface HomePageProps {
   params: Promise<{ lang: string }>
@@ -112,30 +112,8 @@ export default async function HomePage({ params }: HomePageProps) {
             </p>
           </div>
 
-          {/* Salary Cards */}
-          <div className="grid sm:grid-cols-3 gap-4 sm:gap-5 mb-8 sm:mb-12">
-            <SalaryCard
-              lang={lang}
-              icon="🔧"
-              level="junior"
-              salary={70000}
-              gradient="from-blue-500 to-sky-400"
-            />
-            <SalaryCard
-              lang={lang}
-              icon="⚙️"
-              level="midlevel"
-              salary={110000}
-              gradient="from-blue-500 to-sky-400"
-            />
-            <SalaryCard
-              lang={lang}
-              icon="🚀"
-              level="senior"
-              salary={180000}
-              gradient="from-blue-500 to-sky-400"
-            />
-          </div>
+          {/* Salary Showcase */}
+          <SalaryShowcase lang={lang} />
 
           {/* Benefits */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-8 sm:mb-12">
