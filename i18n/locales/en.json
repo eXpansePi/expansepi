@@ -91,7 +91,9 @@
     "preparing": "Preparing",
     "level": "Level",
     "duration": "Duration",
-    "noData": "No courses available"
+    "noData": "No courses available",
+    "price": "2 000 EUR",
+    "priceNote": "Note: Funding by Czech Labour Office is only available for Czech residents"
   },
   "blog": {
     "title": "Blog",

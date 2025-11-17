@@ -87,7 +87,11 @@
     "preparing": "Připravujeme",
     "level": "Úroveň",
     "duration": "Trvání",
-    "noData": "Žádné kurzy nejsou dostupné"
+    "noData": "Žádné kurzy nejsou dostupné",
+    "price": "49 900 Kč",
+    "priceFrom": "od 0 Kč",
+    "priceNote": "Může být plně hrazeno Úřadem práce",
+    "installments": "Možnost uhrazení ve 3 splátkách bez navýšení"
   },
   "blog": {
     "title": "Blog",
