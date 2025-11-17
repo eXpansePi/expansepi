@@ -30,21 +30,21 @@
     "ourCourses": "Naše kurzy",
     "benefits": {
       "title": "Proč si vybrat nás",
-      "experienced": {
-        "title": "Zkušení lektoři",
-        "description": "Absolventi Matfyzu UK a ČVUT s praktickými zkušenostmi"
+      "european": {
+        "title": "Evropská kvalifikace",
+        "description": "Jeden certifikát, otevřené možnosti napříč EU"
       },
-      "practical": {
-        "title": "Praktické zaměření",
-        "description": "Kurzy zaměřené na reálné projekty"
+      "language": {
+        "title": "Jazyk, který vydělává",
+        "description": "Angličtinou zvládnete svět, Pythonem zvládnete IT"
       },
-      "certification": {
-        "title": "Certifikace",
-        "description": "Oficiální certifikát po absolvování"
+      "prague": {
+        "title": "Praha jako základna",
+        "description": "Výuka i zázemí přímo v centru města"
       },
-      "individual": {
-        "title": "Individuální přístup",
-        "description": "Malé skupiny pro osobní pozornost"
+      "freedom": {
+        "title": "Svobodná práce",
+        "description": "IT dává možnost pracovat odkudkoli, klidně z domova"
       }
     },
     "stats": {
@@ -52,6 +52,24 @@
       "success": "Úspěšnost",
       "lecturers": "Lektorů",
       "courses": "Kurzů"
+    },
+    "salaries": {
+      "title": "Průměrné platy v IT",
+      "junior": "Junior",
+      "midlevel": "Mid-level",
+      "senior": "Senior",
+      "upTo": "až",
+      "juniorSalary": "70 000",
+      "midlevelSalary": "110 000",
+      "seniorSalary": "180 000",
+      "currency": "Kč",
+      "perMonth": "měsíčně",
+      "disclaimer": "Hrubá měsíční mzda. Reálné horní hranice podle ČSÚ a praxe."
+    },
+    "marketReadiness": {
+      "title": "Připravenost k trhu",
+      "commonCourses": "Běžné IT kurzy",
+      "expansepi": "eXpansePi"
     },
     "courseLevels": {
       "beginner": "Začátečníci",

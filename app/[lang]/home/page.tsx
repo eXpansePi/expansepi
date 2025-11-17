@@ -6,7 +6,8 @@ import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getActiveCourses } from "@/data/courses"
 import { getRoutePath, getDetailRoutePath, getAllRoutePaths } from "@/lib/routes"
-import SalaryShowcase from "./components/SalaryShowcase"
+import SalaryStats from "./components/SalaryStats"
+import SalaryCard from "./components/SalaryCard"
 
 interface HomePageProps {
   params: Promise<{ lang: string }>
@@ -78,24 +79,24 @@ export default async function HomePage({ params }: HomePageProps) {
 
   const benefits = [
     {
-      icon: "🎓",
-      title: t.home.benefits.experienced.title,
-      description: t.home.benefits.experienced.description,
+      icon: "🇪🇺",
+      title: t.home.benefits.european.title,
+      description: t.home.benefits.european.description,
     },
     {
-      icon: "💼",
-      title: t.home.benefits.practical.title,
-      description: t.home.benefits.practical.description,
+      icon: "🐍",
+      title: t.home.benefits.language.title,
+      description: t.home.benefits.language.description,
     },
     {
-      icon: "📜",
-      title: t.home.benefits.certification.title,
-      description: t.home.benefits.certification.description,
+      icon: "🏰",
+      title: t.home.benefits.prague.title,
+      description: t.home.benefits.prague.description,
     },
     {
-      icon: "👥",
-      title: t.home.benefits.individual.title,
-      description: t.home.benefits.individual.description,
+      icon: "🏠",
+      title: t.home.benefits.freedom.title,
+      description: t.home.benefits.freedom.description,
     },
   ]
 
@@ -135,19 +136,42 @@ export default async function HomePage({ params }: HomePageProps) {
             </p>
           </div>
 
-          {/* Salary Showcase */}
-          <SalaryShowcase lang={lang} />
+          {/* Salary Cards */}
+          <div className="grid sm:grid-cols-3 gap-4 sm:gap-5 mb-8 sm:mb-12">
+            <SalaryCard
+              lang={lang}
+              icon="👶"
+              level="junior"
+              salary={70000}
+              gradient="from-blue-500 to-sky-400"
+            />
+            <SalaryCard
+              lang={lang}
+              icon="⚙️"
+              level="midlevel"
+              salary={110000}
+              gradient="from-blue-600 to-indigo-500"
+            />
+            <SalaryCard
+              lang={lang}
+              icon="🚀"
+              level="senior"
+              salary={180000}
+              gradient="from-blue-700 to-indigo-600"
+            />
+          </div>
+>>>>>>> 026860d (Update home page: new benefit cards, salary cards with animation, market readiness section, and footer)
 
           {/* Benefits */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-12">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-8 sm:mb-12">
             {benefits.map((b, i) => (
               <div
                 key={i}
-                className="glow-box bg-gradient-to-br from-blue-50 to-sky-50 p-3 sm:p-4 rounded-lg"
+                className="glow-box bg-gradient-to-br from-blue-50 to-sky-50 p-5 sm:p-6 lg:p-7 rounded-lg"
               >
-                <div className="text-2xl sm:text-3xl mb-2">{b.icon}</div>
-                <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-1">{b.title}</h2>
-                <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{b.description}</p>
+                <div className="text-3xl sm:text-4xl lg:text-5xl mb-3 sm:mb-4 text-center">{b.icon}</div>
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 text-center">{b.title}</h2>
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed text-center">{b.description}</p>
               </div>
             ))}
           </div>
@@ -248,6 +272,11 @@ export default async function HomePage({ params }: HomePageProps) {
             </div>
           </div>
 
+          {/* Salary Stats */}
+          <div className="glow-box bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-8 sm:mb-12 shadow-lg">
+            <SalaryStats lang={lang} />
+          </div>
+
           {/* CTA */}
           <div className="text-center">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">{t.home.readyToStart}</h2>
@@ -268,7 +297,7 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </div>
       </main>
-      <Footer lang={lang} t={t} />
+      <Footer lang={lang} />
     </div>
   )
 }

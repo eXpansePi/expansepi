@@ -30,21 +30,21 @@
     "ourCourses": "Our courses",
     "benefits": {
       "title": "Why choose us",
-      "experienced": {
-        "title": "Experienced instructors",
-        "description": "Graduates of Charles University and Czech Technical University with practical experience"
+      "european": {
+        "title": "European qualification",
+        "description": "One certificate, open opportunities across the EU"
       },
-      "practical": {
-        "title": "Practical focus",
-        "description": "Courses focused on real projects"
+      "language": {
+        "title": "The language that pays",
+        "description": "English opens the world, Python opens IT"
       },
-      "certification": {
-        "title": "Certification",
-        "description": "Official certificate upon completion"
+      "prague": {
+        "title": "Prague as base",
+        "description": "Teaching and facilities right in the city center"
       },
-      "individual": {
-        "title": "Individual approach",
-        "description": "Small groups for personal attention"
+      "freedom": {
+        "title": "Freedom to work",
+        "description": "IT offers the possibility to work from anywhere, even from home"
       }
     },
     "stats": {
@@ -52,6 +52,28 @@
       "success": "Success rate",
       "lecturers": "Lecturers",
       "courses": "Courses"
+    },
+    "salaries": {
+      "title": "Average IT Salaries",
+      "junior": "Junior",
+      "midlevel": "Mid-level",
+      "senior": "Senior",
+      "upTo": "up to",
+      "juniorSalary": "70,000",
+      "midlevelSalary": "110,000",
+      "seniorSalary": "180,000",
+      "juniorCzech": "Junior (Czech Republic)",
+      "seniorCzech": "Senior (Czech Republic)",
+      "juniorGermany": "Junior (Germany)",
+      "seniorGermany": "Senior (Germany)",
+      "currency": "CZK",
+      "perMonth": "per month",
+      "disclaimer": "Gross monthly salary. Real upper limits according to Czech Statistical Office and practice."
+    },
+    "marketReadiness": {
+      "title": "Market Readiness",
+      "commonCourses": "Common IT Courses",
+      "expansepi": "eXpansePi"
     },
     "courseLevels": {
       "beginner": "Beginner",
