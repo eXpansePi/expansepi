@@ -34,7 +34,6 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
     },
     { href: getRoutePath(currentLang, 'contact'), label: t.common.contact },
     { href: getRoutePath(currentLang, 'vacancies'), label: t.common.vacancies },
-    { href: getRoutePath(currentLang, 'blog'), label: t.common.blog },
   ]
 
   // Close menus when clicking outside
