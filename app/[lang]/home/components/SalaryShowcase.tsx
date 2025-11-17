@@ -28,16 +28,16 @@ export default function SalaryShowcase({ lang }: SalaryShowcaseProps) {
         { emoji: '🚀', label: 'Senior', amount: 180000, currency: 'Kč' },
       ]
     : [
-        { emoji: '🔧', label: 'Junior', amount: 3500, currency: 'EUR' },
-        { emoji: '⚙️', label: 'Mid-level', amount: 5000, currency: 'EUR' },
-        { emoji: '🚀', label: 'Senior', amount: 7500, currency: 'EUR' },
+        { emoji: '🔧', label: 'Junior', amount: 5000, currency: 'EUR' },
+        { emoji: '⚙️', label: 'Middle', amount: 6700, currency: 'EUR' },
+        { emoji: '🚀', label: 'Senior', amount: 8300, currency: 'EUR' },
       ]
 
   const tooltipText = lang === 'cs'
-    ? 'Hrubá měsíční mzda. Reálné horní hranice podle ČSÚ a praxe.'
+    ? 'Hrubá měsíční mzda podle českého trhu.'
     : lang === 'en'
-    ? 'Gross monthly salary. Upper realistic ranges based on German market data.'
-    : 'Валовая месячная зарплата. Верхние реалистичные диапазоны на основе данных немецкого рынка.'
+    ? 'Gross monthly salary based on German market data.'
+    : 'Брутто месячная зарплата на основе данных немецкого рынка.'
 
   const upToText = lang === 'cs' ? 'až' : lang === 'en' ? 'up to' : 'до'
 

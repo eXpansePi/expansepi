@@ -99,7 +99,7 @@
     "slug": "programator-csharp",
     "title": "Programátor C#",
     "description": "Rekvalifikační kurz programování v C# .NET. Naučíte se moderní vývoj aplikací s Microsoft technologiemi, ASP.NET MVC, Entity Framework a další pokročilé nástroje.",
-    "duration": "6 měsíců",
+    "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
     "level": "Začátečníci",
     "status": "upcoming"
   },
@@ -107,7 +107,7 @@
     "slug": "programator-java",
     "title": "Programátor Java",
     "description": "Komplexní kurz programování v Javě. Zahrnuje základy Javy, Spring Framework, vývoj enterprise aplikací a moderní best practices v Java ekosystému.",
-    "duration": "6 měsíců",
+    "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
     "level": "Začátečníci",
     "status": "upcoming"
   },
@@ -115,7 +115,7 @@
     "slug": "programator-php",
     "title": "Programátor PHP",
     "description": "Kurz vývoje webových aplikací v PHP. Naučíte se moderní PHP, Laravel framework, práci s databázemi a vývoj REST API.",
-    "duration": "6 měsíců",
+    "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
     "level": "Začátečníci",
     "status": "upcoming"
   },
@@ -123,7 +123,7 @@
     "slug": "programator-javascript",
     "title": "Programátor JavaScript",
     "description": "Kompletní kurz JavaScriptu a moderních frontend technologií. Zahrnuje ES6+, React, Node.js, TypeScript a vývoj full-stack aplikací.",
-    "duration": "6 měsíců",
+    "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
     "level": "Začátečníci",
     "status": "upcoming"
   },
