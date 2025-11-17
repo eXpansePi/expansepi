@@ -54,16 +54,17 @@ function SalaryStats({ lang }: SalaryStatsProps) {
             const animations: any[] = []
             
             marketData.forEach((item, index) => {
+              const target = { value: 0 }
               const anim = anime({
-                targets: { value: 0 },
+                targets: target,
                 value: item.percentage,
-                duration: 2000,
+                duration: 2500,
                 delay: 0, // Start both animations at the same time
-                easing: 'easeOutCubic',
-                update: (anim: any) => {
+                easing: 'easeOutQuart',
+                update: () => {
                   setAnimatedPercentages((prev) => {
                     const newValues = [...prev]
-                    newValues[index] = Math.floor(anim.progress * item.percentage / 100)
+                    newValues[index] = Math.round(target.value)
                     return newValues
                   })
                 },

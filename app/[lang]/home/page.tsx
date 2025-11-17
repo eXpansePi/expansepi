@@ -150,14 +150,14 @@ export default async function HomePage({ params }: HomePageProps) {
               icon="⚙️"
               level="midlevel"
               salary={110000}
-              gradient="from-blue-600 to-indigo-500"
+              gradient="from-blue-500 to-sky-400"
             />
             <SalaryCard
               lang={lang}
               icon="🚀"
               level="senior"
               salary={180000}
-              gradient="from-blue-700 to-indigo-600"
+              gradient="from-blue-500 to-sky-400"
             />
           </div>
 

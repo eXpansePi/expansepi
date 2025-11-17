@@ -28,13 +28,14 @@ function SalaryCard({ lang, icon, level, salary, gradient }: SalaryCardProps) {
           if (entry.isIntersecting && !hasAnimatedRef.current) {
             hasAnimatedRef.current = true
             // Start animation
+            const target = { value: 0 }
             const anim = anime({
-              targets: { value: 0 },
+              targets: target,
               value: salary,
-              duration: 2000,
-              easing: 'easeOutCubic',
-              update: (anim: any) => {
-                setAnimatedValue(Math.floor(anim.progress * salary / 100))
+              duration: 2500,
+              easing: 'easeOutQuart',
+              update: () => {
+                setAnimatedValue(Math.round(target.value))
               },
               complete: () => {
                 setAnimatedValue(salary)
