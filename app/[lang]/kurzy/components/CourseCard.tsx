@@ -3,6 +3,7 @@ import { Course } from "@/types/course"
 import { COURSE_STATUS_CONFIG, COURSE_LEVEL_CONFIG } from "@/lib/course-constants"
 import { getDetailRoutePath } from "@/lib/routes"
 import { type Language } from "@/i18n/config"
+import { getTranslations } from "@/i18n/index"
 
 interface CourseCardProps {
   course: Course
@@ -16,6 +17,7 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
     color: 'gray',
     badgeClass: 'bg-gray-100 text-gray-700'
   }
+  const t = getTranslations(lang as Language)
 
   return (
     <article
@@ -49,7 +51,7 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3">
         <div className="mb-2 sm:mb-0 flex-grow">
           <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1.5">{course.title}</h2>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-gray-600">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-gray-600 mb-2">
             <div className="flex items-center gap-1">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -61,6 +63,21 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
               {course.level}
             </span>
           </div>
+          {!isDraft && (
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <div className="text-lg sm:text-xl font-bold text-gray-900">
+                {t.courses.price}
+              </div>
+              {course.funding && (
+                <div className="flex items-center gap-1.5 bg-green-100 border-2 border-green-300 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 flex-shrink-0">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <p className="text-xs sm:text-sm font-semibold text-green-800 whitespace-nowrap">{course.funding}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         {isDraft && (
           <span className={`text-xs px-2 py-0.5 rounded ${config.badgeClass} whitespace-nowrap`}>

@@ -93,7 +93,8 @@
     "duration": "Duration",
     "noData": "No courses available",
     "price": "2 000 EUR",
-    "priceNote": "Note: Funding by Czech Labour Office is only available for Czech residents"
+    "priceNote": "Note: Funding by Czech Labour Office is only available for Czech residents",
+    "installments": "Pay in 3 installments with no added cost"
   },
   "blog": {
     "title": "Blog",

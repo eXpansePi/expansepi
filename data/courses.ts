@@ -104,6 +104,7 @@ function normalizeCourse(course: any, lang: string = 'cs'): Course | null {
         accreditation: langData.accreditation,
         syllabus: langData.syllabus,
         image: langData.image,
+        funding: langData.funding,
       }
     }
   }

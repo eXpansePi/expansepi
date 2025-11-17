@@ -51,6 +51,9 @@ export interface Course {
   
   /** Optional accreditation information */
   accreditation?: string
+  
+  /** Optional funding information */
+  funding?: string
 }
 
 /**
