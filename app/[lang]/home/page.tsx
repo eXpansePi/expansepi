@@ -160,7 +160,6 @@ export default async function HomePage({ params }: HomePageProps) {
               gradient="from-blue-700 to-indigo-600"
             />
           </div>
->>>>>>> 026860d (Update home page: new benefit cards, salary cards with animation, market readiness section, and footer)
 
           {/* Benefits */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-8 sm:mb-12">
