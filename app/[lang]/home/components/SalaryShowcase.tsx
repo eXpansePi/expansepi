@@ -23,12 +23,12 @@ export default function SalaryShowcase({ lang }: SalaryShowcaseProps) {
   // Salary data based on locale
   const salaryData: SalaryData[] = lang === 'cs'
     ? [
-        { emoji: '👶', label: 'Junior', amount: 70000, currency: 'Kč' },
+        { emoji: '🔧', label: 'Junior', amount: 70000, currency: 'Kč' },
         { emoji: '⚙️', label: 'Mid-level', amount: 110000, currency: 'Kč' },
         { emoji: '🚀', label: 'Senior', amount: 180000, currency: 'Kč' },
       ]
     : [
-        { emoji: '👶', label: 'Junior', amount: 3500, currency: 'EUR' },
+        { emoji: '🔧', label: 'Junior', amount: 3500, currency: 'EUR' },
         { emoji: '⚙️', label: 'Mid-level', amount: 5000, currency: 'EUR' },
         { emoji: '🚀', label: 'Senior', amount: 7500, currency: 'EUR' },
       ]

@@ -116,7 +116,7 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="grid sm:grid-cols-3 gap-4 sm:gap-5 mb-8 sm:mb-12">
             <SalaryCard
               lang={lang}
-              icon="👶"
+              icon="🔧"
               level="junior"
               salary={70000}
               gradient="from-blue-500 to-sky-400"
