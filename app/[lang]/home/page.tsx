@@ -101,10 +101,9 @@ export default async function HomePage({ params }: HomePageProps) {
   ]
 
   const stats = [
-    { number: "500+", label: t.home.stats.graduates },
-    { number: "95%", label: t.home.stats.success },
-    { number: "50+", label: t.home.stats.lecturers },
-    { number: "20+", label: t.home.stats.courses },
+    { number: "20+", label: t.home.stats.technologies },
+    { number: "5 000+", label: t.home.stats.students },
+    { number: "20 000+", label: t.home.stats.hours },
   ]
 
   // Map course levels to translations
@@ -261,7 +260,10 @@ export default async function HomePage({ params }: HomePageProps) {
 
           {/* Stats */}
           <div className="bg-gradient-to-r from-blue-600 to-sky-400 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-8 sm:mb-12">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 text-center">
+              {t.home.stats.title}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {stats.map((s, i) => (
                 <div key={i} className="text-center">
                   <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1">{s.number}</div>

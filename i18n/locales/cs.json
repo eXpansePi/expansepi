@@ -48,10 +48,10 @@
       }
     },
     "stats": {
-      "graduates": "Absolventů",
-      "success": "Úspěšnost",
-      "lecturers": "Lektorů",
-      "courses": "Kurzů"
+      "title": "Naši lektoři odučili",
+      "technologies": "Technologií",
+      "students": "Studentů",
+      "hours": "Hodin"
     },
     "salaries": {
       "title": "Průměrné platy v IT",

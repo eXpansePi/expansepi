@@ -48,10 +48,10 @@
       }
     },
     "stats": {
-      "graduates": "Graduates",
-      "success": "Success rate",
-      "lecturers": "Lecturers",
-      "courses": "Courses"
+      "title": "Our tutors taught",
+      "technologies": "Technologies",
+      "students": "Students",
+      "hours": "Hours"
     },
     "salaries": {
       "title": "Average IT Salaries",
