@@ -111,7 +111,7 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
           )}
         </div>
       </main>
-      <Footer lang={lang} t={t} />
+      <Footer lang={lang} />
     </div>
   )
 }

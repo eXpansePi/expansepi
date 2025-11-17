@@ -189,7 +189,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
           )}
         </div>
       </main>
-      <Footer lang={lang} t={t} />
+      <Footer lang={lang} />
     </div>
   )
 }

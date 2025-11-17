@@ -134,7 +134,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
           </div>
         </div>
       </main>
-      <Footer lang={lang} t={t} />
+      <Footer lang={lang} />
     </div>
   )
 }
