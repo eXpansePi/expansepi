@@ -36,6 +36,12 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
     { href: getRoutePath(currentLang, 'vacancies'), label: t.common.vacancies },
   ]
 
+  // Close menus when pathname changes (navigation completed)
+  useEffect(() => {
+    setAboutMenuOpen(false)
+    setMobileMenuOpen(false)
+  }, [pathname])
+
   // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -93,7 +99,6 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                         <Link
                           key={item.href}
                           href={item.href}
-                          onClick={() => setAboutMenuOpen(false)}
                           className={`block w-full px-4 py-3 text-sm font-semibold hover:bg-blue-50 transition-colors min-h-[44px] flex items-center ${
                             activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
                           }`}
@@ -217,10 +222,6 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                         <Link
                           key={item.href}
                           href={item.href}
-                          onClick={() => {
-                            setAboutMenuOpen(false)
-                            setMobileMenuOpen(false)
-                          }}
                           className={`block w-full px-4 py-3 text-sm transition-colors min-h-[44px] flex items-center touch-manipulation ${
                             activePage === item.href ? 'text-blue-600 font-bold bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                           }`}
