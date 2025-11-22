@@ -88,13 +88,13 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                     </svg>
                   </button>
                   {aboutMenuOpen && (
-                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[200px]">
+                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[200px] w-full">
                       {(link as any).dropdownItems.map((item: any) => (
                         <Link
                           key={item.href}
                           href={item.href}
                           onClick={() => setAboutMenuOpen(false)}
-                          className={`block px-4 py-3 text-sm font-semibold hover:bg-blue-50 transition-colors min-h-[44px] flex items-center ${
+                          className={`block w-full px-4 py-3 text-sm font-semibold hover:bg-blue-50 transition-colors min-h-[44px] flex items-center ${
                             activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
                           }`}
                         >
@@ -212,7 +212,7 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                     </svg>
                   </button>
                   {aboutMenuOpen && (
-                    <div className="pl-4 mt-2 space-y-1">
+                    <div className="mt-2 -mx-4">
                       {(link as any).dropdownItems.map((item: any) => (
                         <Link
                           key={item.href}
@@ -221,7 +221,7 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                             setAboutMenuOpen(false)
                             setMobileMenuOpen(false)
                           }}
-                          className={`block px-3 py-3 text-sm transition-colors min-h-[44px] flex items-center rounded-md ${
+                          className={`block w-full px-4 py-3 text-sm transition-colors min-h-[44px] flex items-center touch-manipulation ${
                             activePage === item.href ? 'text-blue-600 font-bold bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                           }`}
                         >
