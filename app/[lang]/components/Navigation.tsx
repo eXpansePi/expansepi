@@ -36,12 +36,6 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
     { href: getRoutePath(currentLang, 'vacancies'), label: t.common.vacancies },
   ]
 
-  // Close menus when pathname changes (navigation completed)
-  useEffect(() => {
-    setAboutMenuOpen(false)
-    setMobileMenuOpen(false)
-  }, [pathname])
-
   // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -94,12 +88,13 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                     </svg>
                   </button>
                   {aboutMenuOpen && (
-                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[200px] w-full">
+                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[200px]">
                       {(link as any).dropdownItems.map((item: any) => (
                         <Link
                           key={item.href}
                           href={item.href}
-                          className={`block w-full px-4 py-3 text-sm font-semibold hover:bg-blue-50 transition-colors min-h-[44px] flex items-center ${
+                          onClick={() => setAboutMenuOpen(false)}
+                          className={`block px-4 py-2 text-sm font-semibold hover:bg-blue-50 transition-colors ${
                             activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
                           }`}
                         >
@@ -217,13 +212,17 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                     </svg>
                   </button>
                   {aboutMenuOpen && (
-                    <div className="mt-2 -mx-4">
+                    <div className="pl-4 mt-2 space-y-2">
                       {(link as any).dropdownItems.map((item: any) => (
                         <Link
                           key={item.href}
                           href={item.href}
-                          className={`block w-full px-4 py-3 text-sm transition-colors min-h-[44px] flex items-center touch-manipulation ${
-                            activePage === item.href ? 'text-blue-600 font-bold bg-blue-50' : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                          onClick={() => {
+                            setAboutMenuOpen(false)
+                            setMobileMenuOpen(false)
+                          }}
+                          className={`block text-sm transition-colors ${
+                            activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-700 hover:text-blue-600'
                           }`}
                         >
                           {item.label}
