@@ -16,10 +16,21 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
   const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [aboutMenuOpen, setAboutMenuOpen] = useState(false)
   const [showAboutSubmenu, setShowAboutSubmenu] = useState(false)
+  const [currentHash, setCurrentHash] = useState('')
   const langMenuRef = useRef<HTMLDivElement>(null)
   const aboutMenuRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const currentLang = (isValidLanguage(lang) ? lang : 'cs') as Language
+
+  // Track current hash for active state
+  useEffect(() => {
+    const updateHash = () => {
+      setCurrentHash(window.location.hash)
+    }
+    updateHash()
+    window.addEventListener('hashchange', updateHash)
+    return () => window.removeEventListener('hashchange', updateHash)
+  }, [pathname])
 
   const navLinks = [
     { href: getRoutePath(currentLang, 'home'), label: t.common.home },
@@ -263,21 +274,29 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
               <span className="font-semibold">{t.common.about}</span>
             </button>
             {navLinks.find((link) => (link as any).hasDropdown) && (
-              (navLinks.find((link) => (link as any).hasDropdown) as any).dropdownItems.map((item: any) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => {
-                    setShowAboutSubmenu(false)
-                    setMobileMenuOpen(false)
-                  }}
-                  className={`block py-2 transition-colors text-lg ${
-                    activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-800 hover:text-blue-600'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))
+              (navLinks.find((link) => (link as any).hasDropdown) as any).dropdownItems.map((item: any) => {
+                // Check if this item is active by comparing pathname and hash
+                const currentPath = pathname || activePage || ''
+                const itemPath = item.href.split('#')[0]
+                const itemHash = item.href.includes('#') ? `#${item.href.split('#')[1]}` : ''
+                const isActive = currentPath === itemPath && currentHash === itemHash
+                
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => {
+                      setShowAboutSubmenu(false)
+                      setMobileMenuOpen(false)
+                    }}
+                    className={`block py-2 transition-colors text-lg ${
+                      isActive ? 'text-blue-600 font-bold' : 'text-gray-800 hover:text-blue-600'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })
             )}
           </div>
         </div>
