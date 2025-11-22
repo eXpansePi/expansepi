@@ -50,9 +50,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="cs" suppressHydrationWarning>
+    <html lang="cs" suppressHydrationWarning style={{ background: '#ffffff' }}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ background: '#ffffff' }}
       >
         <LangSetter />
         <AnimationManager />
