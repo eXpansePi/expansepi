@@ -15,6 +15,7 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [aboutMenuOpen, setAboutMenuOpen] = useState(false)
+  const [showAboutSubmenu, setShowAboutSubmenu] = useState(false)
   const langMenuRef = useRef<HTMLDivElement>(null)
   const aboutMenuRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
@@ -159,7 +160,12 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => {
+              setMobileMenuOpen(!mobileMenuOpen)
+              if (mobileMenuOpen) {
+                setShowAboutSubmenu(false)
+              }
+            }}
             className="md:hidden p-2 text-gray-800 hover:text-blue-600 transition-colors font-semibold"
             aria-label="Toggle menu"
           >
@@ -188,13 +194,19 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
           mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-4 py-4 space-y-3 bg-white/98 backdrop-blur-md border-t border-gray-200 shadow-lg">
-          {navLinks.map((link) => {
-            if ((link as any).hasDropdown) {
-              return (
-                <div key={link.href}>
+        <div className="relative overflow-hidden bg-white/98 backdrop-blur-md border-t border-gray-200 shadow-lg">
+          {/* Main Menu */}
+          <div
+            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${
+              showAboutSubmenu ? '-translate-x-full absolute inset-0 w-full' : 'translate-x-0'
+            }`}
+          >
+            {navLinks.map((link) => {
+              if ((link as any).hasDropdown) {
+                return (
                   <button
-                    onClick={() => setAboutMenuOpen(!aboutMenuOpen)}
+                    key={link.href}
+                    onClick={() => setShowAboutSubmenu(true)}
                     className={`w-full text-left transition-colors ${
                       activePage === link.href 
                         ? "text-blue-600 font-bold" 
@@ -203,51 +215,71 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                   >
                     {link.label}
                     <svg
-                      className={`w-4 h-4 transition-transform duration-200 ${aboutMenuOpen ? 'rotate-180' : ''}`}
+                      className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
-                  {aboutMenuOpen && (
-                    <div className="pl-4 mt-2 space-y-2">
-                      {(link as any).dropdownItems.map((item: any) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => {
-                            setAboutMenuOpen(false)
-                            setMobileMenuOpen(false)
-                          }}
-                          className={`block text-sm transition-colors ${
-                            activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-700 hover:text-blue-600'
-                          }`}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                )
+              }
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block transition-colors ${
+                    activePage === link.href 
+                      ? "text-blue-600 font-bold" 
+                      : "text-gray-800 font-normal hover:text-blue-600"
+                  }`}
+                >
+                  {link.label}
+                </Link>
               )
-            }
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block transition-colors ${
-                  activePage === link.href 
-                    ? "text-blue-600 font-bold" 
-                    : "text-gray-800 font-normal hover:text-blue-600"
-                }`}
+            })}
+          </div>
+
+          {/* About Submenu */}
+          <div
+            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${
+              showAboutSubmenu ? 'translate-x-0' : 'translate-x-full absolute inset-0 w-full'
+            }`}
+          >
+            <button
+              onClick={() => setShowAboutSubmenu(false)}
+              className="flex items-center gap-2 text-gray-800 hover:text-blue-600 transition-colors mb-2"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                {link.label}
-              </Link>
-            )
-          })}
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span className="font-semibold">{t.common.about}</span>
+            </button>
+            {navLinks.find((link) => (link as any).hasDropdown) && (
+              (navLinks.find((link) => (link as any).hasDropdown) as any).dropdownItems.map((item: any) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => {
+                    setShowAboutSubmenu(false)
+                    setMobileMenuOpen(false)
+                  }}
+                  className={`block py-2 transition-colors text-lg ${
+                    activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-800 hover:text-blue-600'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </nav>
