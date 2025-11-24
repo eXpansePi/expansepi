@@ -39,12 +39,12 @@
         "description": "English opens the world, Python opens IT"
       },
       "prague": {
-        "title": "Prague as base",
-        "description": "Teaching and facilities right in the city center"
+        "title": "Teaching in Prague",
+        "description": "We are just two stops away from the main train station (Hlavní nádraží)."
       },
       "freedom": {
         "title": "Freedom to work",
-        "description": "IT offers the possibility to work from anywhere, even from home"
+        "description": "IT offers the possibility to\u00A0work from anywhere, even from home"
       }
     },
     "stats": {
