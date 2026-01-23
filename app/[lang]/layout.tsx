@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       description: meta.description,
       images: [
         {
-          url: `https://expansepi.com/og-image.jpg`,
+          url: `https://expansepi.com/og-image.png`,
           width: 1200,
           height: 630,
           alt: "eXpansePi - IT Education",
@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       title: meta.title,
       description: meta.description,
       creator: "@expansepi",
-      images: ["https://expansepi.com/og-image.jpg"],
+      images: ["https://expansepi.com/og-image.png"],
     },
     robots: {
       index: true,

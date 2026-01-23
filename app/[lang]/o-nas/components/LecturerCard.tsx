@@ -1,4 +1,5 @@
 import { Lecturer } from "@/types/team"
+import Image from "next/image"
 
 interface LecturerCardProps {
   lecturer: Lecturer
@@ -9,14 +10,16 @@ export default function LecturerCard({ lecturer }: LecturerCardProps) {
     <article className="glow-box bg-white rounded-xl shadow-lg p-4 sm:p-5 transition-all duration-300 flex flex-col hover:shadow-xl">
       {lecturer.photo && (
         <div className="mb-3 flex items-center justify-center">
-          <img 
-            src={lecturer.photo} 
+          <Image
+            src={lecturer.photo}
             alt={lecturer.name}
+            width={128}
+            height={128}
             className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover"
           />
         </div>
       )}
-      
+
       <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1.5">{lecturer.name}</h3>
       <p className="text-sm sm:text-base text-blue-600 font-semibold mb-2 whitespace-pre-line">{lecturer.title}</p>
       {lecturer.specializations && lecturer.specializations.length > 0 && (

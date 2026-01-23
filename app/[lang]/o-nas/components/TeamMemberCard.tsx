@@ -1,4 +1,5 @@
 import { TeamMember } from "@/types/team"
+import Image from "next/image"
 
 interface TeamMemberCardProps {
   member: TeamMember
@@ -9,14 +10,16 @@ export default function TeamMemberCard({ member }: TeamMemberCardProps) {
     <article className="glow-box bg-white rounded-xl shadow-lg p-4 sm:p-5 transition-all duration-300 flex flex-col hover:shadow-xl">
       {member.photo && (
         <div className="mb-3 flex items-center justify-center">
-          <img 
-            src={member.photo} 
+          <Image
+            src={member.photo}
             alt={member.name}
+            width={128}
+            height={128}
             className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover"
           />
         </div>
       )}
-      
+
       <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1.5">{member.name}</h3>
       <p className="text-sm sm:text-base text-blue-600 font-semibold mb-2 whitespace-pre-line">{member.title}</p>
       {member.specializations && member.specializations.length > 0 && (

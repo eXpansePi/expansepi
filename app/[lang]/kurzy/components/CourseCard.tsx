@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Course } from "@/types/course"
 import { COURSE_STATUS_CONFIG, COURSE_LEVEL_CONFIG } from "@/lib/course-constants"
 import { getDetailRoutePath } from "@/lib/routes"
@@ -21,21 +22,22 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
 
   return (
     <article
-      className={`glow-box bg-white rounded-xl shadow-lg p-4 sm:p-5 transition-all duration-300 flex flex-col ${
-        isDraft ? 'opacity-90' : 'hover:shadow-xl'
-      }`}
+      className={`glow-box bg-white rounded-xl shadow-lg p-4 sm:p-5 transition-all duration-300 flex flex-col ${isDraft ? 'opacity-90' : 'hover:shadow-xl'
+        }`}
     >
       {/* Course Image */}
       {course.image && (
-        <div className="mb-3 flex items-center justify-center h-16 sm:h-20 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg">
-          <img 
-            src={course.image} 
+        <div className="mb-3 flex items-center justify-center h-16 sm:h-20 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg relative">
+          <Image
+            src={course.image}
             alt={course.title}
-            className="h-12 sm:h-16 w-auto object-contain"
+            fill
+            className="object-contain p-2"
+            sizes="(max-width: 640px) 4rem, 5rem"
           />
         </div>
       )}
-      
+
       {/* Accreditation Badge */}
       {course.accreditation && (
         <div className="mb-2">
@@ -47,7 +49,7 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
           </span>
         </div>
       )}
-      
+
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3">
         <div className="mb-2 sm:mb-0 flex-grow">
           <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1.5">{course.title}</h2>
