@@ -161,7 +161,7 @@
       "messagePlaceholder": "Vaše zpráva...",
       "send": "Odeslat",
       "sending": "Odesílání...",
-      "success": "Váš emailový klient by se měl otevřít. Prosím, zkontrolujte a odešlete zprávu ručně.",
+      "success": "Zpráva byla úspěšně odeslána. Děkujeme!",
       "error": "Chyba při odesílání. Zkuste to prosím znovu."
     }
   }

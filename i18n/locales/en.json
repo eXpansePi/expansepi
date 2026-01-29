@@ -164,7 +164,7 @@
       "messagePlaceholder": "Your message...",
       "send": "Send",
       "sending": "Sending...",
-      "success": "Your email client should open. Please check and send the message manually.",
+      "success": "Message sent successfully. Thank you!",
       "error": "Error sending message. Please try again."
     }
   }
