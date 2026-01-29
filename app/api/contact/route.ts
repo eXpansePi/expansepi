@@ -1,80 +1,78 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import { NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+const escapeHtml = (text: string) => {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
 
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json()
-    const { name, email, subject, message } = body
+    const body = await req.json();
+    const { name, email, message } = body;
 
-    // Validate required fields
-    if (!name || !email || !subject || !message) {
+    // 1. Basic Validation (Input presence)
+    if (!name || !email || !message) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'Chybí povinná pole.' },
         { status: 400 }
-      )
+      );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    // 2. Length Validation (Prevent massive payloads)
+    if (name.length > 100) return NextResponse.json({ error: 'Jméno je příliš dlouhé.' }, { status: 400 });
+    if (email.length > 100) return NextResponse.json({ error: 'Email je příliš dlouhý.' }, { status: 400 });
+    if (message.length > 5000) return NextResponse.json({ error: 'Zpráva je příliš dlouhá.' }, { status: 400 });
+
+    // 3. Email Format Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Neplatný formát emailu.' }, { status: 400 });
     }
 
-    // Create email content
-    const emailContent = `
-Name: ${name}
-Email: ${email}
-Subject: ${subject}
-
-Message:
-${message}
-    `.trim()
-
-    // Try to send email using Resend if API key is configured
-    if (resend && process.env.RESEND_API_KEY) {
-      try {
-        await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL || 'noreply@expansepi.com',
-          to: 'info@expansepi.com',
-          subject: `Contact Form: ${subject}`,
-          text: emailContent,
-          replyTo: email,
-        })
-
-        return NextResponse.json(
-          { 
-            success: true,
-            message: 'Email sent successfully'
-          },
-          { status: 200 }
-        )
-      } catch (emailError) {
-        console.error('Error sending email via Resend:', emailError)
-        // Fall through to mailto fallback
-      }
-    }
-
-    // Fallback to mailto link if Resend is not configured
-    return NextResponse.json(
-      { 
-        success: true,
-        message: 'Email prepared successfully',
-        // Return mailto link for client-side handling
-        mailtoLink: `mailto:info@expansepi.com?subject=${encodeURIComponent(`Contact Form: ${subject}`)}&body=${encodeURIComponent(emailContent)}`
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
       },
-      { status: 200 }
-    )
-  } catch (error) {
-    console.error('Error processing contact form:', error)
+    });
+
+    // 4. Sanitization for HTML context (Prevent HTML Injection/XSS in email client)
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
+
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: 'info@expansepi.com',
+      replyTo: email, // Nodemailer handles basic header sanitization
+      subject: `Nová zpráva od ${safeName} přes kontaktní formulář`,
+      text: `Jméno: ${name}\nEmail: ${email}\n\nZpráva:\n${message}`, // Plain text is safe
+      html: `
+        <h3>Nová zpráva z kontaktního formuláře</h3>
+        <p><strong>Jméno:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
+        <p><strong>Zpráva:</strong></p>
+        <p>${safeMessage}</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { message: 'Email byl úspěšně odeslán.' },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Email sending error:', error);
+    return NextResponse.json(
+      { error: 'Nepodařilo se odeslat email.' },
       { status: 500 }
-    )
+    );
   }
 }
-
