@@ -41,6 +41,9 @@ export async function POST(req: Request) {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS,
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     });
 
     // 4. Sanitization for HTML context (Prevent HTML Injection/XSS in email client)
@@ -50,11 +53,11 @@ export async function POST(req: Request) {
     const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
 
     const mailOptions = {
-      from: process.env.GMAIL_USER,
+      from: `"Nová Poptávka" <info@expansepi.com>`,
       to: 'info@expansepi.com',
-      replyTo: email, // Nodemailer handles basic header sanitization
+      replyTo: email,
       subject: `${safeSubject} (od: ${safeName})`,
-      text: `Jméno: ${name}\nEmail: ${email}\nPředmět: ${subject}\n\nZpráva:\n${message}`, // Plain text is safe
+      text: `Jméno: ${name}\nEmail: ${email}\nPředmět: ${subject}\n\nZpráva:\n${message}`,
       html: `
         <h3>Nová zpráva z kontaktního formuláře</h3>
         <p><strong>Jméno:</strong> ${safeName}</p>
@@ -71,10 +74,14 @@ export async function POST(req: Request) {
       { success: true, message: 'Email byl úspěšně odeslán.' },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error('Email sending error:', error);
     return NextResponse.json(
-      { error: 'Nepodařilo se odeslat email.' },
+      {
+        success: false,
+        error: 'Nepodařilo se odeslat email.',
+        details: error.message
+      },
       { status: 500 }
     );
   }
