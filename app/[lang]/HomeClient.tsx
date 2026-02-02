@@ -79,8 +79,8 @@ export default function HomeClient({ lang }: HomeClientProps) {
     return result.length > 0 ? <>{result}</> : <span>{typedText}</span>
   }
 
-  const BASE_SPEED = 0.08
-  const TURN_RATE = 0.01
+  const BASE_SPEED = 0.05
+  const TURN_RATE = 0.005
   const REPULSION_RADIUS = 150
   const REPULSION_STRENGTH = 0.2
   // Base node count for large screens (maintains original behavior)
@@ -89,7 +89,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
   const BIRTH_FADE_SPEED = 0.002
   const ELLIPSE_RADIUS_X = 700
   const ELLIPSE_RADIUS_Y = 600
-  const ELLIPSE_FADE_STRENGTH = 0.7
+  const ELLIPSE_FADE_STRENGTH = 0.5
 
   // Calculate responsive node count based on screen size
   const calculateNodeCount = (width: number, height: number): number => {
@@ -228,8 +228,8 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
         // Bottom ellipse (Partners section)
         const bottomCy = height - 60
-        const bottomRx = 500
-        const bottomRy = 140
+        const bottomRx = 400
+        const bottomRy = 120
 
         const bdx = (x - centerX) / bottomRx
         const bdy = (y - bottomCy) / bottomRy
