@@ -79,8 +79,8 @@ export default function HomeClient({ lang }: HomeClientProps) {
     return result.length > 0 ? <>{result}</> : <span>{typedText}</span>
   }
 
-  const BASE_SPEED = 0.02
-  const TURN_RATE = 0.002
+  const BASE_SPEED = 0.08
+  const TURN_RATE = 0.01
   const REPULSION_RADIUS = 150
   const REPULSION_STRENGTH = 0.2
   // Base node count for large screens (maintains original behavior)
@@ -89,7 +89,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
   const BIRTH_FADE_SPEED = 0.002
   const ELLIPSE_RADIUS_X = 700
   const ELLIPSE_RADIUS_Y = 600
-  const ELLIPSE_FADE_STRENGTH = 0.5
+  const ELLIPSE_FADE_STRENGTH = 0.7
 
   // Calculate responsive node count based on screen size
   const calculateNodeCount = (width: number, height: number): number => {
@@ -97,7 +97,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
     // Base area for large screens (1920x1080 = 2,073,600)
     const baseArea = 1920 * 1080
     // Minimum node count for very small screens
-    const minNodes = 20
+    const minNodes = 40
     // Maximum node count (for large screens, maintain original)
     const maxNodes = BASE_NODE_COUNT
 
@@ -106,12 +106,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
     // Scale nodes based on area, but cap at maxNodes for large screens
     // Use a square root scaling to reduce nodes more aggressively on small screens
-    let scaledNodes = Math.floor(BASE_NODE_COUNT * Math.sqrt(densityRatio))
-
-    // Reduce count further on mobile devices to prevent overcrowding
-    if (width < 768) {
-      scaledNodes = Math.floor(scaledNodes * 0.6)
-    }
+    const scaledNodes = Math.floor(BASE_NODE_COUNT * Math.sqrt(densityRatio))
 
     // Clamp between min and max
     return Math.max(minNodes, Math.min(maxNodes, scaledNodes))
