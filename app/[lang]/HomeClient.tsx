@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import anime from "animejs/lib/anime.es.js"
 import Navigation from "./components/Navigation"
 import { getTranslations } from "@/i18n/index"
@@ -18,16 +19,26 @@ export default function HomeClient({ lang }: HomeClientProps) {
   const mouse = useRef({ x: 0, y: 0, active: false })
 
   const t = getTranslations(lang)
+  const partners = [
+    {
+      name: "JetBrains",
+      logo: "/jetbrains/jetbrains.svg",
+      url: "https://www.jetbrains.com/",
+      width: 48,
+      height: 48
+    }
+  ]
+
   const fullText = t.home.tagline
 
   const renderTypedText = () => {
     // Find keywords to highlight (university names, etc.)
-    const keywords = lang === 'cs' 
+    const keywords = lang === 'cs'
       ? ['Matfyzu UK', 'ČVUT']
       : lang === 'en'
-      ? ['top European universities']
-      : ['ведущих европейских университетов']
-    
+        ? ['top European universities']
+        : ['ведущих европейских университетов']
+
     let currentLength = typedText.length
     if (currentLength === 0) return null
 
@@ -89,14 +100,14 @@ export default function HomeClient({ lang }: HomeClientProps) {
     const minNodes = 40
     // Maximum node count (for large screens, maintain original)
     const maxNodes = BASE_NODE_COUNT
-    
+
     // Calculate density ratio
     const densityRatio = area / baseArea
-    
+
     // Scale nodes based on area, but cap at maxNodes for large screens
     // Use a square root scaling to reduce nodes more aggressively on small screens
     const scaledNodes = Math.floor(BASE_NODE_COUNT * Math.sqrt(densityRatio))
-    
+
     // Clamp between min and max
     return Math.max(minNodes, Math.min(maxNodes, scaledNodes))
   }
@@ -108,7 +119,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
     let width = (canvas.width = window.innerWidth)
     let height = (canvas.height = window.innerHeight)
-    
+
     // Calculate node count based on current screen size
     let nodeCount = calculateNodeCount(width, height)
 
@@ -174,7 +185,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
     const draw = () => {
       if (!isRunning) return
-      
+
       ctx.clearRect(0, 0, width, height)
       ctx.fillStyle = "#f9fafb"
       ctx.fillRect(0, 0, width, height)
@@ -209,16 +220,34 @@ export default function HomeClient({ lang }: HomeClientProps) {
         if (n.life < 1) n.life = Math.min(1, n.life + BIRTH_FADE_SPEED)
       }
 
-      const fadeInsideEllipse = (x: number, y: number) => {
+      const calculateFade = (x: number, y: number) => {
+        // Main center ellipse (Hero section)
         const dx = (x - centerX) / ELLIPSE_RADIUS_X
         const dy = (y - centerY) / ELLIPSE_RADIUS_Y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < 1) {
-          // More aggressive fade: use higher power for smoother, more transparent center
-          const fadeFactor = Math.pow(dist, 2.5) * ELLIPSE_FADE_STRENGTH + (1 - ELLIPSE_FADE_STRENGTH)
-          return Math.max(0.02, fadeFactor)
+        const distCenter = Math.sqrt(dx * dx + dy * dy)
+
+        // Bottom ellipse (Partners section)
+        const bottomCy = height - 60
+        const bottomRx = 500
+        const bottomRy = 140
+
+        const bdx = (x - centerX) / bottomRx
+        const bdy = (y - bottomCy) / bottomRy
+        const distBottom = Math.sqrt(bdx * bdx + bdy * bdy)
+
+        let fade = 1.0
+
+        if (distCenter < 1) {
+          const val = Math.pow(distCenter, 2.5) * ELLIPSE_FADE_STRENGTH + (1 - ELLIPSE_FADE_STRENGTH)
+          fade = Math.min(fade, val)
         }
-        return 1
+
+        if (distBottom < 1) {
+          const val = Math.pow(distBottom, 2.5) * ELLIPSE_FADE_STRENGTH + (1 - ELLIPSE_FADE_STRENGTH)
+          fade = Math.min(fade, val)
+        }
+
+        return Math.max(0.02, fade)
       }
 
       for (let i = 0; i < nodes.length; i++) {
@@ -229,12 +258,12 @@ export default function HomeClient({ lang }: HomeClientProps) {
           if (dist < CONNECTION_DISTANCE) {
             const fade = (nodes[i].life + nodes[j].life) / 2
             const baseAlpha = Math.pow(fade, 2) * (1 - dist / CONNECTION_DISTANCE)
-            const fade1 = fadeInsideEllipse(nodes[i].x, nodes[i].y)
-            const fade2 = fadeInsideEllipse(nodes[j].x, nodes[j].y)
+            const fade1 = calculateFade(nodes[i].x, nodes[i].y)
+            const fade2 = calculateFade(nodes[j].x, nodes[j].y)
             const avgFade = (fade1 + fade2) / 2
             const combined = baseAlpha * avgFade
             ctx.strokeStyle = `rgba(37, 99, 235,${combined})`
-            // Make edges thinner in the center area: scale from 2.5 (edges) to 0.8 (center)
+            // Make edges thinner in the center or bottom area
             ctx.lineWidth = 0.8 + (avgFade * 1.7)
             ctx.beginPath()
             ctx.moveTo(nodes[i].x, nodes[i].y)
@@ -245,9 +274,9 @@ export default function HomeClient({ lang }: HomeClientProps) {
       }
 
       for (const n of nodes) {
-        const fade = fadeInsideEllipse(n.x, n.y)
+        const fade = calculateFade(n.x, n.y)
         ctx.fillStyle = `rgba(37, 99, 235,${n.life * fade})`
-        // Make vertices smaller in the center area: scale from 3.5 (edges) to 2.0 (center)
+        // Make vertices smaller in the center or bottom area
         const radius = 2.0 + (fade * 1.5)
         ctx.beginPath()
         ctx.arc(n.x, n.y, radius, 0, 2 * Math.PI)
@@ -278,10 +307,10 @@ export default function HomeClient({ lang }: HomeClientProps) {
     const handleResize = () => {
       width = canvas.width = window.innerWidth
       height = canvas.height = window.innerHeight
-      
+
       // Recalculate node count on resize
       const newNodeCount = calculateNodeCount(width, height)
-      
+
       // Adjust nodes array if count changed
       if (newNodeCount !== nodeCount) {
         if (newNodeCount > nodeCount) {
@@ -386,6 +415,15 @@ export default function HomeClient({ lang }: HomeClientProps) {
       duration: 800,
     })
 
+    anime({
+      targets: ".partners-section",
+      opacity: [0, 1],
+      translateY: [20, 0],
+      delay: buttonDelay + 400,
+      easing: "easeOutCubic",
+      duration: 800,
+    })
+
     return () => {
       clearTimeout(timeoutId)
       if (typeInterval) clearInterval(typeInterval)
@@ -400,7 +438,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
         <Navigation activePage={`/${lang}`} lang={lang} t={t} />
 
         {/* Hero Section */}
-        <section className="hero-section absolute inset-0 flex flex-col items-center justify-center text-center transition-all px-4 sm:px-6 pt-16 sm:pt-20">
+        <section className="hero-section absolute inset-0 flex flex-col items-center justify-center text-center transition-all px-4 sm:px-6 pt-16 sm:pt-20 pb-32">
           <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl font-bold mb-4 drop-shadow-sm">
             <span className="inline-block text-gray-900">eXpanse</span>
             <span className="inline-block text-blue-600 ml-1">Pi</span>
@@ -434,6 +472,32 @@ export default function HomeClient({ lang }: HomeClientProps) {
             >
               {t.home.ctaSecondary}
             </Link>
+          </div>
+
+          {/* Supported By Section */}
+          <div className="partners-section opacity-0 absolute bottom-8 sm:bottom-12 left-0 right-0 flex flex-col items-center justify-center">
+            <p className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-widest mb-4">
+              {t.home.supportedBy}
+            </p>
+            <div className="flex items-center justify-center gap-8 flex-wrap">
+              {partners.map((partner) => (
+                <a
+                  key={partner.name}
+                  href={partner.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="opacity-70 hover:opacity-100 transition-opacity duration-300"
+                >
+                  <Image
+                    src={partner.logo}
+                    alt={partner.name}
+                    width={partner.width}
+                    height={partner.height}
+                    className="h-10 w-auto sm:h-11"
+                  />
+                </a>
+              ))}
+            </div>
           </div>
         </section>
       </main>
