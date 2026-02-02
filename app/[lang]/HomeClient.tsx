@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import anime from "animejs/lib/anime.es.js"
 import Navigation from "./components/Navigation"
 import { getTranslations } from "@/i18n/index"
@@ -22,12 +23,12 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
   const renderTypedText = () => {
     // Find keywords to highlight (university names, etc.)
-    const keywords = lang === 'cs' 
+    const keywords = lang === 'cs'
       ? ['Matfyzu UK', 'ČVUT']
       : lang === 'en'
-      ? ['top European universities']
-      : ['ведущих европейских университетов']
-    
+        ? ['top European universities']
+        : ['ведущих европейских университетов']
+
     let currentLength = typedText.length
     if (currentLength === 0) return null
 
@@ -68,7 +69,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
     return result.length > 0 ? <>{result}</> : <span>{typedText}</span>
   }
 
-  const BASE_SPEED = 0.08
+  const BASE_SPEED = 0.05
   const TURN_RATE = 0.01
   const REPULSION_RADIUS = 150
   const REPULSION_STRENGTH = 0.2
@@ -89,14 +90,14 @@ export default function HomeClient({ lang }: HomeClientProps) {
     const minNodes = 40
     // Maximum node count (for large screens, maintain original)
     const maxNodes = BASE_NODE_COUNT
-    
+
     // Calculate density ratio
     const densityRatio = area / baseArea
-    
+
     // Scale nodes based on area, but cap at maxNodes for large screens
     // Use a square root scaling to reduce nodes more aggressively on small screens
     const scaledNodes = Math.floor(BASE_NODE_COUNT * Math.sqrt(densityRatio))
-    
+
     // Clamp between min and max
     return Math.max(minNodes, Math.min(maxNodes, scaledNodes))
   }
@@ -108,7 +109,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
     let width = (canvas.width = window.innerWidth)
     let height = (canvas.height = window.innerHeight)
-    
+
     // Calculate node count based on current screen size
     let nodeCount = calculateNodeCount(width, height)
 
@@ -174,7 +175,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
     const draw = () => {
       if (!isRunning) return
-      
+
       ctx.clearRect(0, 0, width, height)
       ctx.fillStyle = "#f9fafb"
       ctx.fillRect(0, 0, width, height)
@@ -278,10 +279,10 @@ export default function HomeClient({ lang }: HomeClientProps) {
     const handleResize = () => {
       width = canvas.width = window.innerWidth
       height = canvas.height = window.innerHeight
-      
+
       // Recalculate node count on resize
       const newNodeCount = calculateNodeCount(width, height)
-      
+
       // Adjust nodes array if count changed
       if (newNodeCount !== nodeCount) {
         if (newNodeCount > nodeCount) {
@@ -386,6 +387,15 @@ export default function HomeClient({ lang }: HomeClientProps) {
       duration: 800,
     })
 
+    anime({
+      targets: ".partners-section",
+      opacity: [0, 1],
+      translateY: [20, 0],
+      delay: buttonDelay + 400,
+      easing: "easeOutCubic",
+      duration: 800,
+    })
+
     return () => {
       clearTimeout(timeoutId)
       if (typeInterval) clearInterval(typeInterval)
@@ -400,40 +410,65 @@ export default function HomeClient({ lang }: HomeClientProps) {
         <Navigation activePage={`/${lang}`} lang={lang} t={t} />
 
         {/* Hero Section */}
-        <section className="hero-section absolute inset-0 flex flex-col items-center justify-center text-center transition-all px-4 sm:px-6 pt-16 sm:pt-20">
-          <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl font-bold mb-4 drop-shadow-sm">
-            <span className="inline-block text-gray-900">eXpanse</span>
-            <span className="inline-block text-blue-600 ml-1">Pi</span>
-          </h1>
+        <section className="hero-section absolute inset-0 flex flex-col items-center text-center transition-all px-4 sm:px-6 pt-16 sm:pt-20 overflow-hidden">
+          <div className="flex-1 flex flex-col items-center justify-center w-full pb-10">
+            <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl font-bold mb-4 drop-shadow-sm">
+              <span className="inline-block text-gray-900">eXpanse</span>
+              <span className="inline-block text-blue-600 ml-1">Pi</span>
+            </h1>
 
-          <p className="hero-subtitle text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-3 sm:mb-4 opacity-0 px-4 drop-shadow-sm">
-            {t.home.subtitle}
-          </p>
+            <p className="hero-subtitle text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-3 sm:mb-4 opacity-0 px-4 drop-shadow-sm">
+              {t.home.subtitle}
+            </p>
 
-          <div className="hero-subtitle opacity-0 mb-6 sm:mb-8 px-4">
-            <div className="glow-outline inline-block px-4 sm:px-6 py-2 sm:py-3 bg-white/80 backdrop-blur-md rounded-full shadow-lg">
-              <p className="text-sm sm:text-base md:text-lg font-medium text-gray-900">
-                {renderTypedText()}
-                {typedText.length < fullText.length && (
-                  <span className="inline-block w-0.5 h-4 sm:h-5 bg-blue-600 ml-1 animate-pulse" />
-                )}
-              </p>
+            <div className="hero-subtitle opacity-0 mb-6 sm:mb-8 px-4">
+              <div className="glow-outline inline-block px-4 sm:px-6 py-2 sm:py-3 bg-white/80 backdrop-blur-md rounded-full shadow-lg">
+                <p className="text-sm sm:text-base md:text-lg font-medium text-gray-900">
+                  {renderTypedText()}
+                  {typedText.length < fullText.length && (
+                    <span className="inline-block w-0.5 h-4 sm:h-5 bg-blue-600 ml-1 animate-pulse" />
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <Link
+                href={getRoutePath(lang, 'home')}
+                className="cta-button opacity-0 px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-gradient-to-r from-blue-600 to-sky-400 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
+              >
+                {t.home.cta}
+              </Link>
+              <Link
+                href={getRoutePath(lang, 'about')}
+                className="cta-button opacity-0 px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-white text-blue-600 font-semibold shadow-md border-2 border-blue-600 transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
+              >
+                {t.home.ctaSecondary}
+              </Link>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Link
-              href={getRoutePath(lang, 'home')}
-              className="cta-button opacity-0 px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-gradient-to-r from-blue-600 to-sky-400 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
-            >
-              {t.home.cta}
-            </Link>
-            <Link
-              href={getRoutePath(lang, 'about')}
-              className="cta-button opacity-0 px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-white text-blue-600 font-semibold shadow-md border-2 border-blue-600 transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
-            >
-              {t.home.ctaSecondary}
-            </Link>
+          {/* Partners Section */}
+          <div className="partners-section opacity-0 w-full flex flex-col items-center pb-8 sm:pb-12 z-10 shrink-0">
+            <p className="text-gray-500 text-sm font-medium mb-6 uppercase tracking-wider">
+              {t.home.supportedBy}
+            </p>
+            <div className="flex flex-wrap justify-center gap-8 items-center px-4 max-w-4xl mx-auto">
+              <a
+                href="https://www.jetbrains.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:scale-105 transition-transform duration-300"
+              >
+                <Image
+                  src="/jetbrains/jetbrains.svg"
+                  alt="JetBrains"
+                  width={100}
+                  height={100}
+                  className="h-8 sm:h-10 w-auto"
+                />
+              </a>
+            </div>
           </div>
         </section>
       </main>
