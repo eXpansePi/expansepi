@@ -446,32 +446,46 @@ export default function HomeClient({ lang }: HomeClientProps) {
                 {t.home.ctaSecondary}
               </Link>
             </div>
-          </div>
 
-          {/* Partners Section */}
-          <div className="partners-section opacity-0 w-full flex flex-col items-center pb-8 sm:pb-12 z-10 shrink-0">
-            <p className="text-gray-500 text-sm font-medium mb-6 uppercase tracking-wider">
-              {t.home.supportedBy}
-            </p>
-            <div className="flex flex-wrap justify-center gap-8 items-center px-4 max-w-4xl mx-auto">
-              <a
-                href="https://www.jetbrains.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:scale-105 transition-transform duration-300"
-              >
-                <Image
-                  src="/jetbrains/jetbrains.svg"
-                  alt="JetBrains"
-                  width={100}
-                  height={100}
-                  className="h-8 sm:h-10 w-auto"
-                />
-              </a>
+            {/* Partners Section */}
+            <div className="partners-section opacity-0 w-full flex flex-col items-center mt-12 sm:mt-16 z-10">
+              <p className="text-gray-500 text-sm font-medium mb-6 uppercase tracking-wider">
+                {t.home.supportedBy}
+              </p>
+              <div className="flex flex-wrap justify-center gap-12 sm:gap-16 items-center px-4 max-w-4xl mx-auto">
+                <a
+                  href="https://www.jetbrains.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-105 transition-transform duration-300"
+                >
+                  <Image
+                    src="/jetbrains/jetbrains.svg"
+                    alt="JetBrains"
+                    width={100}
+                    height={100}
+                    className="h-8 sm:h-10 w-auto"
+                  />
+                </a>
+                <a
+                  href="https://www.microsoft.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-105 transition-transform duration-300"
+                >
+                  <Image
+                    src="/microsoft/microsoft-white.png"
+                    alt="Microsoft"
+                    width={220}
+                    height={46}
+                    className="h-20 sm:h-28 w-auto"
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </section>
-      </main>
+      </main >
     </>
   )
 }
