@@ -129,8 +129,7 @@
           "specializations": [
             "C/C++",
             "Operační systémy",
-            "Architektura",
-            "Algoritmy a datové struktury"
+            "Architektura"
           ],
           "description": "Seniorní vývojář v oblasti kybernetické bezpečnosti s více než 10 lety zkušeností. V Rapid7 pracuje na vývoji antivirových a endpoint bezpečnostních technologií. Dříve působil v Samsungu a několika startupech, z nichž jeden byl následně koupen společností Google. Specializuje se na nízkoúrovňový vývoj v C/C++, práci s endpoint systémy a tvorbu výkonných a spolehlivých bezpečnostních řešení."
         },
@@ -138,8 +137,7 @@
           "specializations": [
             "C/C++",
             "Operating systems",
-            "Architecture",
-            "Algorithms and data structures"
+            "Architecture"
           ],
           "description": "A senior cybersecurity developer with more than 10 years of experience. At Rapid7, he works on antivirus and endpoint security technologies. He previously worked at Samsung and several startups, one of which was later acquired by Google. He specializes in low-level development in C/C++, endpoint system engineering, and building high-performance, reliable security solutions."
         },
@@ -147,8 +145,7 @@
           "specializations": [
             "C/C++",
             "Oперационные системы",
-            "Архитектура",
-            "Алгоритмы и структуры данных"
+            "Архитектура"
           ],
           "description": "Senior разработчик в области кибербезопасности с более чем 10-летним опытом. В Rapid7 работает над антивирусными и endpoint-технологиями. Ранее работал в Samsung и нескольких стартапах, один из которых позже был приобретён компанией Google. Специализируется на низкоуровневой разработке на C/C++, работе с endpoint-системами и создании высокопроизводительных и надёжных решений в сфере безопасности."
         }
