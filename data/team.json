@@ -49,7 +49,7 @@
     {
       "id": 1,
       "name": "Aleš Prokop",
-      "title": "Software Engineer\nMicrosoft\nMFF UK",
+      "title": "Software Engineer\nRapid7\nMFF UK",
       "photo": "",
       "languages": {
         "cs": {
@@ -57,7 +57,6 @@
             "Python",
             "Automatizace",
             "Django",
-            "Robot Framework",
             "Algoritmy a datové struktury"
           ],
           "description": "Absolvent obecné informatiky na MFF UK a zkušený vývojář v Pythonu. Zaměřuje se na automatizaci procesů, tvorbu datových nástrojů a efektivní backendová řešení. Má silné technické zázemí a cit pro čistý, udržitelný kód. Jako lektor programování má bohaté zkušenosti s vedením kurzů i individuálním mentoringem a dokáže naučit moderní vývojové principy jasně, strukturovaně a prakticky."
@@ -67,7 +66,6 @@
             "Python",
             "Automation",
             "Django",
-            "Robot Framework",
             "Algorithms and data structures"
           ],
           "description": "A graduate of General Computer Science at the Faculty of Mathematics and Physics, Charles University, and an experienced Python developer. He focuses on process automation, building data tools, and creating efficient backend solutions. He has a strong technical foundation and an eye for clean, maintainable code. As a programming instructor, he has extensive experience with courses and individual mentoring, explaining modern development principles clearly, logically, and with practical relevance."
@@ -77,7 +75,6 @@
             "Python",
             "Автоматизация",
             "Django",
-            "Robot Framework",
             "Алгоритмы и структуры данных"
           ],
           "description": "Выпускник направления «Общая информатика» на факультете математики и физики Карлова университета и опытный разработчик на Python. Специализируется на автоматизации процессов, создании инструментов для работы с данными и эффективных backend-решений. Обладает сильной технической базой и вниманием к чистому, поддерживаемому коду. Как преподаватель программирования имеет большой опыт проведения курсов и индивидуального менторства, объясняя современные принципы разработки ясно, структурированно и с практическим уклоном."
