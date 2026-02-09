@@ -49,7 +49,7 @@
     {
       "id": 1,
       "name": "Aleš Prokop",
-      "title": "Software Engineer, Microsoft\nMFF UK",
+      "title": "Software Engineer\nMicrosoft\nMFF UK",
       "photo": "",
       "languages": {
         "cs": {
@@ -87,7 +87,7 @@
     {
       "id": 2,
       "name": "Eldar Urmanov",
-      "title": "Senior Software Engineer, Rapid7\nMFF UK",
+      "title": "Senior Software Engineer\nRapid7\nMFF UK",
       "photo": "",
       "languages": {
         "cs": {
@@ -125,7 +125,7 @@
     {
       "id": 3,
       "name": "Kostiantyn Agapov",
-      "title": "Senior Software Engineer, Rapid7\n\n",
+      "title": "Senior Software Engineer\nRapid7\n\n",
       "photo": "",
       "languages": {
         "cs": {
@@ -160,7 +160,7 @@
     {
       "id": 4,
       "name": "Vít Dvořák",
-      "title": "Freelance Software Engineer\nMFF UK",
+      "title": "Software Engineer\nFreelance\nMFF UK",
       "photo": "",
       "languages": {
         "cs": {
@@ -195,7 +195,7 @@
     {
       "id": 5,
       "name": "Vlad Karpenko",
-      "title": "Software Engineer, Grant Thornton\nMFF UK",
+      "title": "Software Engineer\nGrant Thornton\nMFF UK",
       "photo": "",
       "languages": {
         "cs": {
@@ -233,7 +233,7 @@
     {
       "id": 6,
       "name": "Anton Voznia",
-      "title": "Senior Software Engineer, Azul Systems\nČVUT",
+      "title": "Senior Software Engineer\nAzul Systems\nČVUT",
       "photo": "",
       "languages": {
         "cs": {
