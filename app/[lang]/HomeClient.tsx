@@ -432,16 +432,16 @@ export default function HomeClient({ lang }: HomeClientProps) {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0 max-w-lg">
               <Link
                 href={getRoutePath(lang, 'home')}
-                className="cta-button opacity-0 px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-gradient-to-r from-blue-600 to-sky-400 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
+                className="cta-button opacity-0 w-full sm:w-64 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-gradient-to-r from-blue-600 to-sky-400 text-white font-semibold shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg text-center items-center justify-center flex"
               >
                 {t.home.cta}
               </Link>
               <Link
                 href={getRoutePath(lang, 'about')}
-                className="cta-button opacity-0 px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-white text-blue-600 font-semibold shadow-md border-2 border-blue-600 transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
+                className="cta-button opacity-0 w-full sm:w-64 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-white text-blue-600 font-semibold shadow-md border-2 border-blue-600 transition-all duration-200 hover:scale-105 hover:shadow-lg text-center items-center justify-center flex"
               >
                 {t.home.ctaSecondary}
               </Link>
