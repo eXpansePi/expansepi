@@ -13,7 +13,11 @@
     "notFound": "Not found"
   },
   "nav": {
-    "language": "Language"
+    "language": "Language",
+    "aboutMenu": {
+      "whoWeAre": "Who We Are",
+      "teamAndLecturers": "Our Team and Lecturers"
+    }
   },
   "home": {
     "title": "eXpansePi - IT Education of the Future",
@@ -88,12 +92,14 @@
   },
   "courses": {
     "title": "Courses",
+    "subtitle": "Browse our currently available and upcoming IT courses.",
     "available": "Available courses",
     "preparing": "Preparing",
     "level": "Level",
     "duration": "Duration",
     "noData": "No courses available",
     "price": "2 000 EUR",
+    "priceFrom": "from 0 EUR",
     "priceNote": "Note: Funding by Czech Labour Office is only available for Czech residents",
     "installments": "Pay in 3 installments with no added cost"
   },
@@ -138,6 +144,12 @@
     "teamTitle": "Our Team",
     "lecturersTitle": "Lecturers",
     "lecturerDefinition": "Our lecturers are experienced professionals with practical experience in IT."
+  },
+  "footer": {
+    "companyDescription": "IT education of the future. Reskilling courses with experts from Charles University and Czech Technical University.",
+    "quickLinks": "Quick Links",
+    "moreInfo": "More Information",
+    "copyright": "All rights reserved."
   },
   "contact": {
     "title": "Contact",

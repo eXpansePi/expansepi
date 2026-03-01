@@ -3,13 +3,24 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { languages, langLabels, isValidLanguage, type Language } from "@/i18n/config"
+import { type Translations } from "@/i18n/index"
 import { getRoutePath, getPublicPath } from "@/lib/routes"
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type DropdownItem = { href: string; label: string }
+
+type NavLink =
+  | { href: string; label: string; hasDropdown?: false }
+  | { href: string; label: string; hasDropdown: true; dropdownItems: DropdownItem[] }
 
 interface NavigationProps {
   activePage?: string
   lang: string
-  t: any
+  t: Translations
 }
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Navigation({ activePage, lang, t }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -21,17 +32,17 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
   const pathname = usePathname()
   const currentLang = (isValidLanguage(lang) ? lang : 'cs') as Language
 
-  const navLinks = [
+  const navLinks: NavLink[] = [
     { href: getRoutePath(currentLang, 'home'), label: t.common.home },
     { href: getRoutePath(currentLang, 'courses'), label: t.common.courses },
-    { 
-      href: getRoutePath(currentLang, 'about'), 
+    {
+      href: getRoutePath(currentLang, 'about'),
       label: t.common.about,
       hasDropdown: true,
       dropdownItems: [
-        { href: getRoutePath(currentLang, 'about'), label: (t.about as any)?.whoWeAre || (currentLang === 'cs' ? 'Kdo jsme' : currentLang === 'en' ? 'Who We Are' : 'Кто мы') },
-        { href: `${getRoutePath(currentLang, 'about')}#team`, label: currentLang === 'cs' ? 'Náš tým a lektoři' : currentLang === 'en' ? 'Our Team and Lecturers' : 'Наша команда и лекторы' },
-      ]
+        { href: getRoutePath(currentLang, 'about'), label: t.nav.aboutMenu.whoWeAre },
+        { href: `${getRoutePath(currentLang, 'about')}#team`, label: t.nav.aboutMenu.teamAndLecturers },
+      ],
     },
     { href: getRoutePath(currentLang, 'contact'), label: t.common.contact },
     { href: getRoutePath(currentLang, 'vacancies'), label: t.common.vacancies },
@@ -63,20 +74,21 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
         <Link href={`/${currentLang}`} className="text-xl sm:text-2xl font-bold hover:opacity-80 transition-opacity drop-shadow-sm">
           <span className="text-gray-900">eXpanse</span><span className="text-blue-600">Pi</span>
         </Link>
-        
+
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-6 lg:space-x-8 text-gray-800">
           {navLinks.map((link) => {
-            if ((link as any).hasDropdown) {
+            if (link.hasDropdown) {
               return (
                 <div key={link.href} className="relative" ref={aboutMenuRef}>
                   <button
                     onClick={() => setAboutMenuOpen(!aboutMenuOpen)}
-                    className={`transition-colors ${
-                      activePage === link.href 
-                        ? "text-blue-600 font-bold" 
+                    aria-haspopup="true"
+                    aria-expanded={aboutMenuOpen}
+                    className={`transition-colors ${activePage === link.href
+                        ? "text-blue-600 font-bold"
                         : "font-normal hover:text-blue-600"
-                    } flex items-center gap-1`}
+                      } flex items-center gap-1`}
                   >
                     {link.label}
                     <svg
@@ -84,20 +96,24 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                   {aboutMenuOpen && (
-                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[200px]">
-                      {(link as any).dropdownItems.map((item: any) => (
+                    <div
+                      role="menu"
+                      className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[200px]"
+                    >
+                      {link.dropdownItems.map((item) => (
                         <Link
                           key={item.href}
                           href={item.href}
+                          role="menuitem"
                           onClick={() => setAboutMenuOpen(false)}
-                          className={`block px-4 py-2 text-sm font-semibold hover:bg-blue-50 transition-colors ${
-                            activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
-                          }`}
+                          className={`block px-4 py-2 text-sm font-semibold hover:bg-blue-50 transition-colors ${activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
+                            }`}
                         >
                           {item.label}
                         </Link>
@@ -111,11 +127,10 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`transition-colors ${
-                  activePage === link.href 
-                    ? "text-blue-600 font-bold" 
+                className={`transition-colors ${activePage === link.href
+                    ? "text-blue-600 font-bold"
                     : "font-normal hover:text-blue-600"
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
@@ -128,27 +143,26 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
           <div className="relative" ref={langMenuRef}>
             <button
               onClick={() => setLangMenuOpen(!langMenuOpen)}
+              aria-label={t.nav.language}
+              aria-expanded={langMenuOpen}
+              aria-haspopup="true"
               className="p-2 text-gray-800 hover:text-blue-600 transition-colors font-semibold text-sm"
-              aria-label="Select language"
             >
               {currentLang.toUpperCase()}
             </button>
             {langMenuOpen && (
-              <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[120px]">
+              <div role="menu" className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[120px]">
                 {languages.map(l => {
-                  // Use actual pathname from Next.js router, fallback to activePage prop
-                  // Note: pathname may return internal route after rewrite, so we convert it
                   const currentPath = pathname || activePage || `/${currentLang}`
-                  // Convert internal route to public route for target language
                   const newPath = getPublicPath(currentPath, l as Language)
                   return (
                     <Link
                       key={l}
                       href={newPath}
+                      role="menuitem"
                       onClick={() => setLangMenuOpen(false)}
-                      className={`block px-4 py-2 text-sm font-semibold hover:bg-blue-50 transition-colors ${
-                        currentLang === l ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
-                      }`}
+                      className={`block px-4 py-2 text-sm font-semibold hover:bg-blue-50 transition-colors ${currentLang === l ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
+                        }`}
                     >
                       {langLabels[l]}
                     </Link>
@@ -166,8 +180,9 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                 setShowAboutSubmenu(false)
               }
             }}
-            className="md:hidden p-2 text-gray-800 hover:text-blue-600 transition-colors font-semibold"
             aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+            className="md:hidden p-2 text-gray-800 hover:text-blue-600 transition-colors font-semibold"
           >
             <svg
               className="w-6 h-6"
@@ -177,6 +192,7 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
               strokeWidth="2"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               {mobileMenuOpen ? (
                 <path d="M6 18L18 6M6 6l12 12" />
@@ -190,28 +206,25 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${mobileMenuOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="relative overflow-hidden bg-white/98 backdrop-blur-md border-t border-gray-200 shadow-lg">
           {/* Main Menu */}
           <div
-            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${
-              showAboutSubmenu ? '-translate-x-full absolute inset-0 w-full' : 'translate-x-0'
-            }`}
+            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${showAboutSubmenu ? '-translate-x-full absolute inset-0 w-full' : 'translate-x-0'
+              }`}
           >
             {navLinks.map((link) => {
-              if ((link as any).hasDropdown) {
+              if (link.hasDropdown) {
                 return (
                   <button
                     key={link.href}
                     onClick={() => setShowAboutSubmenu(true)}
-                    className={`w-full text-left transition-colors ${
-                      activePage === link.href 
-                        ? "text-blue-600 font-bold" 
+                    className={`w-full text-left transition-colors ${activePage === link.href
+                        ? "text-blue-600 font-bold"
                         : "text-gray-800 font-normal hover:text-blue-600"
-                    } flex items-center justify-between`}
+                      } flex items-center justify-between`}
                   >
                     {link.label}
                     <svg
@@ -219,6 +232,7 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -230,11 +244,10 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block transition-colors ${
-                    activePage === link.href 
-                      ? "text-blue-600 font-bold" 
+                  className={`block transition-colors ${activePage === link.href
+                      ? "text-blue-600 font-bold"
                       : "text-gray-800 font-normal hover:text-blue-600"
-                  }`}
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -244,9 +257,8 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
 
           {/* About Submenu */}
           <div
-            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${
-              showAboutSubmenu ? 'translate-x-0' : 'translate-x-full absolute inset-0 w-full'
-            }`}
+            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${showAboutSubmenu ? 'translate-x-0' : 'translate-x-full absolute inset-0 w-full'
+              }`}
           >
             <button
               onClick={() => setShowAboutSubmenu(false)}
@@ -257,13 +269,14 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
               <span className="font-semibold">{t.common.about}</span>
             </button>
-            {navLinks.find((link) => (link as any).hasDropdown) && (
-              (navLinks.find((link) => (link as any).hasDropdown) as any).dropdownItems.map((item: any) => (
+            {navLinks.find((link): link is NavLink & { hasDropdown: true } => link.hasDropdown === true)
+              ?.dropdownItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -271,14 +284,12 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                     setShowAboutSubmenu(false)
                     setMobileMenuOpen(false)
                   }}
-                  className={`block py-2 transition-colors text-lg ${
-                    activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-800 hover:text-blue-600'
-                  }`}
+                  className={`block py-2 transition-colors text-lg ${activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-800 hover:text-blue-600'
+                    }`}
                 >
                   {item.label}
                 </Link>
-              ))
-            )}
+              ))}
           </div>
         </div>
       </div>

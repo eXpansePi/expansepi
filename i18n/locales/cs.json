@@ -13,7 +13,11 @@
     "notFound": "Nenalezeno"
   },
   "nav": {
-    "language": "Jazyk"
+    "language": "Jazyk",
+    "aboutMenu": {
+      "whoWeAre": "Kdo jsme",
+      "teamAndLecturers": "Náš tým a lektoři"
+    }
   },
   "home": {
     "title": "eXpansePi - IT Vzdělávání budoucnosti",
@@ -84,6 +88,7 @@
   },
   "courses": {
     "title": "Kurzy",
+    "subtitle": "Přehled aktuálně dostupných a připravovaných IT kurzů.",
     "available": "Dostupné kurzy",
     "preparing": "Připravujeme",
     "level": "Úroveň",
@@ -135,6 +140,12 @@
     "teamTitle": "Náš tým",
     "lecturersTitle": "Lektoři",
     "lecturerDefinition": "Naši lektoři jsou zkušení odborníci s praktickými zkušenostmi v oblasti IT."
+  },
+  "footer": {
+    "companyDescription": "IT vzdělávání budoucnosti. Rekvalifikační kurzy s experty z Matfyzu UK a ČVUT.",
+    "quickLinks": "Rychlé odkazy",
+    "moreInfo": "Více informací",
+    "copyright": "Všechna práva vyhrazena."
   },
   "contact": {
     "title": "Kontakt",

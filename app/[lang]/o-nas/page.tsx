@@ -3,7 +3,7 @@ import Navigation from "../components/Navigation"
 import Footer from "../components/Footer"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
-import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
+import { getRoutePath } from "@/lib/routes"
 import { getAllTeamMembers, getAllLecturers } from "@/data/team"
 import TeamMemberCard from "./components/TeamMemberCard"
 import LecturerCard from "./components/LecturerCard"
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
   const t = getTranslations(lang)
   return {
     title: t.about.title,
-    description: t.about.title,
+    description: t.about.description,
   }
 }
 
@@ -27,17 +27,17 @@ function formatText(text: string) {
   const result: React.ReactNode[] = []
   let remainingText = text
   let keyCounter = 0
-  
+
   // Process text: find bold sections (including those with newlines) and regular text
   while (remainingText.length > 0) {
     // Look for **text** pattern (may contain newlines)
     const boldMatch = remainingText.match(/^\*\*((?:[^*]|\*(?!\*))*?)\*\*/)
-    
+
     if (boldMatch) {
       // Found bold text - handle newlines within it
       const boldContent = boldMatch[1]
       const boldLines = boldContent.split('\n')
-      
+
       result.push(
         <strong key={keyCounter++}>
           {boldLines.map((line, lineIdx) => (
@@ -72,7 +72,7 @@ function formatText(text: string) {
       }
     }
   }
-  
+
   return result
 }
 
@@ -85,10 +85,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const lecturers = getAllLecturers(lang)
 
   // Extract content with type assertion for new fields
-  const about = t.about as any
-  const content = about.content as string[] | undefined
-  const goalTitle = about.goalTitle as string | undefined
-  const goalContent = about.goalContent as string[] | undefined
+  const content = t.about.content as string[] | undefined
+  const goalTitle = t.about.goalTitle as string | undefined
+  const goalContent = t.about.goalContent as string[] | undefined
 
   // Separate motto (first element) from regular content
   const motto = content && content.length > 0 ? content[0] : undefined
@@ -100,13 +99,13 @@ export default async function AboutPage({ params }: AboutPageProps) {
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6 flex-grow">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-8 sm:mb-10">{t.about.title}</h1>
-          
+
           {/* Who We Are Section */}
           <section className="mb-8 sm:mb-10">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">
-              {(t.about as any).whoWeAre || 'Kdo jsme'}
+              {t.about.whoWeAre}
             </h2>
-            
+
             {/* Motto - Hero Quote */}
             {motto && (
               <div className="mb-6 sm:mb-8">

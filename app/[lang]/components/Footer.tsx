@@ -17,20 +17,12 @@ export default function Footer({ lang }: FooterProps) {
           {/* Company Info */}
           <div>
             <h3 className="text-white font-bold text-lg mb-3 sm:mb-4">eXpansePi</h3>
-            <p className="text-sm leading-relaxed">
-              {lang === 'cs' 
-                ? 'IT vzdělávání budoucnosti. Rekvalifikační kurzy s experty z Matfyzu UK a ČVUT.'
-                : lang === 'en'
-                ? 'IT education of the future. Reskilling courses with experts from Charles University and Czech Technical University.'
-                : 'IT образование будущего. Курсы переквалификации с экспертами из Карлова университета и Чешского технического университета.'}
-            </p>
+            <p className="text-sm leading-relaxed">{t.footer.companyDescription}</p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-semibold mb-3 sm:mb-4">
-              {lang === 'cs' ? 'Rychlé odkazy' : lang === 'en' ? 'Quick Links' : 'Быстрые ссылки'}
-            </h4>
+            <h4 className="text-white font-semibold mb-3 sm:mb-4">{t.footer.quickLinks}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href={getRoutePath(lang, 'home')} className="hover:text-white transition-colors">
@@ -57,9 +49,7 @@ export default function Footer({ lang }: FooterProps) {
 
           {/* More Links */}
           <div>
-            <h4 className="text-white font-semibold mb-3 sm:mb-4">
-              {lang === 'cs' ? 'Více informací' : lang === 'en' ? 'More Information' : 'Больше информации'}
-            </h4>
+            <h4 className="text-white font-semibold mb-3 sm:mb-4">{t.footer.moreInfo}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href={getRoutePath(lang, 'vacancies')} className="hover:text-white transition-colors">
@@ -76,9 +66,7 @@ export default function Footer({ lang }: FooterProps) {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-white font-semibold mb-3 sm:mb-4">
-              {t.contact.title}
-            </h4>
+            <h4 className="text-white font-semibold mb-3 sm:mb-4">{t.contact.title}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <span className="text-gray-400">{t.contact.address}:</span>
@@ -94,9 +82,7 @@ export default function Footer({ lang }: FooterProps) {
 
         {/* Copyright */}
         <div className="border-t border-gray-800 pt-6 sm:pt-8 text-center text-sm">
-          <p>
-            © {new Date().getFullYear()} eXpansePi. {lang === 'cs' ? 'Všechna práva vyhrazena.' : lang === 'en' ? 'All rights reserved.' : 'Все права защищены.'}
-          </p>
+          <p>© {new Date().getFullYear()} eXpansePi. {t.footer.copyright}</p>
         </div>
       </div>
     </footer>

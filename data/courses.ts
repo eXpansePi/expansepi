@@ -6,37 +6,6 @@
 import coursesData from './courses.json'
 import { Course, CourseStatus } from '@/types/course'
 
-/**
- * Type guard to validate course object structure (supports both old and multilingual structures)
- */
-function isCourse(obj: any): obj is Course {
-  if (!obj || typeof obj.slug !== 'string' || !(obj.status === 'active' || obj.status === 'upcoming')) {
-    return false
-  }
-
-  // Check for multilingual structure
-  if (obj.languages && typeof obj.languages === 'object') {
-    // Validate that at least one language exists
-    const hasValidLanguage = Object.values(obj.languages).some((langData: any) => 
-      langData && 
-      typeof langData.title === 'string' &&
-      typeof langData.description === 'string' &&
-      typeof langData.duration === 'string' &&
-      typeof langData.level === 'string'
-    )
-    return hasValidLanguage
-  }
-
-  // Check for old structure
-  return (
-    typeof obj.title === 'string' &&
-    typeof obj.description === 'string' &&
-    typeof obj.duration === 'string' &&
-    typeof obj.level === 'string' &&
-    (obj.image === undefined || typeof obj.image === 'string') &&
-    (obj.accreditation === undefined || typeof obj.accreditation === 'string')
-  )
-}
 
 const cache: Record<string, Course[]> = {}
 
@@ -46,27 +15,27 @@ const cache: Record<string, Course[]> = {}
  */
 function normalizeLevel(level: string): Course['level'] {
   const normalized = level.toLowerCase().trim()
-  
+
   // Beginner levels
   if (normalized === 'začátečník' || normalized === 'beginner' || normalized === 'начальный') {
     return 'Začátečníci'
   }
-  
+
   // Intermediate levels
   if (normalized === 'středně pokročilí' || normalized === 'intermediate' || normalized === 'средний') {
     return 'Středně pokročilí'
   }
-  
+
   // Advanced levels
   if (normalized === 'pokročilí' || normalized === 'advanced' || normalized === 'продвинутый') {
     return 'Pokročilí'
   }
-  
+
   // Fallback: if it matches one of the standard values (case-insensitive), return it
   const standardLevels: Course['level'][] = ['Začátečníci', 'Středně pokročilí', 'Pokročilí']
   const matched = standardLevels.find(l => l.toLowerCase() === normalized)
   if (matched) return matched
-  
+
   // Default fallback to beginner
   return 'Začátečníci'
 }
@@ -74,56 +43,60 @@ function normalizeLevel(level: string): Course['level'] {
 /**
  * Normalize course data to Course interface (handles both old and multilingual structures)
  */
-function normalizeCourse(course: any, lang: string = 'cs'): Course | null {
+function normalizeCourse(course: unknown, lang: string = 'cs'): Course | null {
   // Validate basic course structure
-  if (!course || typeof course !== 'object' || typeof course.slug !== 'string' || !(course.status === 'active' || course.status === 'upcoming')) {
+  if (!course || typeof course !== 'object') return null
+  const obj = course as Record<string, unknown>
+  if (typeof obj.slug !== 'string' || !(obj.status === 'active' || obj.status === 'upcoming')) {
     return null
   }
 
-  // Check for multilingual structure first (before type guard narrows the type)
-  if ('languages' in course && typeof course.languages === 'object') {
-    // Try requested language first, then fallback to available languages
-    const langData = course.languages[lang] || 
-                     course.languages['cs'] || 
-                     course.languages['en'] || 
-                     course.languages['ru'] ||
-                     Object.values(course.languages)[0]
-    
-    if (langData && typeof langData === 'object' && 
-        typeof langData.title === 'string' &&
-        typeof langData.description === 'string' &&
-        typeof langData.duration === 'string' &&
-        typeof langData.level === 'string') {
-      return {
-        slug: course.slug,
-        title: langData.title,
-        description: langData.description,
-        duration: langData.duration,
-        level: normalizeLevel(langData.level),
-        status: course.status,
-        accreditation: langData.accreditation,
-        syllabus: langData.syllabus,
-        image: langData.image,
-        funding: langData.funding,
+  // Check for multilingual structure first
+  if ('languages' in obj && typeof obj.languages === 'object' && obj.languages !== null) {
+    const langs = obj.languages as Record<string, unknown>
+    const langData = langs[lang] ?? langs['cs'] ?? langs['en'] ?? langs['ru'] ?? Object.values(langs)[0]
+
+    if (langData && typeof langData === 'object') {
+      const ld = langData as Record<string, unknown>
+      if (
+        typeof ld.title === 'string' &&
+        typeof ld.description === 'string' &&
+        typeof ld.duration === 'string' &&
+        typeof ld.level === 'string'
+      ) {
+        return {
+          slug: obj.slug as string,
+          title: ld.title,
+          description: ld.description,
+          duration: ld.duration,
+          level: normalizeLevel(ld.level),
+          status: obj.status as Course['status'],
+          accreditation: typeof ld.accreditation === 'string' ? ld.accreditation : undefined,
+          syllabus: Array.isArray(ld.syllabus) ? (ld.syllabus as string[]) : undefined,
+          image: typeof ld.image === 'string' ? ld.image : undefined,
+          funding: typeof ld.funding === 'string' ? ld.funding : undefined,
+        }
       }
     }
   }
 
-  // Handle old structure (fallback to default language if multilingual not available)
-  if (typeof course.title === 'string' && 
-      typeof course.description === 'string' &&
-      typeof course.duration === 'string' &&
-      typeof course.level === 'string') {
+  // Handle old (flat) structure
+  if (
+    typeof obj.title === 'string' &&
+    typeof obj.description === 'string' &&
+    typeof obj.duration === 'string' &&
+    typeof obj.level === 'string'
+  ) {
     return {
-      slug: course.slug,
-      title: course.title,
-      description: course.description,
-      duration: course.duration,
-      level: normalizeLevel(course.level),
-      status: course.status,
-      accreditation: course.accreditation,
-      syllabus: course.syllabus,
-      image: course.image,
+      slug: obj.slug as string,
+      title: obj.title,
+      description: obj.description,
+      duration: obj.duration,
+      level: normalizeLevel(obj.level),
+      status: obj.status as Course['status'],
+      accreditation: typeof obj.accreditation === 'string' ? obj.accreditation : undefined,
+      syllabus: Array.isArray(obj.syllabus) ? (obj.syllabus as string[]) : undefined,
+      image: typeof obj.image === 'string' ? obj.image : undefined,
     }
   }
 
@@ -138,22 +111,22 @@ function normalizeCourse(course: any, lang: string = 'cs'): Course | null {
  */
 export function getAllCourses(lang: string = 'cs'): Course[] {
   if (cache[lang]) return cache[lang]
-  
-  const arr = coursesData as any
-  if (!Array.isArray(arr)) {
+
+  const arr: unknown[] = Array.isArray(coursesData) ? coursesData : []
+  if (!Array.isArray(coursesData)) {
     throw new Error('courses.json must be an array')
   }
-  
+
   const validated: Course[] = arr
     .map(course => normalizeCourse(course, lang))
     .filter((course): course is Course => course !== null)
-  
+
   if (validated.length !== arr.length) {
     console.warn(
       `Warning: ${arr.length - validated.length} invalid course(s) filtered out`
     )
   }
-  
+
   cache[lang] = validated
   return validated
 }

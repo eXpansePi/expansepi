@@ -5,7 +5,7 @@ import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getActiveCourses, getUpcomingCourses } from "@/data/courses"
 import { CourseCard } from "./components"
-import { getRoutePath, getAllRoutePaths, type RouteKey } from "@/lib/routes"
+import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
 
 interface CoursesPageProps {
   params: Promise<{ lang: string }>
@@ -18,13 +18,13 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
   const coursesUrl = `${baseUrl}${getRoutePath(lang, 'courses')}`
   const allRoutes = getAllRoutePaths('courses')
-  
+
   // Enhanced SEO description
-  const seoDescription = lang === 'cs' 
+  const seoDescription = lang === 'cs'
     ? 'IT kurzy plně hrazené Úřadem práce ČR. Rekvalifikační IT kurzy - Python, datová analýza, web development. Naučte se programovat s experty z Matfyzu UK a ČVUT.'
     : lang === 'en'
-    ? 'IT courses fully funded by the Czech Labour Office. IT reskilling courses - Python, data analysis, web development. Learn programming with experts from Charles University and Czech Technical University.'
-    : 'IT курсы, полностью финансируемые Чешским центром занятости. Курсы переквалификации IT - Python, анализ данных, веб-разработка. Изучите программирование с экспертами из Карлова университета и Чешского технического университета.'
+      ? 'IT courses fully funded by the Czech Labour Office. IT reskilling courses - Python, data analysis, web development. Learn programming with experts from Charles University and Czech Technical University.'
+      : 'IT курсы, полностью финансируемые Чешским центром занятости. Курсы переквалификации IT - Python, анализ данных, веб-разработка. Изучите программирование с экспертами из Карлова университета и Чешского технического университета.'
 
   return {
     title: lang === 'cs' ? 'IT Kurzy eXpansePi - Rekvalifikační kurzy plně hrazené Úřadem práce' : t.courses.title,
@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
     keywords: lang === 'cs'
       ? ['rekvalifikační IT kurzy', 'Python kurz', 'datová analýza', 'web development', 'Úřad práce', 'IT vzdělávání', 'rekvalifikace IT']
       : lang === 'en'
-      ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
-      : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
+        ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
+        : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
     alternates: {
       canonical: coursesUrl,
       languages: {
@@ -45,11 +45,11 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
     },
     openGraph: {
       title: lang === 'cs' ? 'IT Kurzy eXpansePi' : t.courses.title,
-      description: lang === 'cs' 
+      description: lang === 'cs'
         ? 'Rekvalifikační IT kurzy plně hrazené Úřadem práce ČR. Naučte se Python, datovou analýzu, web development.'
         : lang === 'en'
-        ? 'IT reskilling courses fully funded by the Czech Labour Office. Learn Python, data analysis, web development.'
-        : 'Курсы переквалификации IT, полностью финансируемые Чешским центром занятости. Изучите Python, анализ данных, веб-разработку.',
+          ? 'IT reskilling courses fully funded by the Czech Labour Office. Learn Python, data analysis, web development.'
+          : 'Курсы переквалификации IT, полностью финансируемые Чешским центром занятости. Изучите Python, анализ данных, веб-разработку.',
       url: coursesUrl,
       siteName: 'eXpansePi',
       locale: lang === 'cs' ? 'cs_CZ' : lang === 'en' ? 'en_US' : 'ru_RU',
@@ -86,7 +86,7 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6 flex-grow">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">{t.courses.title}</h1>
-          <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8">{t.courses.title}</p>
+          <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8">{t.courses.subtitle}</p>
 
           {activeCourses.length > 0 && (
             <section aria-labelledby="available-heading" className="mb-8 sm:mb-10">

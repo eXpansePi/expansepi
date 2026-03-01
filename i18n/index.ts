@@ -3,14 +3,13 @@
  */
 
 import { Language, isValidLanguage, defaultLanguage } from './config'
+import cs from './locales/cs.json'
+import en from './locales/en.json'
+import ru from './locales/ru.json'
 
-export type Translations = typeof import('./locales/cs.json')
+export type Translations = typeof cs
 
-const locales: Record<Language, Translations> = {
-  cs: require('./locales/cs.json'),
-  en: require('./locales/en.json'),
-  ru: require('./locales/ru.json')
-}
+const locales: Record<Language, Translations> = { cs, en, ru }
 
 export function getTranslations(lang: string): Translations {
   if (!isValidLanguage(lang)) {

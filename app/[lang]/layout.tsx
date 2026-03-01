@@ -109,6 +109,16 @@ export default async function RootLayout({
 
   return (
     <>
+      {/*
+        Next.js App Router cannot set html[lang] from a nested layout.
+        This inline script runs synchronously before hydration so the correct
+        lang is applied on first paint (before LangSetter's useEffect fires).
+      */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.lang = "${lang}";`,
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
