@@ -346,22 +346,22 @@ export default function HomeClient({ lang }: HomeClientProps) {
       targets: ".hero-title span",
       translateY: [titleTranslate, 0],
       opacity: [0, 1],
-      delay: anime.stagger(100),
+      delay: anime.stagger(75),
       easing: "easeOutCubic",
-      duration: 1200,
+      duration: 1000,
     })
 
     anime({
       targets: ".hero-subtitle",
       opacity: [0, 1],
       translateY: [subtitleTranslate, 0],
-      delay: 500,
+      delay: 400,
       easing: "easeOutCubic",
-      duration: 1000,
+      duration: 800,
     })
 
-    const typewriterDelay = 1200
-    const typewriterSpeed = 30
+    const typewriterDelay = 900
+    const typewriterSpeed = 25
 
     let typeInterval: NodeJS.Timeout | null = null
     const timeoutId = setTimeout(() => {
@@ -376,7 +376,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
       }, typewriterSpeed)
     }, typewriterDelay)
 
-    const buttonDelay = typewriterDelay + fullText.length * typewriterSpeed + 300
+    const buttonDelay = typewriterDelay + fullText.length * typewriterSpeed + 200
     anime({
       targets: ".cta-button",
       opacity: [0, 1],
@@ -384,16 +384,16 @@ export default function HomeClient({ lang }: HomeClientProps) {
       translateY: [buttonTranslate, 0],
       delay: buttonDelay,
       easing: "easeOutCubic",
-      duration: 800,
+      duration: 650,
     })
 
     anime({
       targets: ".partners-section",
       opacity: [0, 1],
       translateY: [20, 0],
-      delay: buttonDelay + 400,
+      delay: buttonDelay + 300,
       easing: "easeOutCubic",
-      duration: 800,
+      duration: 650,
     })
 
     return () => {
