@@ -24,7 +24,7 @@ function SalaryStats({ lang }: SalaryStatsProps) {
 
   const getMarketReadinessData = (): MarketReadinessData[] => {
     const marketReadiness = (t.home as any)?.marketReadiness
-    
+
     return [
       {
         label: marketReadiness?.commonCourses || 'Běžné IT kurzy',
@@ -50,36 +50,27 @@ function SalaryStats({ lang }: SalaryStatsProps) {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAnimatedRef.current) {
             hasAnimatedRef.current = true
-            // Start animations
-            const animations: any[] = []
-            
-            marketData.forEach((item, index) => {
-              const target = { value: 0 }
-              const anim = anime({
-                targets: target,
-                value: item.percentage,
-                duration: 2500,
-                delay: 0, // Start both animations at the same time
-                easing: 'easeOutQuart',
-                update: () => {
-                  setAnimatedPercentages((prev) => {
-                    const newValues = [...prev]
-                    newValues[index] = Math.round(target.value)
-                    return newValues
-                  })
-                },
-                complete: () => {
-                  setAnimatedPercentages((prev) => {
-                    const newValues = [...prev]
-                    newValues[index] = item.percentage
-                    return newValues
-                  })
-                }
-              })
-              animations.push(anim)
+
+            // Create a target object for each data point
+            const targets = marketData.map(() => ({ value: 0 }))
+
+            // Single animation instance for all bars to improve performance
+            const anim = anime({
+              targets: targets,
+              value: (el: any, i: number) => marketData[i].percentage,
+              duration: 2500,
+              delay: 0,
+              easing: 'easeOutQuart',
+              update: () => {
+                // Bulk update state once per frame for all percentages
+                setAnimatedPercentages(targets.map(t => t.value))
+              },
+              complete: () => {
+                setAnimatedPercentages(marketData.map(item => item.percentage))
+              }
             })
 
-            animationRef.current = animations
+            animationRef.current = [anim]
           }
         })
       },
@@ -94,21 +85,22 @@ function SalaryStats({ lang }: SalaryStatsProps) {
       observer.disconnect()
       animationRef.current.forEach((anim) => anim.pause())
     }
-  }, [lang, t])
+  }, [lang])
 
   const marketReadiness = (t.home as any)?.marketReadiness
   const marketData = getMarketReadinessData()
-  
+
   return (
     <div ref={containerRef} className="w-full">
       <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">
         {marketReadiness?.title || 'Připravenost k trhu'}
       </h3>
-      
+
       <div className="space-y-4 sm:space-y-6">
         {marketData.map((item, index) => {
-          const animatedPercentage = animatedPercentages[index] || 0
-          
+          const animatedPercentageFloat = animatedPercentages[index] || 0
+          const displayPercentage = Math.round(animatedPercentageFloat)
+
           return (
             <div key={index} className="space-y-2">
               <div className="flex justify-between items-center">
@@ -122,22 +114,22 @@ function SalaryStats({ lang }: SalaryStatsProps) {
                   </span>
                 )}
                 <span className="text-lg sm:text-xl font-bold text-gray-900 tabular-nums">
-                  {animatedPercentage}%
+                  {displayPercentage}%
                 </span>
               </div>
-              
+
               {/* Bar Chart */}
               <div className="relative h-6 sm:h-8 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className={`h-full bg-gradient-to-r ${item.color} rounded-full transition-all duration-300 flex items-center justify-end pr-2 sm:pr-3`}
+                  className={`h-full bg-gradient-to-r ${item.color} rounded-full flex items-center justify-end pr-2 sm:pr-3`}
                   style={{
-                    width: `${animatedPercentage}%`,
-                    minWidth: animatedPercentage > 0 ? '4px' : '0'
+                    width: `${animatedPercentageFloat}%`,
+                    minWidth: animatedPercentageFloat > 0 ? '4px' : '0'
                   }}
                 >
-                  {animatedPercentage > 15 && (
+                  {displayPercentage > 15 && (
                     <span className="text-xs sm:text-sm font-semibold text-white">
-                      {animatedPercentage}%
+                      {displayPercentage}%
                     </span>
                   )}
                 </div>
