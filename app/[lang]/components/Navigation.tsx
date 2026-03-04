@@ -13,6 +13,7 @@ type DropdownItem = {
   label: string
   badge?: string
   badgeVariant?: 'active' | 'upcoming'
+  dividerAfter?: boolean
 }
 
 type NavLink =
@@ -45,6 +46,11 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
       hasDropdown: true,
       dropdownId: 'courses',
       dropdownItems: [
+        {
+          href: getRoutePath(currentLang, 'courses'),
+          label: t.nav.coursesMenu.overview,
+          dividerAfter: true,
+        },
         {
           href: getDetailRoutePath(currentLang, 'courses', 'programator-www-aplikaci-v-pythonu'),
           label: 'Python',
@@ -158,24 +164,26 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                       className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[230px] py-1"
                     >
                       {link.dropdownItems.map((item) => (
-                        <Link
-                          key={`${item.label}`}
-                          href={item.href}
-                          role="menuitem"
-                          onClick={() => setOpenDropdown(null)}
-                          className={`flex items-center justify-between px-4 py-2.5 text-sm font-semibold hover:bg-blue-50 transition-colors ${activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
-                            }`}
-                        >
-                          <span>{item.label}</span>
-                          {item.badge && (
-                            <span className={`ml-3 text-[11px] px-2 py-0.5 rounded-full font-medium ${item.badgeVariant === 'active'
+                        <div key={`${item.label}`}>
+                          <Link
+                            href={item.href}
+                            role="menuitem"
+                            onClick={() => setOpenDropdown(null)}
+                            className={`flex items-center justify-between px-4 py-2.5 text-sm font-semibold hover:bg-blue-50 transition-colors ${activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
+                              }`}
+                          >
+                            <span>{item.label}</span>
+                            {item.badge && (
+                              <span className={`ml-3 text-[11px] px-2 py-0.5 rounded-full font-medium ${item.badgeVariant === 'active'
                                 ? 'bg-green-100 text-green-700'
                                 : 'bg-gray-100 text-gray-500'
-                              }`}>
-                              {item.badge}
-                            </span>
-                          )}
-                        </Link>
+                                }`}>
+                                {item.badge}
+                              </span>
+                            )}
+                          </Link>
+                          {item.dividerAfter && <div className="my-1 border-t border-gray-100" />}
+                        </div>
                       ))}
                     </div>
                   )}
@@ -352,8 +360,8 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                     <span>{item.label}</span>
                     {item.badge && (
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.badgeVariant === 'active'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-500'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-gray-100 text-gray-500'
                         }`}>
                         {item.badge}
                       </span>
