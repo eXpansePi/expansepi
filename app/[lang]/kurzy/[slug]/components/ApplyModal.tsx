@@ -16,6 +16,8 @@ interface ModalTranslations {
     namePlaceholder: string
     email: string
     emailPlaceholder: string
+    phone: string
+    phonePlaceholder: string
     message: string
     send: string
     sending: string
@@ -32,6 +34,8 @@ function getTranslations(lang: string): ModalTranslations {
             namePlaceholder: "Vaše jméno",
             email: "Email",
             emailPlaceholder: "vas@email.cz",
+            phone: "Telefon",
+            phonePlaceholder: "+420",
             message: "Zpráva",
             send: "Odeslat přihlášku",
             sending: "Odesílání...",
@@ -46,6 +50,8 @@ function getTranslations(lang: string): ModalTranslations {
             namePlaceholder: "Your name",
             email: "Email",
             emailPlaceholder: "your@email.com",
+            phone: "Phone",
+            phonePlaceholder: "+420",
             message: "Message",
             send: "Submit Application",
             sending: "Submitting...",
@@ -60,6 +66,8 @@ function getTranslations(lang: string): ModalTranslations {
             namePlaceholder: "Ваше имя",
             email: "Email",
             emailPlaceholder: "ваш@email.com",
+            phone: "Телефон",
+            phonePlaceholder: "+420",
             message: "Сообщение",
             send: "Отправить заявку",
             sending: "Отправка...",
@@ -79,6 +87,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
     const [formData, setFormData] = useState({
         name: "",
         email: "",
+        phone: "",
         message: defaultMsg,
     })
     const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
@@ -94,6 +103,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
             setFormData({
                 name: "",
                 email: "",
+                phone: "",
                 message: defaultMsg,
             })
             setStatus("idle")
@@ -127,7 +137,9 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                     name: formData.name,
                     email: formData.email,
                     subject: courseTitle,
-                    message: formData.message,
+                    message: formData.phone
+                        ? `${formData.message}\n\nTelefon: ${formData.phone}`
+                        : formData.message,
                 }),
             })
 
@@ -225,21 +237,40 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                                 />
                             </div>
 
-                            {/* Email */}
-                            <div>
-                                <label htmlFor="apply-email" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                                    {t.email}
-                                </label>
-                                <input
-                                    type="email"
-                                    id="apply-email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    placeholder={t.emailPlaceholder}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white hover:border-gray-300"
-                                />
+                            {/* Email & Phone side by side */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {/* Email */}
+                                <div>
+                                    <label htmlFor="apply-email" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                                        {t.email}
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="apply-email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                        placeholder={t.emailPlaceholder}
+                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white hover:border-gray-300"
+                                    />
+                                </div>
+
+                                {/* Phone */}
+                                <div>
+                                    <label htmlFor="apply-phone" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                                        {t.phone}
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        id="apply-phone"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        placeholder={t.phonePlaceholder}
+                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white hover:border-gray-300"
+                                    />
+                                </div>
                             </div>
 
                             {/* Message */}
