@@ -17,6 +17,10 @@
     "aboutMenu": {
       "whoWeAre": "Кто мы",
       "teamAndLecturers": "Наша команда и лекторы"
+    },
+    "coursesMenu": {
+      "enrolling": "набираем",
+      "comingSoon": "готовим"
     }
   },
   "home": {

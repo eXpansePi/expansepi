@@ -4,15 +4,20 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { languages, langLabels, isValidLanguage, type Language } from "@/i18n/config"
 import { type Translations } from "@/i18n/index"
-import { getRoutePath, getPublicPath } from "@/lib/routes"
+import { getRoutePath, getPublicPath, getDetailRoutePath } from "@/lib/routes"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type DropdownItem = { href: string; label: string }
+type DropdownItem = {
+  href: string
+  label: string
+  badge?: string
+  badgeVariant?: 'active' | 'upcoming'
+}
 
 type NavLink =
   | { href: string; label: string; hasDropdown?: false }
-  | { href: string; label: string; hasDropdown: true; dropdownItems: DropdownItem[] }
+  | { href: string; label: string; hasDropdown: true; dropdownId: string; dropdownItems: DropdownItem[] }
 
 interface NavigationProps {
   activePage?: string
@@ -25,20 +30,58 @@ interface NavigationProps {
 export default function Navigation({ activePage, lang, t }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
-  const [aboutMenuOpen, setAboutMenuOpen] = useState(false)
-  const [showAboutSubmenu, setShowAboutSubmenu] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null)
   const langMenuRef = useRef<HTMLDivElement>(null)
-  const aboutMenuRef = useRef<HTMLDivElement>(null)
+  const dropdownRefs = useRef<Record<string, HTMLDivElement | null>>({})
   const pathname = usePathname()
   const currentLang = (isValidLanguage(lang) ? lang : 'cs') as Language
 
   const navLinks: NavLink[] = [
     { href: getRoutePath(currentLang, 'home'), label: t.common.home },
-    { href: getRoutePath(currentLang, 'courses'), label: t.common.courses },
+    {
+      href: getRoutePath(currentLang, 'courses'),
+      label: t.common.courses,
+      hasDropdown: true,
+      dropdownId: 'courses',
+      dropdownItems: [
+        {
+          href: getDetailRoutePath(currentLang, 'courses', 'programator-www-aplikaci-v-pythonu'),
+          label: 'Python',
+          badge: t.nav.coursesMenu.enrolling,
+          badgeVariant: 'active',
+        },
+        {
+          href: getRoutePath(currentLang, 'courses'),
+          label: 'Java',
+          badge: t.nav.coursesMenu.comingSoon,
+          badgeVariant: 'upcoming',
+        },
+        {
+          href: getRoutePath(currentLang, 'courses'),
+          label: 'C#',
+          badge: t.nav.coursesMenu.comingSoon,
+          badgeVariant: 'upcoming',
+        },
+        {
+          href: getRoutePath(currentLang, 'courses'),
+          label: 'JavaScript',
+          badge: t.nav.coursesMenu.comingSoon,
+          badgeVariant: 'upcoming',
+        },
+        {
+          href: getRoutePath(currentLang, 'courses'),
+          label: 'PHP',
+          badge: t.nav.coursesMenu.comingSoon,
+          badgeVariant: 'upcoming',
+        },
+      ],
+    },
     {
       href: getRoutePath(currentLang, 'about'),
       label: t.common.about,
       hasDropdown: true,
+      dropdownId: 'about',
       dropdownItems: [
         { href: getRoutePath(currentLang, 'about'), label: t.nav.aboutMenu.whoWeAre },
         { href: `${getRoutePath(currentLang, 'about')}#team`, label: t.nav.aboutMenu.teamAndLecturers },
@@ -54,19 +97,22 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
       if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
         setLangMenuOpen(false)
       }
-      if (aboutMenuRef.current && !aboutMenuRef.current.contains(event.target as Node)) {
-        setAboutMenuOpen(false)
+      if (openDropdown) {
+        const ref = dropdownRefs.current[openDropdown]
+        if (ref && !ref.contains(event.target as Node)) {
+          setOpenDropdown(null)
+        }
       }
     }
 
-    if (langMenuOpen || aboutMenuOpen) {
+    if (langMenuOpen || openDropdown) {
       document.addEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [langMenuOpen, aboutMenuOpen])
+  }, [langMenuOpen, openDropdown])
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
@@ -79,20 +125,25 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
         <div className="hidden md:flex space-x-6 lg:space-x-8 text-gray-800">
           {navLinks.map((link) => {
             if (link.hasDropdown) {
+              const isOpen = openDropdown === link.dropdownId
               return (
-                <div key={link.href} className="relative" ref={aboutMenuRef}>
+                <div
+                  key={link.dropdownId}
+                  className="relative"
+                  ref={(el) => { dropdownRefs.current[link.dropdownId] = el }}
+                >
                   <button
-                    onClick={() => setAboutMenuOpen(!aboutMenuOpen)}
+                    onClick={() => setOpenDropdown(isOpen ? null : link.dropdownId)}
                     aria-haspopup="true"
-                    aria-expanded={aboutMenuOpen}
+                    aria-expanded={isOpen}
                     className={`transition-colors ${activePage === link.href
-                        ? "text-blue-600 font-bold"
-                        : "font-normal hover:text-blue-600"
+                      ? "text-blue-600 font-bold"
+                      : "font-normal hover:text-blue-600"
                       } flex items-center gap-1`}
                   >
                     {link.label}
                     <svg
-                      className={`w-4 h-4 transition-transform duration-200 ${aboutMenuOpen ? 'rotate-180' : ''}`}
+                      className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -101,21 +152,29 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
-                  {aboutMenuOpen && (
+                  {isOpen && (
                     <div
                       role="menu"
-                      className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[200px]"
+                      className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 min-w-[230px] py-1"
                     >
                       {link.dropdownItems.map((item) => (
                         <Link
-                          key={item.href}
+                          key={`${item.label}`}
                           href={item.href}
                           role="menuitem"
-                          onClick={() => setAboutMenuOpen(false)}
-                          className={`block px-4 py-2 text-sm font-semibold hover:bg-blue-50 transition-colors ${activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
+                          onClick={() => setOpenDropdown(null)}
+                          className={`flex items-center justify-between px-4 py-2.5 text-sm font-semibold hover:bg-blue-50 transition-colors ${activePage === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-800'
                             }`}
                         >
-                          {item.label}
+                          <span>{item.label}</span>
+                          {item.badge && (
+                            <span className={`ml-3 text-[11px] px-2 py-0.5 rounded-full font-medium ${item.badgeVariant === 'active'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-gray-100 text-gray-500'
+                              }`}>
+                              {item.badge}
+                            </span>
+                          )}
                         </Link>
                       ))}
                     </div>
@@ -128,8 +187,8 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                 key={link.href}
                 href={link.href}
                 className={`transition-colors ${activePage === link.href
-                    ? "text-blue-600 font-bold"
-                    : "font-normal hover:text-blue-600"
+                  ? "text-blue-600 font-bold"
+                  : "font-normal hover:text-blue-600"
                   }`}
               >
                 {link.label}
@@ -177,7 +236,7 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
             onClick={() => {
               setMobileMenuOpen(!mobileMenuOpen)
               if (mobileMenuOpen) {
-                setShowAboutSubmenu(false)
+                setMobileSubmenu(null)
               }
             }}
             aria-label="Toggle menu"
@@ -212,18 +271,18 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
         <div className="relative overflow-hidden bg-white/98 backdrop-blur-md border-t border-gray-200 shadow-lg">
           {/* Main Menu */}
           <div
-            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${showAboutSubmenu ? '-translate-x-full absolute inset-0 w-full' : 'translate-x-0'
+            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${mobileSubmenu ? '-translate-x-full absolute inset-0 w-full' : 'translate-x-0'
               }`}
           >
             {navLinks.map((link) => {
               if (link.hasDropdown) {
                 return (
                   <button
-                    key={link.href}
-                    onClick={() => setShowAboutSubmenu(true)}
+                    key={link.dropdownId}
+                    onClick={() => setMobileSubmenu(link.dropdownId)}
                     className={`w-full text-left transition-colors ${activePage === link.href
-                        ? "text-blue-600 font-bold"
-                        : "text-gray-800 font-normal hover:text-blue-600"
+                      ? "text-blue-600 font-bold"
+                      : "text-gray-800 font-normal hover:text-blue-600"
                       } flex items-center justify-between`}
                   >
                     {link.label}
@@ -245,8 +304,8 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`block transition-colors ${activePage === link.href
-                      ? "text-blue-600 font-bold"
-                      : "text-gray-800 font-normal hover:text-blue-600"
+                    ? "text-blue-600 font-bold"
+                    : "text-gray-800 font-normal hover:text-blue-600"
                     }`}
                 >
                   {link.label}
@@ -255,42 +314,54 @@ export default function Navigation({ activePage, lang, t }: NavigationProps) {
             })}
           </div>
 
-          {/* About Submenu */}
-          <div
-            className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${showAboutSubmenu ? 'translate-x-0' : 'translate-x-full absolute inset-0 w-full'
-              }`}
-          >
-            <button
-              onClick={() => setShowAboutSubmenu(false)}
-              className="flex items-center gap-2 text-gray-800 hover:text-blue-600 transition-colors mb-2"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
+          {/* Dynamic Submenus */}
+          {navLinks
+            .filter((link): link is NavLink & { hasDropdown: true } => link.hasDropdown === true)
+            .map((link) => (
+              <div
+                key={link.dropdownId}
+                className={`px-4 py-4 space-y-3 transition-transform duration-300 ease-in-out ${mobileSubmenu === link.dropdownId ? 'translate-x-0' : 'translate-x-full absolute inset-0 w-full'
+                  }`}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              <span className="font-semibold">{t.common.about}</span>
-            </button>
-            {navLinks.find((link): link is NavLink & { hasDropdown: true } => link.hasDropdown === true)
-              ?.dropdownItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => {
-                    setShowAboutSubmenu(false)
-                    setMobileMenuOpen(false)
-                  }}
-                  className={`block py-2 transition-colors text-lg ${activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-800 hover:text-blue-600'
-                    }`}
+                <button
+                  onClick={() => setMobileSubmenu(null)}
+                  className="flex items-center gap-2 text-gray-800 hover:text-blue-600 transition-colors mb-2"
                 >
-                  {item.label}
-                </Link>
-              ))}
-          </div>
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  <span className="font-semibold">{link.label}</span>
+                </button>
+                {link.dropdownItems.map((item) => (
+                  <Link
+                    key={`${item.label}`}
+                    href={item.href}
+                    onClick={() => {
+                      setMobileSubmenu(null)
+                      setMobileMenuOpen(false)
+                    }}
+                    className={`flex items-center justify-between py-2 transition-colors text-lg ${activePage === item.href ? 'text-blue-600 font-bold' : 'text-gray-800 hover:text-blue-600'
+                      }`}
+                  >
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.badgeVariant === 'active'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-gray-100 text-gray-500'
+                        }`}>
+                        {item.badge}
+                      </span>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            ))}
         </div>
       </div>
     </nav>

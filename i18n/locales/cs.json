@@ -17,6 +17,10 @@
     "aboutMenu": {
       "whoWeAre": "Kdo jsme",
       "teamAndLecturers": "Náš tým a lektoři"
+    },
+    "coursesMenu": {
+      "enrolling": "nabíráme",
+      "comingSoon": "připravujeme"
     }
   },
   "home": {

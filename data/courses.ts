@@ -75,6 +75,7 @@ function normalizeCourse(course: unknown, lang: string = 'cs'): Course | null {
           syllabus: Array.isArray(ld.syllabus) ? (ld.syllabus as string[]) : undefined,
           image: typeof ld.image === 'string' ? ld.image : undefined,
           funding: typeof ld.funding === 'string' ? ld.funding : undefined,
+          dates: Array.isArray(ld.dates) ? (ld.dates as string[]) : undefined,
         }
       }
     }

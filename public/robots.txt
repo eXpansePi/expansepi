@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /private/
+
+# Host
+Host: https://expansepi.com
+
+# Sitemaps
+Sitemap: https://expansepi.com/sitemap.xml

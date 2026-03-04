@@ -21,39 +21,42 @@ export type CourseLevel = 'Začátečníci' | 'Středně pokročilí' | 'Pokroč
 export interface Course {
   /** Unique URL-friendly identifier */
   slug: string
-  
+
   /** Course display title */
   title: string
-  
+
   /** Short course description */
   description: string
-  
+
   /** Course duration (e.g., "8 týdnů") */
   duration: string
-  
+
   /** Target audience level */
   level: CourseLevel
-  
+
   /** Current availability status */
   status: CourseStatus
-  
+
   /** Optional detailed syllabus (for active courses) */
   syllabus?: string[]
-  
+
   /** Optional start date (for active courses) */
   startDate?: string
-  
+
   /** Optional price (for active courses) */
   price?: number
-  
+
   /** Optional course image/logo URL */
   image?: string
-  
+
   /** Optional accreditation information */
   accreditation?: string
-  
+
   /** Optional funding information */
   funding?: string
+
+  /** Optional dates/cycles to display */
+  dates?: string[]
 }
 
 /**

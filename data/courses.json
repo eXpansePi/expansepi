@@ -24,6 +24,10 @@
         "exam": "Závěrečná písemná zkouška (15 otázek) a odevzdání software projektu",
         "certification": "Osvědčení o rekvalifikaci – Programátor www aplikací v jazyce Python",
         "funding": "Plně hrazeno Úřadem práce ČR",
+        "dates": [
+          "4.4.2026 - 11.7.2026",
+          "2.5.2026 - 8.8.2026"
+        ],
         "highlights": [
           "Akreditace MŠMT",
           "Hlavní část online – studujte odkudkoliv",
@@ -54,6 +58,10 @@
         "exam": "Final written exam (15 questions) and submission of a software project",
         "certification": "Official retraining certificate – Python Web Application Developer",
         "funding": "Fully funded by the Czech Labour Office",
+        "dates": [
+          "4.4.2026 - 11.7.2026",
+          "2.5.2026 - 8.8.2026"
+        ],
         "highlights": [
           "Accredited by the Ministry of Education (MŠMT)",
           "Primarily online – study from anywhere",
@@ -84,6 +92,10 @@
         "exam": "Итоговый письменный экзамен (15 вопросов) и сдача программного проекта",
         "certification": "Официальный сертификат переподготовки – Разработчик веб-приложений на Python",
         "funding": "Полностью финансируется Чешским центром занятости",
+        "dates": [
+          "4.4.2026 - 11.7.2026",
+          "2.5.2026 - 8.8.2026"
+        ],
         "highlights": [
           "Аккредитация Министерства образования (MŠMT)",
           "Основная часть онлайн – учитесь из любого места",

@@ -17,6 +17,10 @@
     "aboutMenu": {
       "whoWeAre": "Who We Are",
       "teamAndLecturers": "Our Team and Lecturers"
+    },
+    "coursesMenu": {
+      "enrolling": "enrolling",
+      "comingSoon": "coming soon"
     }
   },
   "home": {

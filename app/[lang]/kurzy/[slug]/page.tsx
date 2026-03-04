@@ -23,6 +23,7 @@ interface MultilingualCourseData {
   certification?: string
   funding?: string
   highlights?: string[]
+  dates?: string[]
 }
 
 function getCourseData(slug: string, lang: Language): MultilingualCourseData | null {
@@ -71,7 +72,7 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
   const resolvedParams = await params
   const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const courseData = getCourseData(resolvedParams.slug, lang)
-  
+
   if (!courseData) {
     const t = getTranslations(lang)
     return { title: t.common.notFound }
@@ -85,17 +86,17 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
   const seoDescription = lang === 'cs'
     ? `${courseData.description} ${courseData.funding ? courseData.funding + '.' : ''} Rekvalifikační IT kurzy plně hrazené Úřadem práce ČR.`
     : lang === 'en'
-    ? `${courseData.description} ${courseData.funding ? courseData.funding + '.' : ''} IT reskilling courses fully funded by the Czech Labour Office.`
-    : `${courseData.description} ${courseData.funding ? courseData.funding + '.' : ''} IT курсы переквалификации, полностью финансируемые Чешским центром занятости.`
+      ? `${courseData.description} ${courseData.funding ? courseData.funding + '.' : ''} IT reskilling courses fully funded by the Czech Labour Office.`
+      : `${courseData.description} ${courseData.funding ? courseData.funding + '.' : ''} IT курсы переквалификации, полностью финансируемые Чешским центром занятости.`
 
   return {
     title: courseData.title,
     description: seoDescription,
-    keywords: lang === 'cs' 
+    keywords: lang === 'cs'
       ? ['rekvalifikační IT kurzy', 'Python kurz', 'datová analýza', 'web development', 'Úřad práce', 'IT vzdělávání']
       : lang === 'en'
-      ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
-      : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
+        ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
+        : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
     alternates: {
       canonical: courseUrl,
       languages: {
@@ -107,11 +108,11 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
     },
     openGraph: {
       title: lang === 'cs' ? `IT Kurzy eXpansePi - ${courseData.title}` : courseData.title,
-      description: lang === 'cs' 
+      description: lang === 'cs'
         ? 'Rekvalifikační IT kurzy plně hrazené Úřadem práce ČR. Naučte se Python, datovou analýzu, web development.'
         : lang === 'en'
-        ? 'IT reskilling courses fully funded by the Czech Labour Office. Learn Python, data analysis, web development.'
-        : 'Курсы переквалификации IT, полностью финансируемые Чешским центром занятости. Изучите Python, анализ данных, веб-разработку.',
+          ? 'IT reskilling courses fully funded by the Czech Labour Office. Learn Python, data analysis, web development.'
+          : 'Курсы переквалификации IT, полностью финансируемые Чешским центром занятости. Изучите Python, анализ данных, веб-разработку.',
       url: courseUrl,
       siteName: 'eXpansePi',
       locale: lang === 'cs' ? 'cs_CZ' : lang === 'en' ? 'en_US' : 'ru_RU',
@@ -212,52 +213,67 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
                 <span>{courseData.duration}</span>
               </div>
             </div>
-            
+
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">{courseData.title}</h1>
-            
+
             {/* Price Section */}
             <div className="bg-gradient-to-r from-blue-50 to-sky-50 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-6 border-2 border-blue-200">
-              {lang === 'cs' ? (
-                <div className="space-y-3">
-                  <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-                    <span className="text-3xl sm:text-4xl font-bold text-gray-900">{t.courses.price}</span>
-                    {courseData.funding && (
-                      <div className="flex items-center gap-2 bg-green-100 border-2 border-green-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 flex-shrink-0">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        <p className="text-sm sm:text-base font-semibold text-green-800 whitespace-nowrap">{courseData.funding}</p>
-                      </div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-6">
+
+                {/* Left side: Additional Info and Dates */}
+                <div className="flex flex-col gap-4 w-full sm:w-auto order-2 sm:order-1 mt-2 sm:mt-0">
+                  <div className="space-y-1">
+                    <p className="text-sm sm:text-base text-gray-700">
+                      {courseData.funding ? t.courses.priceNote : t.courses.priceNote}
+                    </p>
+                    {t.courses.installments && (
+                      <p className="text-sm sm:text-base text-blue-600 font-bold">{t.courses.installments}</p>
                     )}
                   </div>
-                  <p className="text-sm sm:text-base text-blue-600 font-bold">{t.courses.installments}</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-                    <div className="text-3xl sm:text-4xl font-bold text-gray-900">{t.courses.price}</div>
-                    {courseData.funding && (
-                      <div className="flex items-center gap-2 bg-green-100 border-2 border-green-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 flex-shrink-0">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        <p className="text-sm sm:text-base font-semibold text-green-800 whitespace-nowrap">{courseData.funding}</p>
+
+                  {/* Upcoming Dates / Cycles */}
+                  {courseData.dates && courseData.dates.length > 0 && (
+                    <div className="pt-2">
+                      <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-2">
+                        {lang === 'cs' ? 'Nejbližší termíny:' : lang === 'en' ? 'Upcoming Dates:' : 'Ближайшие dates:'}
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {courseData.dates.map((date, index) => (
+                          <span key={index} className="inline-flex items-center gap-1.5 bg-white text-blue-700 border-2 border-blue-200 rounded-md px-3 py-1.5 text-sm font-semibold shadow-sm">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {date}
+                          </span>
+                        ))}
                       </div>
-                    )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Right side: Prices and Funding badge */}
+                <div className="flex flex-col items-start sm:items-end gap-3 order-1 sm:order-2 sm:ml-auto w-full sm:w-auto">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-5xl sm:text-6xl font-black text-green-600 tracking-tight">
+                      {t.courses.priceFrom}
+                    </span>
+                    <span className="text-2xl sm:text-3xl font-bold text-gray-500 line-through decoration-red-500 decoration-[4px] opacity-90">
+                      {t.courses.price}
+                    </span>
                   </div>
                   {courseData.funding && (
-                    <p className="text-sm text-gray-700">{t.courses.priceNote}</p>
-                  )}
-                  {!courseData.funding && (
-                    <p className="text-sm text-gray-600">{t.courses.priceNote}</p>
-                  )}
-                  {t.courses.installments && (
-                    <p className="text-sm sm:text-base text-blue-600 font-bold">{t.courses.installments}</p>
+                    <div className="inline-flex items-center gap-2 bg-green-100 border border-green-300 rounded-lg px-4 py-2 sm:py-2.5 flex-shrink-0 shadow-sm">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-base sm:text-lg font-bold text-green-800 whitespace-nowrap">{courseData.funding}</p>
+                    </div>
                   )}
                 </div>
-              )}
+
+              </div>
             </div>
-            
+
             {courseData.accreditation && (
               <p className="text-sm sm:text-base text-gray-600 mb-4 italic">
                 {courseData.accreditation}
