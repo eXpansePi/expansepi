@@ -8,6 +8,7 @@ import coursesData from "@/data/courses.json"
 import { getCourseSchema, getBreadcrumbSchema } from "@/lib/seo"
 import ExpandableSyllabus from "./components/ExpandableSyllabus"
 import AnimatedPrice from "./components/AnimatedPrice"
+import ApplyButton from "./components/ApplyButton"
 import { getRoutePath, getDetailRoutePath, getAllDetailRoutePaths } from "@/lib/routes"
 
 interface CourseDetailProps {
@@ -240,10 +241,15 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
             </h1>
 
             {courseData.accreditation && (
-              <p className="text-sm sm:text-base text-gray-500 italic font-medium">
+              <p className="text-sm sm:text-base text-gray-500 italic font-medium mb-4 sm:mb-5">
                 {courseData.accreditation}
               </p>
             )}
+
+            {/* Apply CTA in hero */}
+            <div className="mt-2">
+              <ApplyButton courseTitle={courseData.title} lang={lang} variant="hero" />
+            </div>
           </div>
         </section>
 
@@ -437,11 +443,12 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
               )}
             </div>
 
-            {/* Back Link (bottom) */}
-            <div className="mt-8 sm:mt-10">
+            {/* Bottom actions */}
+            <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-4">
+              <ApplyButton courseTitle={courseData.title} lang={lang} variant="bottom" />
               <Link
                 href={getRoutePath(lang, 'courses')}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-sky-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 text-sm sm:text-base"
+                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 text-sm sm:text-base"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
