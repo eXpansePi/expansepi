@@ -110,7 +110,21 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
           ))}
         </div>
       )}
-      <p className="text-xs sm:text-sm text-gray-600 mb-3 leading-relaxed flex-grow">{course.description}</p>
+      {/* Description + Accreditation Logo */}
+      <div className="flex items-start gap-4 mb-3 flex-grow">
+        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed flex-grow">{course.description}</p>
+        {course.accreditationLogo && (
+          <div className="flex-shrink-0 hidden sm:block">
+            <Image
+              src={course.accreditationLogo}
+              alt={course.accreditation || 'Accreditation'}
+              width={160}
+              height={80}
+              className="object-contain"
+            />
+          </div>
+        )}
+      </div>
       {course.status === 'active' ? (
         <Link
           href={getDetailRoutePath(lang as Language, 'courses', course.slug)}

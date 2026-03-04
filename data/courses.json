@@ -100,7 +100,8 @@
         ]
       }
     },
-    "status": "active"
+    "status": "active",
+    "accreditationLogo": "/msmt/msmt.jpg"
   },
   {
     "slug": "programator-csharp",

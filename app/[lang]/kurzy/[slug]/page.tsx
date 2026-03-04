@@ -274,7 +274,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
             </div>
 
             {courseData.accreditation && (
-              <p className="text-sm sm:text-base text-gray-600 mb-4 italic">
+              <p className="text-sm sm:text-base text-gray-600 mb-4 italic font-bold">
                 {courseData.accreditation}
               </p>
             )}

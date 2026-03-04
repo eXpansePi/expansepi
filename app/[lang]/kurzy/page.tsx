@@ -132,7 +132,7 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
               {activeCourses.map(course => (
                 <article
                   key={course.slug}
-                  className="relative bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                  className="glow-box relative bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
                   {/* Top accent gradient */}
                   <div className="h-1.5 bg-gradient-to-r from-blue-600 via-sky-400 to-emerald-400" />
@@ -163,7 +163,7 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
                     <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">{course.title}</h3>
 
                     {/* Description */}
-                    <p className="text-gray-500 text-sm sm:text-base leading-relaxed mb-6 max-w-3xl">
+                    <p className="text-gray-500 text-sm sm:text-base leading-relaxed mb-6">
                       {course.description}
                     </p>
 
@@ -249,7 +249,7 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
                   return (
                     <article
                       key={course.slug}
-                      className="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300 hover:-translate-y-0.5"
+                      className="glow-box group bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
                     >
                       {/* Accent bar */}
                       <div className={`h-1 bg-gradient-to-r ${color.accent} opacity-80 group-hover:opacity-100 transition-opacity`} />

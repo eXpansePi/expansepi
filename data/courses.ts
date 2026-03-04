@@ -72,6 +72,7 @@ function normalizeCourse(course: unknown, lang: string = 'cs'): Course | null {
           level: normalizeLevel(ld.level),
           status: obj.status as Course['status'],
           accreditation: typeof ld.accreditation === 'string' ? ld.accreditation : undefined,
+          accreditationLogo: typeof obj.accreditationLogo === 'string' ? obj.accreditationLogo as string : undefined,
           syllabus: Array.isArray(ld.syllabus) ? (ld.syllabus as string[]) : undefined,
           image: typeof ld.image === 'string' ? ld.image : undefined,
           funding: typeof ld.funding === 'string' ? ld.funding : undefined,
@@ -96,6 +97,7 @@ function normalizeCourse(course: unknown, lang: string = 'cs'): Course | null {
       level: normalizeLevel(obj.level),
       status: obj.status as Course['status'],
       accreditation: typeof obj.accreditation === 'string' ? obj.accreditation : undefined,
+      accreditationLogo: typeof obj.accreditationLogo === 'string' ? obj.accreditationLogo : undefined,
       syllabus: Array.isArray(obj.syllabus) ? (obj.syllabus as string[]) : undefined,
       image: typeof obj.image === 'string' ? obj.image : undefined,
     }
