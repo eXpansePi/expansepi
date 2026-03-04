@@ -31,9 +31,9 @@ export default function AnimatedPrice({ originalPrice, newPrice }: AnimatedPrice
             <div className="flex items-baseline gap-3 flex-wrap">
                 {/* New price - appears after strikethrough */}
                 <span
-                    className={`text-5xl sm:text-6xl font-black text-green-600 tracking-tight transition-all duration-700 ease-out ${phase === 'revealing' || phase === 'done'
-                            ? 'opacity-100 translate-y-0 scale-100'
-                            : 'opacity-0 translate-y-2 scale-95'
+                    className={`text-3xl sm:text-4xl font-black text-green-600 tracking-tight transition-all duration-700 ease-out ${phase === 'revealing' || phase === 'done'
+                        ? 'opacity-100 translate-y-0 scale-100'
+                        : 'opacity-0 translate-y-2 scale-95'
                         }`}
                 >
                     {newPrice}
@@ -41,7 +41,7 @@ export default function AnimatedPrice({ originalPrice, newPrice }: AnimatedPrice
 
                 {/* Original price with animated strikethrough */}
                 <span className="animated-price-original relative inline-block">
-                    <span className={`text-2xl sm:text-3xl font-bold text-gray-500 transition-opacity duration-500 ${phase === 'initial' ? 'opacity-100' : 'opacity-90'
+                    <span className={`text-lg sm:text-xl font-bold text-gray-500 transition-opacity duration-500 ${phase === 'initial' ? 'opacity-100' : 'opacity-90'
                         }`}>
                         {originalPrice}
                     </span>
@@ -49,8 +49,8 @@ export default function AnimatedPrice({ originalPrice, newPrice }: AnimatedPrice
                     {/* Animated red strikethrough line */}
                     <span
                         className={`absolute left-0 top-1/2 h-[4px] bg-red-500 rounded-full transition-all ease-out ${phase === 'initial'
-                                ? 'w-0 opacity-0'
-                                : 'opacity-100'
+                            ? 'w-0 opacity-0'
+                            : 'opacity-100'
                             }`}
                         style={{
                             width: phase === 'initial' ? '0%' : '100%',
