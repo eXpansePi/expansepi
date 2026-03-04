@@ -94,23 +94,46 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const regularContent = content && content.length > 1 ? content.slice(1) : undefined
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       <Navigation activePage={getRoutePath(lang, 'about')} lang={lang} t={t} />
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6 flex-grow">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-8 sm:mb-10">{t.about.title}</h1>
 
-          {/* Who We Are Section */}
-          <section className="mb-8 sm:mb-10">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">
+      <main className="flex-grow">
+        {/* ── Hero Section ───────────────────────────────────────────────── */}
+        <section className="relative pt-24 sm:pt-28 pb-10 sm:pb-14 px-4 sm:px-6 bg-gradient-to-br from-blue-50/80 via-white to-sky-50/60 overflow-hidden">
+          {/* Decorative blurs */}
+          <div className="absolute top-16 right-0 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-30 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-100 rounded-full blur-3xl opacity-20 pointer-events-none" />
+
+          <div className="max-w-5xl mx-auto relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100/80 text-blue-700 rounded-full text-sm font-medium mb-5">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              {lang === 'cs' ? 'Náš tým' : lang === 'en' ? 'Our team' : 'Наша команда'}
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 tracking-tight">
+              {t.about.title}
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl text-gray-500 max-w-2xl leading-relaxed">
+              {t.about.description}
+            </p>
+          </div>
+        </section>
+
+        {/* ── Who We Are Section ─────────────────────────────────────────── */}
+        <section className="px-4 sm:px-6 py-12 sm:py-16">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">
               {t.about.whoWeAre}
             </h2>
 
             {/* Motto - Hero Quote */}
             {motto && (
-              <div className="mb-6 sm:mb-8">
-                <div className="glow-box bg-gradient-to-br from-blue-50 to-sky-50 rounded-xl shadow-lg p-6 sm:p-8 border-l-4 border-blue-600">
-                  <blockquote className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-600 leading-relaxed">
+              <div className="mb-8 sm:mb-10">
+                <div className="glow-box relative bg-gradient-to-br from-blue-50 to-sky-50 rounded-2xl shadow-lg p-6 sm:p-8 overflow-hidden">
+                  {/* Accent bar */}
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-blue-600 via-sky-400 to-emerald-400 rounded-l-2xl" />
+                  <blockquote className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-600 leading-relaxed pl-4">
                     {formatText(motto)}
                   </blockquote>
                 </div>
@@ -119,75 +142,95 @@ export default async function AboutPage({ params }: AboutPageProps) {
 
             {/* Regular Content Paragraphs */}
             {regularContent && regularContent.length > 0 && (
-              <div className="mb-6 sm:mb-8">
-                <div className="glow-box bg-white rounded-xl shadow-lg p-6 sm:p-8">
-                  {regularContent.map((paragraph, index) => (
-                    <p key={index} className="text-base sm:text-lg leading-relaxed mb-6 text-gray-900 last:mb-0">
-                      {formatText(paragraph)}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Divider */}
-            {content && goalTitle && (
-              <hr className="border-gray-300 my-8 sm:my-10" />
-            )}
-
-            {/* Goal Section */}
-            {goalTitle && (
-              <div className="mb-6 sm:mb-8">
-                <div className="glow-box bg-white rounded-xl shadow-lg p-6 sm:p-8">
-                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">
-                    {goalTitle}
-                  </h3>
-                  <div className="space-y-4">
-                    {goalContent && Array.isArray(goalContent) && goalContent.length > 0 && goalContent.map((paragraph, index) => (
-                      <p key={index} className="text-base sm:text-lg leading-relaxed text-gray-900">
+              <div className="mb-8 sm:mb-10">
+                <article className="glow-box bg-white rounded-2xl shadow-lg overflow-hidden">
+                  {/* Top accent gradient */}
+                  <div className="h-1 bg-gradient-to-r from-blue-600 via-sky-400 to-emerald-400" />
+                  <div className="p-6 sm:p-8">
+                    {regularContent.map((paragraph, index) => (
+                      <p key={index} className="text-base sm:text-lg leading-relaxed mb-6 text-gray-700 last:mb-0">
                         {formatText(paragraph)}
                       </p>
                     ))}
                   </div>
-                </div>
+                </article>
               </div>
             )}
-          </section>
 
-          {/* Team Members Section */}
-          {teamMembers.length > 0 && (
-            <section aria-labelledby="team-heading" className="mb-16 sm:mb-20" id="team">
-              <h2 id="team-heading" className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 sm:mb-8">
-                {t.about.teamTitle}
-              </h2>
+            {/* Goal Section */}
+            {goalTitle && (
+              <div className="mb-8 sm:mb-10">
+                <article className="glow-box bg-white rounded-2xl shadow-lg overflow-hidden">
+                  {/* Top accent gradient */}
+                  <div className="h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400" />
+                  <div className="p-6 sm:p-8">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                      </div>
+                      {goalTitle}
+                    </h3>
+                    <div className="space-y-4">
+                      {goalContent && Array.isArray(goalContent) && goalContent.length > 0 && goalContent.map((paragraph, index) => (
+                        <p key={index} className="text-base sm:text-lg leading-relaxed text-gray-700">
+                          {formatText(paragraph)}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ── Team Members Section ──────────────────────────────────────── */}
+        {teamMembers.length > 0 && (
+          <section aria-labelledby="team-heading" className="px-4 sm:px-6 pb-14 sm:pb-18" id="team">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-8">
+                <h2 id="team-heading" className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  {t.about.teamTitle}
+                </h2>
+                <p className="text-gray-400 text-sm sm:text-base">
+                  {lang === 'cs' ? 'Lidé, kteří stojí za eXpansePi' : lang === 'en' ? 'The people behind eXpansePi' : 'Люди, стоящие за eXpansePi'}
+                </p>
+              </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                 {teamMembers.map(member => (
                   <TeamMemberCard key={member.id} member={member} />
                 ))}
               </div>
-            </section>
-          )}
+            </div>
+          </section>
+        )}
 
-          {/* Lecturers Section */}
-          {lecturers.length > 0 && (
-            <section aria-labelledby="lecturers-heading" id="lecturers">
-              <h2 id="lecturers-heading" className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
-                {t.about.lecturersTitle}
-              </h2>
-              {t.about.lecturerDefinition && (
-                <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8">
-                  {t.about.lecturerDefinition}
-                </p>
-              )}
+        {/* ── Lecturers Section ─────────────────────────────────────────── */}
+        {lecturers.length > 0 && (
+          <section aria-labelledby="lecturers-heading" className="px-4 sm:px-6 pb-16 sm:pb-20" id="lecturers">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-8">
+                <h2 id="lecturers-heading" className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  {t.about.lecturersTitle}
+                </h2>
+                {t.about.lecturerDefinition && (
+                  <p className="text-gray-400 text-sm sm:text-base">
+                    {t.about.lecturerDefinition}
+                  </p>
+                )}
+              </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                 {lecturers.map(lecturer => (
                   <LecturerCard key={lecturer.id} lecturer={lecturer} />
                 ))}
               </div>
-            </section>
-          )}
-        </div>
+            </div>
+          </section>
+        )}
       </main>
+
       <Footer lang={lang} />
     </div>
   )
