@@ -5,6 +5,7 @@ import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import coursesData from "@/data/courses.json"
 import { getCourseSchema, getBreadcrumbSchema } from "@/lib/seo"
 import ExpandableSyllabus from "./components/ExpandableSyllabus"
+import AnimatedPrice from "./components/AnimatedPrice"
 import { getRoutePath, getDetailRoutePath, getAllDetailRoutePaths } from "@/lib/routes"
 
 interface CourseDetailProps {
@@ -254,12 +255,10 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
                 {/* Right side: Prices and Funding badge */}
                 <div className="flex flex-col items-start sm:items-end gap-3 order-1 sm:order-2 sm:ml-auto w-full sm:w-auto">
                   <div className="flex items-baseline gap-3">
-                    <span className="text-5xl sm:text-6xl font-black text-green-600 tracking-tight">
-                      {t.courses.priceFrom}
-                    </span>
-                    <span className="text-2xl sm:text-3xl font-bold text-gray-500 line-through decoration-red-500 decoration-[4px] opacity-90">
-                      {t.courses.price}
-                    </span>
+                    <AnimatedPrice
+                      originalPrice={t.courses.price}
+                      newPrice={t.courses.priceFrom}
+                    />
                   </div>
                   {courseData.funding && (
                     <div className="inline-flex items-center gap-2 bg-green-100 border border-green-300 rounded-lg px-4 py-2 sm:py-2.5 flex-shrink-0 shadow-sm">
