@@ -123,10 +123,27 @@ export default function HomeClient({ lang }: HomeClientProps) {
     let height = (canvas.height = window.innerHeight)
     let nodeCount = calculateNodeCount(width, height)
 
-    const nodes: Node[] = Array.from({ length: nodeCount }, () => {
-      const angle = Math.random() * Math.PI * 2
-      return { x: Math.random() * width, y: Math.random() * height, vx: Math.cos(angle) * BASE_SPEED, vy: Math.sin(angle) * BASE_SPEED, angle, life: 1 }
-    })
+    const nodes: Node[] = []
+
+    // Spawn nodes in clusters so connections are visible from the first frame
+    const CLUSTER_SIZE = 4
+    const clusterCount = Math.ceil(nodeCount / CLUSTER_SIZE)
+    for (let c = 0; c < clusterCount; c++) {
+      const cx = Math.random() * width
+      const cy = Math.random() * height
+      const nodesInCluster = Math.min(CLUSTER_SIZE, nodeCount - nodes.length)
+      for (let n = 0; n < nodesInCluster; n++) {
+        const angle = Math.random() * Math.PI * 2
+        nodes.push({
+          x: cx + (Math.random() - 0.5) * CONNECTION_DISTANCE * 0.7,
+          y: cy + (Math.random() - 0.5) * CONNECTION_DISTANCE * 0.7,
+          vx: Math.cos(angle) * BASE_SPEED,
+          vy: Math.sin(angle) * BASE_SPEED,
+          angle,
+          life: 1,
+        })
+      }
+    }
 
     // ── Density maintenance (fixes sprite splice bug: removes nodes in overcrowded cells) ──
     function maintainDensity() {

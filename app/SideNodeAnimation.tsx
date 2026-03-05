@@ -46,19 +46,28 @@ export default function SideNodeAnimation() {
       vy: number
       angle: number
       life: number
-    }> = Array.from({ length: nodeCount }, () => {
-      const angle = Math.random() * Math.PI * 2
-      // Spawn nodes mostly on the sides to be efficient
+    }> = []
+
+    // Spawn nodes in clusters so connections are visible from the first frame
+    const CLUSTER_SIZE = 4
+    const clusterCount = Math.ceil(nodeCount / CLUSTER_SIZE)
+    for (let c = 0; c < clusterCount; c++) {
       const isLeft = Math.random() > 0.5
-      return {
-        x: isLeft ? Math.random() * (width * 0.25) : width - Math.random() * (width * 0.25),
-        y: Math.random() * height,
-        vx: Math.cos(angle) * BASE_SPEED,
-        vy: Math.sin(angle) * BASE_SPEED,
-        angle,
-        life: 1,
+      const cx = isLeft ? Math.random() * (width * 0.25) : width - Math.random() * (width * 0.25)
+      const cy = Math.random() * height
+      const nodesInCluster = Math.min(CLUSTER_SIZE, nodeCount - nodes.length)
+      for (let n = 0; n < nodesInCluster; n++) {
+        const angle = Math.random() * Math.PI * 2
+        nodes.push({
+          x: cx + (Math.random() - 0.5) * CONNECTION_DISTANCE * 0.7,
+          y: cy + (Math.random() - 0.5) * CONNECTION_DISTANCE * 0.7,
+          vx: Math.cos(angle) * BASE_SPEED,
+          vy: Math.sin(angle) * BASE_SPEED,
+          angle,
+          life: 1,
+        })
       }
-    })
+    }
 
     function maintainDensity() {
       const cellSize = 200
