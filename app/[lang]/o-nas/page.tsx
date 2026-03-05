@@ -99,7 +99,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
 
       <main className="flex-grow">
         {/* ── Hero Section ───────────────────────────────────────────────── */}
-        <section className="relative pt-24 sm:pt-28 pb-10 sm:pb-14 px-4 sm:px-6 bg-gradient-to-br from-blue-50/80 via-white to-sky-50/60 overflow-hidden">
+        <section className="relative pt-24 sm:pt-28 pb-6 sm:pb-8 px-4 sm:px-6 bg-gradient-to-br from-blue-50/80 via-white to-sky-50/60 overflow-hidden">
           {/* Decorative blurs */}
           <div className="absolute top-16 right-0 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-30 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-100 rounded-full blur-3xl opacity-20 pointer-events-none" />
@@ -121,7 +121,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
         </section>
 
         {/* ── Who We Are Section ─────────────────────────────────────────── */}
-        <section className="px-4 sm:px-6 py-12 sm:py-16">
+        <section className="px-4 sm:px-6 py-8 sm:py-10">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">
               {t.about.whoWeAre}
@@ -194,7 +194,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 <h2 id="team-heading" className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                   {t.about.teamTitle}
                 </h2>
-                <p className="text-gray-400 text-sm sm:text-base">
+                <p className="text-gray-500 text-sm sm:text-base">
                   {lang === 'cs' ? 'Lidé, kteří stojí za eXpansePi' : lang === 'en' ? 'The people behind eXpansePi' : 'Люди, стоящие за eXpansePi'}
                 </p>
               </div>
@@ -216,7 +216,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                   {t.about.lecturersTitle}
                 </h2>
                 {t.about.lecturerDefinition && (
-                  <p className="text-gray-400 text-sm sm:text-base">
+                  <p className="text-gray-500 text-sm sm:text-base">
                     {t.about.lecturerDefinition}
                   </p>
                 )}
