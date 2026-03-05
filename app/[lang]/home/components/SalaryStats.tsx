@@ -29,12 +29,12 @@ function SalaryStats({ lang }: SalaryStatsProps) {
       {
         label: marketReadiness?.commonCourses || 'Běžné IT kurzy',
         percentage: 60,
-        color: 'from-blue-600 to-sky-400'
+        color: 'from-slate-500 to-blue-300'
       },
       {
         label: marketReadiness?.expansepi || 'eXpansePi',
         percentage: 100,
-        color: 'from-blue-600 to-sky-400'
+        color: 'from-blue-600 via-sky-500 to-emerald-400'
       }
     ]
   }

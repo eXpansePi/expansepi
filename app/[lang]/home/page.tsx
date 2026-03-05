@@ -19,12 +19,12 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
   const homeUrl = `${baseUrl}${getRoutePath(lang, 'home')}`
   const allRoutes = getAllRoutePaths('home')
-  
+
   const seoDescription = lang === 'cs'
     ? 'IT kurzy plně hrazené Úřadem práce ČR. Rekvalifikační IT kurzy - Python, datová analýza, web development. Naučte se programovat s experty z Matfyzu UK a ČVUT.'
     : lang === 'en'
-    ? 'IT courses fully funded by the Czech Labour Office. IT reskilling courses - Python, data analysis, web development. Learn programming with experts from Charles University and Czech Technical University.'
-    : 'IT курсы, полностью финансируемые Чешским центром занятости. Курсы переквалификации IT - Python, анализ данных, веб-разработка. Изучите программирование с экспертами из Карлова университета и Чешского технического университета.'
+      ? 'IT courses fully funded by the Czech Labour Office. IT reskilling courses - Python, data analysis, web development. Learn programming with experts from Charles University and Czech Technical University.'
+      : 'IT курсы, полностью финансируемые Чешским центром занятости. Курсы переквалификации IT - Python, анализ данных, веб-разработка. Изучите программирование с экспертами из Карлова университета и Чешского технического университета.'
 
   return {
     title: lang === 'cs' ? 'IT Kurzy eXpansePi - Rekvalifikační kurzy plně hrazené Úřadem práce' : t.home.title,
@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
     keywords: lang === 'cs'
       ? ['rekvalifikační IT kurzy', 'Python kurz', 'datová analýza', 'web development', 'Úřad práce', 'IT vzdělávání']
       : lang === 'en'
-      ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
-      : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
+        ? ['IT reskilling courses', 'Python course', 'data analysis', 'web development', 'Czech Labour Office', 'IT education']
+        : ['курсы переквалификации IT', 'курс Python', 'анализ данных', 'веб-разработка', 'Чешский центр занятости', 'IT образование'],
     alternates: {
       canonical: homeUrl,
       languages: {
@@ -75,24 +75,41 @@ export default async function HomePage({ params }: HomePageProps) {
   const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
 
+  const BENEFIT_PALETTES = [
+    { bar: "from-blue-500 via-cyan-400 to-teal-400", bg: "from-blue-50/60 to-cyan-50/40", iconBg: "bg-blue-100", titleColor: "text-blue-700" },
+    { bar: "from-violet-500 via-fuchsia-400 to-pink-400", bg: "from-violet-50/60 to-fuchsia-50/40", iconBg: "bg-violet-100", titleColor: "text-violet-700" },
+    { bar: "from-emerald-500 via-teal-400 to-cyan-400", bg: "from-emerald-50/60 to-teal-50/40", iconBg: "bg-emerald-100", titleColor: "text-emerald-700" },
+    { bar: "from-amber-500 via-orange-400 to-yellow-400", bg: "from-amber-50/60 to-orange-50/40", iconBg: "bg-amber-100", titleColor: "text-amber-700" },
+  ] as const
+
+  // SVG icons for benefits
+  const benefitIcons = [
+    // Globe - EU qualification
+    (color: string) => <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>,
+    // Code - Programming language
+    (color: string) => <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>,
+    // Map pin - Prague location
+    (color: string) => <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>,
+    // Laptop - Remote work / freedom
+    (color: string) => <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="2" y1="20" x2="22" y2="20" /><line x1="12" y1="17" x2="12" y2="20" /></svg>,
+  ]
+
+  const iconColors = ["#3b82f6", "#8b5cf6", "#10b981", "#f59e0b"]
+
   const benefits = [
     {
-      icon: "🇪🇺",
       title: t.home.benefits.european.title,
       description: t.home.benefits.european.description,
     },
     {
-      icon: "🐍",
       title: t.home.benefits.language.title,
       description: t.home.benefits.language.description,
     },
     {
-      icon: "🏰",
       title: t.home.benefits.prague.title,
       description: t.home.benefits.prague.description,
     },
     {
-      icon: "🏠",
       title: t.home.benefits.freedom.title,
       description: t.home.benefits.freedom.description,
     },
@@ -117,21 +134,34 @@ export default async function HomePage({ params }: HomePageProps) {
 
           {/* Benefits */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-8 sm:mb-12">
-            {benefits.map((b, i) => (
-              <div
-                key={i}
-                className="glow-box bg-gradient-to-br from-blue-50 to-sky-50 p-5 sm:p-6 lg:p-7 rounded-lg"
-              >
-                <div className="text-3xl sm:text-4xl lg:text-5xl mb-3 sm:mb-4 text-center">{b.icon}</div>
-                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 text-center">{b.title}</h2>
-                <p className="text-gray-600 text-sm sm:text-base leading-relaxed text-center">{b.description}</p>
-              </div>
-            ))}
+            {benefits.map((b, i) => {
+              const palette = BENEFIT_PALETTES[i % BENEFIT_PALETTES.length]
+              return (
+                <div
+                  key={i}
+                  className="glow-box bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 flex flex-col"
+                >
+                  {/* Gradient accent bar */}
+                  <div className={`h-1.5 bg-gradient-to-r ${palette.bar}`} />
+                  <div className={`flex-1 flex flex-col p-5 sm:p-6 lg:p-7 bg-gradient-to-br ${palette.bg}`}>
+                    <div className={`w-14 h-14 ${palette.iconBg} rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4`}>
+                      {benefitIcons[i](iconColors[i])}
+                    </div>
+                    <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 text-center">{b.title}</h2>
+                    <p className="text-gray-600 text-sm sm:text-base leading-relaxed text-center">{b.description}</p>
+                  </div>
+                </div>
+              )
+            })}
           </div>
 
           {/* Salary Stats */}
-          <div className="glow-box bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-8 sm:mb-12 shadow-lg">
-            <SalaryStats lang={lang} />
+          <div className="glow-box bg-white rounded-xl overflow-hidden shadow-lg mb-8 sm:mb-12">
+            {/* Gradient accent bar */}
+            <div className="h-1.5 bg-gradient-to-r from-blue-500 via-violet-400 to-emerald-400" />
+            <div className="p-4 sm:p-6 bg-gradient-to-br from-blue-50/50 via-white to-sky-50/40">
+              <SalaryStats lang={lang} />
+            </div>
           </div>
 
           {/* CTA */}
@@ -140,13 +170,13 @@ export default async function HomePage({ params }: HomePageProps) {
             <div className="flex gap-2 sm:gap-3 justify-center flex-col sm:flex-row">
               <Link
                 href={getRoutePath(lang, 'contact')}
-                className="px-5 sm:px-6 py-2 text-sm bg-gradient-to-r from-blue-600 to-sky-400 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
+                className="px-6 sm:px-8 py-2.5 text-sm bg-gradient-to-r from-blue-600 via-sky-500 to-teal-400 text-white rounded-lg font-semibold hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
               >
                 {t.home.contact}
               </Link>
               <Link
                 href={getRoutePath(lang, 'courses')}
-                className="px-5 sm:px-6 py-2 text-sm bg-white text-blue-600 rounded-lg border-2 border-blue-600 font-semibold hover:bg-blue-50 transition-colors"
+                className="px-6 sm:px-8 py-2.5 text-sm bg-white text-blue-600 rounded-lg border-2 border-blue-200 font-semibold hover:border-blue-400 hover:bg-blue-50 transition-all duration-300"
               >
                 {t.home.courses}
               </Link>
