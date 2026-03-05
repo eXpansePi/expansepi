@@ -12,13 +12,13 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
   const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
   const t = getTranslations(lang)
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://expansepi.com"
-  
+
   const langMetadata: Record<string, { locale: string }> = {
     cs: { locale: "cs_CZ" },
     en: { locale: "en_US" },
     ru: { locale: "ru_RU" },
   }
-  
+
   const meta = langMetadata[lang] || langMetadata.cs
 
   return {

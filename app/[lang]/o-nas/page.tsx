@@ -199,8 +199,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 </p>
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-                {teamMembers.map(member => (
-                  <TeamMemberCard key={member.id} member={member} />
+                {teamMembers.map((member, index) => (
+                  <TeamMemberCard key={member.id} member={member} index={index} />
                 ))}
               </div>
             </div>
@@ -222,8 +222,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 )}
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-                {lecturers.map(lecturer => (
-                  <LecturerCard key={lecturer.id} lecturer={lecturer} />
+                {lecturers.map((lecturer, index) => (
+                  <LecturerCard key={lecturer.id} lecturer={lecturer} index={index} />
                 ))}
               </div>
             </div>

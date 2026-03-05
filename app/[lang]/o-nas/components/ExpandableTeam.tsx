@@ -15,21 +15,21 @@ interface ExpandableTeamProps {
   lecturerDefinition?: string
 }
 
-export default function ExpandableTeam({ 
-  teamMembers, 
-  lecturers, 
-  lang, 
+export default function ExpandableTeam({
+  teamMembers,
+  lecturers,
+  lang,
   teamTitle,
   lecturersTitle,
-  lecturerDefinition 
+  lecturerDefinition
 }: ExpandableTeamProps) {
   const [isExpanded, setIsExpanded] = useState(true) // Expanded by default since we're on the about page
 
-  const toggleLabel = lang === 'cs' 
+  const toggleLabel = lang === 'cs'
     ? (isExpanded ? 'Skrýt tým' : 'Zobrazit tým')
     : lang === 'en'
-    ? (isExpanded ? 'Hide team' : 'Show team')
-    : (isExpanded ? 'Скрыть команду' : 'Показать команду')
+      ? (isExpanded ? 'Hide team' : 'Show team')
+      : (isExpanded ? 'Скрыть команду' : 'Показать команду')
 
   return (
     <div className="mb-6 sm:mb-8">
@@ -55,11 +55,10 @@ export default function ExpandableTeam({
           </svg>
         </div>
       </button>
-      
+
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isExpanded ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
       >
         <div className="space-y-12 sm:space-y-16">
           {/* Team Members Section */}
@@ -69,8 +68,8 @@ export default function ExpandableTeam({
                 {teamTitle}
               </h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-                {teamMembers.map(member => (
-                  <TeamMemberCard key={member.id} member={member} />
+                {teamMembers.map((member, index) => (
+                  <TeamMemberCard key={member.id} member={member} index={index} />
                 ))}
               </div>
             </section>
@@ -88,8 +87,8 @@ export default function ExpandableTeam({
                 </p>
               )}
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-                {lecturers.map(lecturer => (
-                  <LecturerCard key={lecturer.id} lecturer={lecturer} />
+                {lecturers.map((lecturer, index) => (
+                  <LecturerCard key={lecturer.id} lecturer={lecturer} index={index} />
                 ))}
               </div>
             </section>
