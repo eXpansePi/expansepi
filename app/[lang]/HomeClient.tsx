@@ -11,13 +11,14 @@ import { getRoutePath } from "@/lib/routes"
 
 // ─── Canvas constants at module scope (never change, no reason to live inside component) ─
 
-const BASE_SPEED = 0.05
-const TURN_RATE = 0.01
+const BASE_SPEED = 0.03
+const TURN_RATE = 0.008
 const REPULSION_RADIUS = 150
 const REPULSION_STRENGTH = 0.2
 const BASE_NODE_COUNT = 180
 const CONNECTION_DISTANCE = 150
 const BIRTH_FADE_SPEED = 0.002
+const TARGET_FPS = 60
 const ELLIPSE_RADIUS_X = 700
 const ELLIPSE_RADIUS_Y = 600
 const ELLIPSE_FADE_STRENGTH = 0.7
@@ -169,9 +170,14 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
     let animationFrameId: number | null = null
     let isRunning = true
+    let lastTime = performance.now()
 
-    const draw = () => {
+    const draw = (now: number = performance.now()) => {
       if (!isRunning) return
+
+      const rawDt = (now - lastTime) / 1000
+      lastTime = now
+      const dt = Math.min(rawDt, 0.1) * TARGET_FPS // normalize to 60fps equivalent
 
       ctx.clearRect(0, 0, width, height)
       ctx.fillStyle = "#f9fafb"
@@ -182,9 +188,9 @@ export default function HomeClient({ lang }: HomeClientProps) {
 
       // Update node positions
       for (const n of nodes) {
-        n.angle += (Math.random() - 0.5) * TURN_RATE
-        n.vx += Math.cos(n.angle) * 0.01
-        n.vy += Math.sin(n.angle) * 0.01
+        n.angle += (Math.random() - 0.5) * TURN_RATE * dt
+        n.vx += Math.cos(n.angle) * 0.006 * dt
+        n.vy += Math.sin(n.angle) * 0.006 * dt
 
         if (mouse.current.active) {
           const dx = n.x - mouse.current.x
@@ -192,19 +198,20 @@ export default function HomeClient({ lang }: HomeClientProps) {
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < REPULSION_RADIUS && dist > 0) {
             const force = (1 - dist / REPULSION_RADIUS) * REPULSION_STRENGTH
-            n.vx += (dx / dist) * force
-            n.vy += (dy / dist) * force
+            n.vx += (dx / dist) * force * dt
+            n.vy += (dy / dist) * force * dt
           }
         }
 
-        n.x += n.vx
-        n.y += n.vy
-        n.vx *= 0.95
-        n.vy *= 0.95
+        n.x += n.vx * dt
+        n.y += n.vy * dt
+        const damping = Math.pow(0.95, dt)
+        n.vx *= damping
+        n.vy *= damping
 
         if (n.x < 0 || n.x > width) n.vx *= -1
         if (n.y < 0 || n.y > height) n.vy *= -1
-        if (n.life < 1) n.life = Math.min(1, n.life + BIRTH_FADE_SPEED)
+        if (n.life < 1) n.life = Math.min(1, n.life + BIRTH_FADE_SPEED * dt)
       }
 
       const fadeInsideEllipse = (x: number, y: number) => {

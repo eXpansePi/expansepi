@@ -12,10 +12,11 @@ export default function SideNodeAnimation() {
   const isHomePage = pathname === '/' || /^\/[a-z]{2}$/.test(pathname)
 
   const BASE_SPEED = 0.05
-  const TURN_RATE = 0.01
+  const TURN_RATE = 0.008
   const BASE_NODE_COUNT = 180
   const CONNECTION_DISTANCE = 150
   const BIRTH_FADE_SPEED = 0.002
+  const TARGET_FPS = 60
 
   const calculateNodeCount = (width: number, height: number): number => {
     const area = width * height
@@ -105,9 +106,14 @@ export default function SideNodeAnimation() {
 
     let animationFrameId: number | null = null
     let isRunning = true
+    let lastTime = performance.now()
 
-    const draw = () => {
+    const draw = (now: number = performance.now()) => {
       if (!isRunning) return
+
+      const rawDt = (now - lastTime) / 1000
+      lastTime = now
+      const dt = Math.min(rawDt, 0.1) * TARGET_FPS // normalize to 60fps equivalent
 
       ctx.clearRect(0, 0, width, height)
       // ctx.fillStyle = "#f9fafb" 
@@ -117,14 +123,15 @@ export default function SideNodeAnimation() {
       const centerX = width / 2
 
       for (const n of nodes) {
-        n.angle += (Math.random() - 0.5) * TURN_RATE
-        n.vx += Math.cos(n.angle) * 0.01
-        n.vy += Math.sin(n.angle) * 0.01
+        n.angle += (Math.random() - 0.5) * TURN_RATE * dt
+        n.vx += Math.cos(n.angle) * 0.006 * dt
+        n.vy += Math.sin(n.angle) * 0.006 * dt
 
-        n.x += n.vx
-        n.y += n.vy
-        n.vx *= 0.95
-        n.vy *= 0.95
+        n.x += n.vx * dt
+        n.y += n.vy * dt
+        const damping = Math.pow(0.95, dt)
+        n.vx *= damping
+        n.vy *= damping
 
         // Wrap around gracefully off-screen to prevent wall-hugging and snapping.
         // We use +/- 150 because CONNECTION_DISTANCE is 150, so links seamlessly fade out.
@@ -134,7 +141,7 @@ export default function SideNodeAnimation() {
         if (n.y < -150) n.y = height + 150
         else if (n.y > height + 150) n.y = -150
 
-        if (n.life < 1) n.life = Math.min(1, n.life + BIRTH_FADE_SPEED)
+        if (n.life < 1) n.life = Math.min(1, n.life + BIRTH_FADE_SPEED * dt)
       }
 
       const fadeInsideCenter = (x: number) => {
