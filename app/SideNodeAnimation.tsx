@@ -3,6 +3,35 @@
 import { useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const BASE_SPEED = 0.05
+const TURN_RATE = 0.008
+const BIRTH_FADE_SPEED = 0.02
+const TARGET_FPS = 60
+const MIN_PER_CELL = 1
+const MAX_PER_CELL = 8
+
+// ─── Viewport-proportional helpers ────────────────────────────────────────────
+
+function getViewportMetrics(w: number, h: number) {
+  const short = Math.min(w, h)
+  const connectionDist = short * 0.1
+  const cellSize = connectionDist * 1.5
+  return { connectionDist, cellSize }
+}
+
+/** Node count scales linearly with area */
+function calculateNodeCount(width: number, height: number): number {
+  const area = width * height
+  const baseArea = 1920 * 1080
+  const baseCount = 220
+  const scaledNodes = Math.round(baseCount * (area / baseArea))
+  return Math.max(60, Math.min(400, scaledNodes))
+}
+
+type Node = { x: number; y: number; vx: number; vy: number; angle: number; life: number }
+
 export default function SideNodeAnimation() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pathname = usePathname()
@@ -10,23 +39,6 @@ export default function SideNodeAnimation() {
   // We do not want this to run on the main home page (e.g. /cs, /en, /ru, /). 
   // It handles its own animation in HomeClient.tsx.
   const isHomePage = pathname === '/' || /^\/[a-z]{2}$/.test(pathname)
-
-  const BASE_SPEED = 0.05
-  const TURN_RATE = 0.008
-  const BASE_NODE_COUNT = 180
-  const CONNECTION_DISTANCE = 150
-  const BIRTH_FADE_SPEED = 0.002
-  const TARGET_FPS = 60
-
-  const calculateNodeCount = (width: number, height: number): number => {
-    const area = width * height
-    const baseArea = 1920 * 1080
-    const minNodes = 40
-    const maxNodes = BASE_NODE_COUNT
-    const densityRatio = area / baseArea
-    const scaledNodes = Math.floor(BASE_NODE_COUNT * Math.sqrt(densityRatio))
-    return Math.max(minNodes, Math.min(maxNodes, scaledNodes))
-  }
 
   useEffect(() => {
     if (isHomePage) return
@@ -38,78 +50,99 @@ export default function SideNodeAnimation() {
     let width = (canvas.width = window.innerWidth)
     let height = (canvas.height = window.innerHeight)
     let nodeCount = calculateNodeCount(width, height)
+    let vm = getViewportMetrics(width, height)
 
-    const nodes: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      angle: number
-      life: number
-    }> = []
+    const nodes: Node[] = []
 
-    // Spawn nodes in clusters so connections are visible from the first frame
-    const CLUSTER_SIZE = 4
-    const clusterCount = Math.ceil(nodeCount / CLUSTER_SIZE)
-    for (let c = 0; c < clusterCount; c++) {
-      const isLeft = Math.random() > 0.5
-      const cx = isLeft ? Math.random() * (width * 0.25) : width - Math.random() * (width * 0.25)
-      const cy = Math.random() * height
-      const nodesInCluster = Math.min(CLUSTER_SIZE, nodeCount - nodes.length)
-      for (let n = 0; n < nodesInCluster; n++) {
-        const angle = Math.random() * Math.PI * 2
-        nodes.push({
-          x: cx + (Math.random() - 0.5) * CONNECTION_DISTANCE * 0.7,
-          y: cy + (Math.random() - 0.5) * CONNECTION_DISTANCE * 0.7,
-          vx: Math.cos(angle) * BASE_SPEED,
-          vy: Math.sin(angle) * BASE_SPEED,
-          angle,
-          life: 1,
-        })
+    // ── Jittered-grid spawn: uniform coverage, organic feel ──────────────────
+    function spawnNodesUniform(w: number, h: number, count: number) {
+      const aspect = w / h
+      const rows = Math.round(Math.sqrt(count / aspect))
+      const cols = Math.round(rows * aspect)
+      const cellW = w / cols
+      const cellH = h / rows
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          if (nodes.length >= count) return
+          const angle = Math.random() * Math.PI * 2
+          nodes.push({
+            x: c * cellW + Math.random() * cellW,
+            y: r * cellH + Math.random() * cellH,
+            vx: Math.cos(angle) * BASE_SPEED,
+            vy: Math.sin(angle) * BASE_SPEED,
+            angle,
+            life: 1,
+          })
+        }
       }
     }
+    spawnNodesUniform(width, height, nodeCount)
 
+    // ── Density maintenance ──────────────────────────────────────────────────
     function maintainDensity() {
-      const cellSize = 200
-      const minPerCell = 1
-      const maxPerCell = 8
-      const cols = Math.ceil(width / cellSize)
-      const rows = Math.ceil(height / cellSize)
-      const grid = Array.from({ length: cols * rows }, () => 0)
-
-      for (const n of nodes) {
-        const cx = Math.floor(n.x / cellSize)
-        const cy = Math.floor(n.y / cellSize)
-        const idx = cy * cols + cx
-        if (grid[idx] !== undefined) grid[idx]++
+      const cs = vm.cellSize
+      const cols = Math.ceil(width / cs)
+      const rows = Math.ceil(height / cs)
+      const grid = new Map<number, number[]>()
+      for (let i = 0; i < nodes.length; i++) {
+        const cx = Math.min(Math.floor(nodes[i].x / cs), cols - 1)
+        const cy = Math.min(Math.floor(nodes[i].y / cs), rows - 1)
+        const key = cy * cols + cx
+        const cell = grid.get(key)
+        if (cell) cell.push(i); else grid.set(key, [i])
       }
 
+      const toRemove = new Set<number>()
       for (let cy = 0; cy < rows; cy++) {
         for (let cx = 0; cx < cols; cx++) {
           // Only maintain density on the sides
-          const cellXCenteredDist = Math.abs((cx * cellSize + cellSize / 2) - width / 2)
-          if (cellXCenteredDist < width * 0.3) {
-            continue // Ignore center area where nodes are invisible anyway
-          }
+          const cellXCenter = cx * cs + cs / 2
+          const distFromCenter = Math.abs(cellXCenter - width / 2)
+          if (distFromCenter < width * 0.3) continue
 
-          const count = grid[cy * cols + cx]
-          if (count < minPerCell) {
-            const add = minPerCell - count
+          const key = cy * cols + cx
+          const cell = grid.get(key) ?? []
+          const count = cell.length
+          if (count < MIN_PER_CELL) {
+            const add = MIN_PER_CELL - count
             for (let i = 0; i < add; i++) {
               const ang = Math.random() * Math.PI * 2
               nodes.push({
-                x: cx * cellSize + Math.random() * cellSize,
-                y: cy * cellSize + Math.random() * cellSize,
+                x: cx * cs + Math.random() * cs,
+                y: cy * cs + Math.random() * cs,
                 vx: Math.cos(ang) * BASE_SPEED,
                 vy: Math.sin(ang) * BASE_SPEED,
                 angle: ang,
                 life: 0,
               })
             }
-          } else if (count > maxPerCell) {
-            nodes.splice(0, count - maxPerCell)
+          } else if (count > MAX_PER_CELL) {
+            const excess = count - MAX_PER_CELL
+            for (let i = 0; i < excess; i++) toRemove.add(cell[i])
           }
         }
+      }
+
+      if (toRemove.size > 0) {
+        const sorted = Array.from(toRemove).sort((a, b) => b - a)
+        for (const idx of sorted) nodes.splice(idx, 1)
+      }
+    }
+
+    // ── Warm-up: 120 physics frames so the network looks naturally dispersed ──
+    for (let w = 0; w < 120; w++) {
+      for (const n of nodes) {
+        n.angle += (Math.random() - 0.5) * TURN_RATE
+        n.vx += Math.cos(n.angle) * 0.006
+        n.vy += Math.sin(n.angle) * 0.006
+        n.x += n.vx
+        n.y += n.vy
+        n.vx *= 0.95
+        n.vy *= 0.95
+        if (n.x < -150) n.x = width + 150
+        else if (n.x > width + 150) n.x = -150
+        if (n.y < -150) n.y = height + 150
+        else if (n.y > height + 150) n.y = -150
       }
     }
 
@@ -122,14 +155,12 @@ export default function SideNodeAnimation() {
 
       const rawDt = (now - lastTime) / 1000
       lastTime = now
-      const dt = Math.min(rawDt, 0.1) * TARGET_FPS // normalize to 60fps equivalent
+      const dt = Math.min(rawDt, 0.1) * TARGET_FPS
 
       ctx.clearRect(0, 0, width, height)
-      // ctx.fillStyle = "#f9fafb" 
-      // Do not fill background here to avoid covering page content.
-      // Layout should have relative positioning.
 
       const centerX = width / 2
+      const connDist = vm.connectionDist
 
       for (const n of nodes) {
         n.angle += (Math.random() - 0.5) * TURN_RATE * dt
@@ -142,11 +173,8 @@ export default function SideNodeAnimation() {
         n.vx *= damping
         n.vy *= damping
 
-        // Wrap around gracefully off-screen to prevent wall-hugging and snapping.
-        // We use +/- 150 because CONNECTION_DISTANCE is 150, so links seamlessly fade out.
         if (n.x < -150) n.x = width + 150
         else if (n.x > width + 150) n.x = -150
-
         if (n.y < -150) n.y = height + 150
         else if (n.y > height + 150) n.y = -150
 
@@ -154,41 +182,79 @@ export default function SideNodeAnimation() {
       }
 
       const fadeInsideCenter = (x: number) => {
-        // We want to fade out towards the center
-        // Let's say the middle 60% is content area -> emptyWidth = width * 0.3
         const distFromCenter = Math.abs(x - centerX)
-        const emptyWidth = Math.min(800, width * 0.35) // Responsive empty center width
-        const edgeGradiantWidth = Math.min(200, width * 0.1)
+        const emptyWidth = Math.min(800, width * 0.35)
+        const edgeGradientWidth = Math.min(200, width * 0.1)
 
-        if (distFromCenter < emptyWidth) {
-          return 0
-        } else if (distFromCenter < emptyWidth + edgeGradiantWidth) {
-          const normDist = (distFromCenter - emptyWidth) / edgeGradiantWidth
+        if (distFromCenter < emptyWidth) return 0
+        if (distFromCenter < emptyWidth + edgeGradientWidth) {
+          const normDist = (distFromCenter - emptyWidth) / edgeGradientWidth
           return Math.pow(normDist, 2)
         }
         return 1
       }
 
+      // ── Draw connections using spatial grid (O(n·k) instead of O(n²)) ─────
+      const cs = vm.cellSize
+      const gridCols = Math.ceil(width / cs)
+      const gridRows = Math.ceil(height / cs)
+      const grid = new Map<number, number[]>()
       for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x
-          const dy = nodes[i].y - nodes[j].y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < CONNECTION_DISTANCE) {
-            const fade = (nodes[i].life + nodes[j].life) / 2
-            const baseAlpha = Math.pow(fade, 2) * (1 - dist / CONNECTION_DISTANCE)
-            const fade1 = fadeInsideCenter(nodes[i].x)
-            const fade2 = fadeInsideCenter(nodes[j].x)
-            const avgFade = (fade1 + fade2) / 2
+        const gx = Math.min(Math.floor(nodes[i].x / cs), gridCols - 1)
+        const gy = Math.min(Math.floor(nodes[i].y / cs), gridRows - 1)
+        const key = gy * gridCols + gx
+        const cell = grid.get(key)
+        if (cell) cell.push(i); else grid.set(key, [i])
+      }
 
-            if (avgFade > 0.01) {
-              const combined = baseAlpha * avgFade
-              ctx.strokeStyle = `rgba(37, 99, 235,${combined})`
-              ctx.lineWidth = 0.8 + (avgFade * 1.7)
-              ctx.beginPath()
-              ctx.moveTo(nodes[i].x, nodes[i].y)
-              ctx.lineTo(nodes[j].x, nodes[j].y)
-              ctx.stroke()
+      for (const [key, cellNodes] of grid) {
+        const cy = Math.floor(key / gridCols)
+        const cx = key % gridCols
+
+        const neighbours = [
+          [cx, cy],
+          [cx + 1, cy],
+          [cx - 1, cy + 1],
+          [cx, cy + 1],
+          [cx + 1, cy + 1],
+        ]
+
+        for (const [nx, ny] of neighbours) {
+          if (nx < 0 || ny < 0 || nx >= gridCols || ny >= gridRows) continue
+          const nKey = ny * gridCols + nx
+          const neighbourNodes = grid.get(nKey)
+          if (!neighbourNodes) continue
+
+          const isSameCell = nKey === key
+          for (let a = 0; a < cellNodes.length; a++) {
+            const startB = isSameCell ? a + 1 : 0
+            for (let b = startB; b < neighbourNodes.length; b++) {
+              const i = cellNodes[a]
+              const j = neighbourNodes[b]
+              if (i === j) continue
+
+              const ni = nodes[i]
+              const nj = nodes[j]
+              const dx = ni.x - nj.x
+              const dy = ni.y - nj.y
+              const dist = Math.sqrt(dx * dx + dy * dy)
+              if (dist < connDist) {
+                const fade = (ni.life + nj.life) / 2
+                const baseAlpha = Math.pow(fade, 2) * (1 - dist / connDist)
+                const fade1 = fadeInsideCenter(ni.x)
+                const fade2 = fadeInsideCenter(nj.x)
+                const avgFade = (fade1 + fade2) / 2
+
+                if (avgFade > 0.01) {
+                  const combined = baseAlpha * avgFade
+                  ctx.strokeStyle = `rgba(37, 99, 235,${combined})`
+                  ctx.lineWidth = 0.8 + (avgFade * 1.7)
+                  ctx.beginPath()
+                  ctx.moveTo(ni.x, ni.y)
+                  ctx.lineTo(nj.x, nj.y)
+                  ctx.stroke()
+                }
+              }
             }
           }
         }
@@ -229,6 +295,7 @@ export default function SideNodeAnimation() {
     const handleResize = () => {
       width = canvas.width = window.innerWidth
       height = canvas.height = window.innerHeight
+      vm = getViewportMetrics(width, height)
 
       const newNodeCount = calculateNodeCount(width, height)
 
@@ -237,9 +304,8 @@ export default function SideNodeAnimation() {
           const toAdd = newNodeCount - nodeCount
           for (let i = 0; i < toAdd; i++) {
             const angle = Math.random() * Math.PI * 2
-            const isLeft = Math.random() > 0.5
             nodes.push({
-              x: isLeft ? Math.random() * (width * 0.25) : width - Math.random() * (width * 0.25),
+              x: Math.random() * width,
               y: Math.random() * height,
               vx: Math.cos(angle) * BASE_SPEED,
               vy: Math.sin(angle) * BASE_SPEED,

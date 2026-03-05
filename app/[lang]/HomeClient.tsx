@@ -9,55 +9,42 @@ import { getTranslations } from "@/i18n/index"
 import { type Language } from "@/i18n/config"
 import { getRoutePath } from "@/lib/routes"
 
-// ─── Canvas constants at module scope (never change, no reason to live inside component) ─
+// ─── Canvas constants at module scope ─────────────────────────────────────────
 
 const BASE_SPEED = 0.03
 const TURN_RATE = 0.008
-const REPULSION_RADIUS = 150
 const REPULSION_STRENGTH = 0.2
-const BASE_NODE_COUNT = 180
-const CONNECTION_DISTANCE = 150
-const BIRTH_FADE_SPEED = 0.002
+const BIRTH_FADE_SPEED = 0.02
 const TARGET_FPS = 60
-const ELLIPSE_RADIUS_X = 700
-const ELLIPSE_RADIUS_Y = 600
 const ELLIPSE_FADE_STRENGTH = 0.7
-const CELL_SIZE = 200      // spatial-grid cell size (px)
 const MIN_PER_CELL = 2
 const MAX_PER_CELL = 8
 
+// ─── Viewport-proportional helpers ────────────────────────────────────────────
+
+/** All distance thresholds scale with the viewport's shorter side */
+function getViewportMetrics(w: number, h: number) {
+  const short = Math.min(w, h)
+  const connectionDist = short * 0.1          // ~108px on mobile, ~150 on 1080p, ~216 on 4K
+  const cellSize = connectionDist * 1.5        // spatial grid cell
+  const repulsionRadius = connectionDist       // mouse repulsion range
+  const ellipseRx = w * 0.36                   // scales with width (≈700px on 1920)
+  const ellipseRy = h * 0.42                   // scales with height (≈450px on 1080)
+  return { connectionDist, cellSize, repulsionRadius, ellipseRx, ellipseRy }
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+/** Node count scales linearly with area — more generous range for all screens */
 function calculateNodeCount(width: number, height: number): number {
   const area = width * height
   const baseArea = 1920 * 1080
-  const minNodes = 40
-  const maxNodes = BASE_NODE_COUNT
-  const scaledNodes = Math.floor(BASE_NODE_COUNT * Math.sqrt(area / baseArea))
-  return Math.max(minNodes, Math.min(maxNodes, scaledNodes))
+  const baseCount = 220
+  const scaledNodes = Math.round(baseCount * (area / baseArea))
+  return Math.max(60, Math.min(400, scaledNodes))
 }
 
 type Node = { x: number; y: number; vx: number; vy: number; angle: number; life: number }
-
-/** Build a spatial grid mapping cell-index → array of node indices */
-function buildGrid(
-  nodes: Node[],
-  width: number,
-  height: number,
-): { grid: Map<number, number[]>; cols: number; rows: number } {
-  const cols = Math.ceil(width / CELL_SIZE)
-  const rows = Math.ceil(height / CELL_SIZE)
-  const grid = new Map<number, number[]>()
-  for (let i = 0; i < nodes.length; i++) {
-    const cx = Math.min(Math.floor(nodes[i].x / CELL_SIZE), cols - 1)
-    const cy = Math.min(Math.floor(nodes[i].y / CELL_SIZE), rows - 1)
-    const key = cy * cols + cx
-    const cell = grid.get(key)
-    if (cell) cell.push(i)
-    else grid.set(key, [i])
-  }
-  return { grid, cols, rows }
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -122,34 +109,50 @@ export default function HomeClient({ lang }: HomeClientProps) {
     let width = (canvas.width = window.innerWidth)
     let height = (canvas.height = window.innerHeight)
     let nodeCount = calculateNodeCount(width, height)
+    let vm = getViewportMetrics(width, height)
 
     const nodes: Node[] = []
 
-    // Spawn nodes in clusters so connections are visible from the first frame
-    const CLUSTER_SIZE = 4
-    const clusterCount = Math.ceil(nodeCount / CLUSTER_SIZE)
-    for (let c = 0; c < clusterCount; c++) {
-      const cx = Math.random() * width
-      const cy = Math.random() * height
-      const nodesInCluster = Math.min(CLUSTER_SIZE, nodeCount - nodes.length)
-      for (let n = 0; n < nodesInCluster; n++) {
-        const angle = Math.random() * Math.PI * 2
-        nodes.push({
-          x: cx + (Math.random() - 0.5) * CONNECTION_DISTANCE * 0.7,
-          y: cy + (Math.random() - 0.5) * CONNECTION_DISTANCE * 0.7,
-          vx: Math.cos(angle) * BASE_SPEED,
-          vy: Math.sin(angle) * BASE_SPEED,
-          angle,
-          life: 1,
-        })
+    // ── Jittered-grid spawn: uniform coverage, organic feel ──────────────────
+    function spawnNodesUniform(w: number, h: number, count: number) {
+      // Derive grid dimensions from desired count
+      const aspect = w / h
+      const rows = Math.round(Math.sqrt(count / aspect))
+      const cols = Math.round(rows * aspect)
+      const cellW = w / cols
+      const cellH = h / rows
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          if (nodes.length >= count) return
+          const angle = Math.random() * Math.PI * 2
+          nodes.push({
+            x: c * cellW + Math.random() * cellW,
+            y: r * cellH + Math.random() * cellH,
+            vx: Math.cos(angle) * BASE_SPEED,
+            vy: Math.sin(angle) * BASE_SPEED,
+            angle,
+            life: 1,
+          })
+        }
       }
     }
+    spawnNodesUniform(width, height, nodeCount)
 
-    // ── Density maintenance (fixes sprite splice bug: removes nodes in overcrowded cells) ──
+    // ── Density maintenance ──────────────────────────────────────────────────
     function maintainDensity() {
-      const { grid, cols, rows } = buildGrid(nodes, width, height)
-      const toRemove = new Set<number>()
+      const cs = vm.cellSize
+      const cols = Math.ceil(width / cs)
+      const rows = Math.ceil(height / cs)
+      const grid = new Map<number, number[]>()
+      for (let i = 0; i < nodes.length; i++) {
+        const cx = Math.min(Math.floor(nodes[i].x / cs), cols - 1)
+        const cy = Math.min(Math.floor(nodes[i].y / cs), rows - 1)
+        const key = cy * cols + cx
+        const cell = grid.get(key)
+        if (cell) cell.push(i); else grid.set(key, [i])
+      }
 
+      const toRemove = new Set<number>()
       for (let cy = 0; cy < rows; cy++) {
         for (let cx = 0; cx < cols; cx++) {
           const key = cy * cols + cx
@@ -160,8 +163,8 @@ export default function HomeClient({ lang }: HomeClientProps) {
             for (let i = 0; i < add; i++) {
               const ang = Math.random() * Math.PI * 2
               nodes.push({
-                x: cx * CELL_SIZE + Math.random() * CELL_SIZE,
-                y: cy * CELL_SIZE + Math.random() * CELL_SIZE,
+                x: cx * cs + Math.random() * cs,
+                y: cy * cs + Math.random() * cs,
                 vx: Math.cos(ang) * BASE_SPEED,
                 vy: Math.sin(ang) * BASE_SPEED,
                 angle: ang,
@@ -169,19 +172,28 @@ export default function HomeClient({ lang }: HomeClientProps) {
               })
             }
           } else if (count > MAX_PER_CELL) {
-            // Mark excess nodes in THIS cell for removal (not from index 0 of the whole array)
             const excess = count - MAX_PER_CELL
-            for (let i = 0; i < excess; i++) {
-              toRemove.add(cell[i])
-            }
+            for (let i = 0; i < excess; i++) toRemove.add(cell[i])
           }
         }
       }
 
-      // Remove marked nodes in reverse order so indices remain valid
       if (toRemove.size > 0) {
         const sorted = Array.from(toRemove).sort((a, b) => b - a)
         for (const idx of sorted) nodes.splice(idx, 1)
+      }
+    }    // ── Warm-up: 120 physics frames so the network looks naturally dispersed ──
+    for (let w = 0; w < 120; w++) {
+      for (const n of nodes) {
+        n.angle += (Math.random() - 0.5) * TURN_RATE
+        n.vx += Math.cos(n.angle) * 0.006
+        n.vy += Math.sin(n.angle) * 0.006
+        n.x += n.vx
+        n.y += n.vy
+        n.vx *= 0.95
+        n.vy *= 0.95
+        if (n.x < 0 || n.x > width) n.vx *= -1
+        if (n.y < 0 || n.y > height) n.vy *= -1
       }
     }
 
@@ -213,8 +225,8 @@ export default function HomeClient({ lang }: HomeClientProps) {
           const dx = n.x - mouse.current.x
           const dy = n.y - mouse.current.y
           const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < REPULSION_RADIUS && dist > 0) {
-            const force = (1 - dist / REPULSION_RADIUS) * REPULSION_STRENGTH
+          if (dist < vm.repulsionRadius && dist > 0) {
+            const force = (1 - dist / vm.repulsionRadius) * REPULSION_STRENGTH
             n.vx += (dx / dist) * force * dt
             n.vy += (dy / dist) * force * dt
           }
@@ -232,8 +244,8 @@ export default function HomeClient({ lang }: HomeClientProps) {
       }
 
       const fadeInsideEllipse = (x: number, y: number) => {
-        const dx = (x - centerX) / ELLIPSE_RADIUS_X
-        const dy = (y - centerY) / ELLIPSE_RADIUS_Y
+        const dx = (x - centerX) / vm.ellipseRx
+        const dy = (y - centerY) / vm.ellipseRy
         const dist = Math.sqrt(dx * dx + dy * dy)
         if (dist < 1) {
           const fadeFactor = Math.pow(dist, 2.5) * ELLIPSE_FADE_STRENGTH + (1 - ELLIPSE_FADE_STRENGTH)
@@ -243,11 +255,22 @@ export default function HomeClient({ lang }: HomeClientProps) {
       }
 
       // ── Draw connections using spatial grid (O(n·k) instead of O(n²)) ─────
-      const { grid, cols } = buildGrid(nodes, width, height)
+      const connDist = vm.connectionDist
+      const cs = vm.cellSize
+      const gridCols = Math.ceil(width / cs)
+      const gridRows = Math.ceil(height / cs)
+      const grid = new Map<number, number[]>()
+      for (let i = 0; i < nodes.length; i++) {
+        const gx = Math.min(Math.floor(nodes[i].x / cs), gridCols - 1)
+        const gy = Math.min(Math.floor(nodes[i].y / cs), gridRows - 1)
+        const key = gy * gridCols + gx
+        const cell = grid.get(key)
+        if (cell) cell.push(i); else grid.set(key, [i])
+      }
 
       for (const [key, cellNodes] of grid) {
-        const cy = Math.floor(key / cols)
-        const cx = key % cols
+        const cy = Math.floor(key / gridCols)
+        const cx = key % gridCols
 
         // Check this cell and the 4 right/down neighbours to avoid duplicate pairs
         const neighbours = [
@@ -259,8 +282,8 @@ export default function HomeClient({ lang }: HomeClientProps) {
         ]
 
         for (const [nx, ny] of neighbours) {
-          if (nx < 0 || ny < 0 || nx >= cols) continue
-          const nKey = ny * cols + nx
+          if (nx < 0 || ny < 0 || nx >= gridCols || ny >= gridRows) continue
+          const nKey = ny * gridCols + nx
           const neighbourNodes = grid.get(nKey)
           if (!neighbourNodes) continue
 
@@ -277,9 +300,9 @@ export default function HomeClient({ lang }: HomeClientProps) {
               const dx = ni.x - nj.x
               const dy = ni.y - nj.y
               const dist = Math.sqrt(dx * dx + dy * dy)
-              if (dist < CONNECTION_DISTANCE) {
+              if (dist < connDist) {
                 const fade = (ni.life + nj.life) / 2
-                const baseAlpha = Math.pow(fade, 2) * (1 - dist / CONNECTION_DISTANCE)
+                const baseAlpha = Math.pow(fade, 2) * (1 - dist / connDist)
                 const fade1 = fadeInsideEllipse(ni.x, ni.y)
                 const fade2 = fadeInsideEllipse(nj.x, nj.y)
                 const avgFade = (fade1 + fade2) / 2
@@ -331,6 +354,7 @@ export default function HomeClient({ lang }: HomeClientProps) {
       resizeTimer = setTimeout(() => {
         width = canvas.width = window.innerWidth
         height = canvas.height = window.innerHeight
+        vm = getViewportMetrics(width, height)
 
         const newNodeCount = calculateNodeCount(width, height)
         if (newNodeCount !== nodeCount) {
