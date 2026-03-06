@@ -13,7 +13,16 @@ const escapeHtml = (text: string) => {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, subject, message } = body;
+    const { name, email, subject, message, surname } = body;
+
+    // 0. Honeypot check for bots
+    if (surname) {
+      // Return success to trick the bot, but do nothing
+      return NextResponse.json(
+        { success: true, message: 'Email byl úspěšně odeslán.' },
+        { status: 200 }
+      );
+    }
 
     // 1. Basic Validation (Input presence)
     if (!name || !email || !subject || !message) {

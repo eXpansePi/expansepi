@@ -13,6 +13,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
     email: "",
     subject: "",
     message: "",
+    surname: "",
   })
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
 
@@ -41,7 +42,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
         setStatus("success")
         // Clear form after showing success message
         setTimeout(() => {
-          setFormData({ name: "", email: "", subject: "", message: "" })
+          setFormData({ name: "", email: "", subject: "", message: "", surname: "" })
         }, 2000)
 
         // Reset status after 8 seconds
@@ -81,6 +82,20 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex-grow flex flex-col">
+            {/* Honeypot field (hidden from real users) */}
+            <div className="hidden" aria-hidden="true">
+              <label htmlFor="surname">Příjmení</label>
+              <input
+                type="text"
+                id="surname"
+                name="surname"
+                value={formData.surname}
+                onChange={handleChange}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
             <div className="space-y-4 sm:space-y-5">
               <div>
                 <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1.5">

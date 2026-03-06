@@ -89,6 +89,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
         email: "",
         phone: "",
         message: defaultMsg,
+        surname: "",
     })
     const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
     const [mounted, setMounted] = useState(false)
@@ -105,6 +106,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                 email: "",
                 phone: "",
                 message: defaultMsg,
+                surname: "",
             })
             setStatus("idle")
         }
@@ -140,6 +142,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                     message: formData.phone
                         ? `${formData.message}\n\nTelefon: ${formData.phone}`
                         : formData.message,
+                    surname: formData.surname,
                 }),
             })
 
@@ -220,6 +223,20 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                     ) : (
                         /* Form */
                         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                            {/* Honeypot field (hidden from real users) */}
+                            <div className="hidden" aria-hidden="true">
+                                <label htmlFor="apply-surname">Příjmení</label>
+                                <input
+                                    type="text"
+                                    id="apply-surname"
+                                    name="surname"
+                                    value={formData.surname}
+                                    onChange={handleChange}
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                />
+                            </div>
+
                             {/* Name */}
                             <div>
                                 <label htmlFor="apply-name" className="block text-sm font-semibold text-gray-700 mb-1.5">
