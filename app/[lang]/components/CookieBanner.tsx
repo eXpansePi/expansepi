@@ -72,7 +72,10 @@ export function CookieBanner({ lang }: CookieBannerProps) {
     const t = translations[lang as keyof typeof translations] || translations.cs;
 
     return (
-        <div className="fixed bottom-0 sm:bottom-6 sm:left-6 w-full sm:w-[420px] p-5 sm:p-6 bg-white/90 sm:bg-white/80 backdrop-blur-xl border-t sm:border border-gray-200 shadow-[0_-8px_30px_rgb(0,0,0,0.04)] sm:shadow-2xl sm:rounded-2xl z-[999] flex flex-col gap-4 animate-[slideUp_400ms_cubic-bezier(0.16,1,0.3,1)]">
+        <div className="fixed bottom-0 sm:bottom-6 sm:left-6 w-full sm:w-[420px] p-5 sm:p-6 bg-white/90 sm:bg-white/80 backdrop-blur-xl border-t sm:border border-gray-200 shadow-[0_-8px_30px_rgb(0,0,0,0.04)] sm:shadow-2xl sm:rounded-2xl z-[999] flex flex-col gap-4 animate-[slideUp_400ms_cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
+            {/* Gradient accent bar */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-sky-500" />
+
             <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-full bg-blue-50/80 flex items-center justify-center flex-shrink-0 text-blue-600 mt-0.5 ring-1 ring-blue-100">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
