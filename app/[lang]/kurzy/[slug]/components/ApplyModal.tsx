@@ -288,6 +288,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                                         value={formData.phone}
                                         onChange={handleChange}
                                         placeholder={t.phonePlaceholder}
+                                        pattern="^\+?[0-9\s\-()]{7,15}$"
                                         className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white hover:border-gray-300"
                                     />
                                 </div>

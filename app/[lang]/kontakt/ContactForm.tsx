@@ -16,6 +16,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
     email: "",
     subject: "",
     message: "",
+    phone: "",
     surname: "",
   })
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
@@ -31,7 +32,15 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.phone
+            ? `${formData.message}\n\nTelefon: ${formData.phone}`
+            : formData.message,
+          surname: formData.surname,
+        }),
       })
 
       const data = await response.json()
@@ -45,7 +54,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
         setStatus("success")
         // Clear form after showing success message
         setTimeout(() => {
-          setFormData({ name: "", email: "", subject: "", message: "", surname: "" })
+          setFormData({ name: "", email: "", subject: "", message: "", phone: "", surname: "" })
         }, 2000)
 
         // Reset status after 8 seconds
@@ -117,6 +126,23 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
               </div>
 
               <div>
+                <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  {t.contact.form.phone}
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  pattern="^\+?[0-9\s\-()]{7,15}$"
+                  title={lang === 'cs' ? 'Zadejte platné telefonní číslo obsaující číslice.' : 'Please enter a valid phone number containing digits.'}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white hover:border-gray-300"
+                  placeholder="+420 123 456 789"
+                />
+              </div>
+
+              <div>
                 <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
                   {t.contact.form.email}
                 </label>
@@ -127,6 +153,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  minLength={5}
                   placeholder={t.contact.form.emailPlaceholder}
                   className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white hover:border-gray-300"
                 />
@@ -198,13 +225,13 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
             </button>
 
             {/* GDPR Consent Info */}
-            <p className="text-sm sm:text-base text-gray-600 text-center mt-4 px-2">
+            <p className="text-xs text-gray-500 text-center mt-4">
               {lang === 'cs' ? (
-                <>Odesláním formuláře souhlasím se <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">zpracováním osobních údajů.</Link></>
+                <>Odesláním formuláře souhlasím se <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="underline hover:text-gray-700">zpracováním osobních údajů.</Link></>
               ) : lang === 'en' ? (
-                <>By submitting this form, I agree to the <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">processing of personal data.</Link></>
+                <>By submitting this form, I agree to the <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="underline hover:text-gray-700">processing of personal data.</Link></>
               ) : (
-                <>Отправляя форму, я соглашаюсь на <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">обработку персональных данных.</Link></>
+                <>Отправляя форму, я соглашаюсь на <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="underline hover:text-gray-700">обработку персональных данных.</Link></>
               )}
             </p>
           </form>

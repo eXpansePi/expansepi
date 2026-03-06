@@ -40,8 +40,19 @@ export async function POST(req: Request) {
 
     // 3. Email Format Validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Neplatný formát emailu.' }, { status: 400 });
+    if (!emailRegex.test(email) || email.length < 5) {
+      return NextResponse.json({ error: 'Neplatný formát emailu nebo příliš krátký.' }, { status: 400 });
+    }
+
+    // 4. Phone validation (if parsed as part of message or explicit fields in future)
+    // The message includes phone if provided. We check if phone was included in the message string.
+    const phoneMatch = message.match(/Telefon: (.*)/);
+    if (phoneMatch) {
+      const phone = phoneMatch[1];
+      const phoneRegex = /^\+?[0-9\s\-()]{7,15}$/;
+      if (!phoneRegex.test(phone)) {
+        return NextResponse.json({ error: 'Neplatný formát telefonního čísla.' }, { status: 400 });
+      }
     }
 
     const transporter = nodemailer.createTransport({
