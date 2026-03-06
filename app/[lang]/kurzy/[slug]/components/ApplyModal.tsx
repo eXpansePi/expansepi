@@ -169,7 +169,8 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                 setStatus("success")
 
                 // Fire Google Ads conversion event with Enhanced Conversions
-                if (typeof window !== "undefined" && typeof window.gtag === "function") {
+                // Skip conversion for honeypot submissions (bot-filled hidden field)
+                if (!formData.surname && typeof window !== "undefined" && typeof window.gtag === "function") {
                     const conversionId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
                     const conversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
 
