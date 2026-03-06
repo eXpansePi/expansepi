@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { languages, isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getOrganizationSchema } from "@/lib/seo"
+import { CookieBanner } from "./components/CookieBanner"
 
 const langMetadata: Record<Language, { title: string; description: string; locale: string }> = {
   cs: {
@@ -124,6 +125,7 @@ export default async function RootLayout({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
       {children}
+      <CookieBanner lang={lang} />
     </>
   )
 }

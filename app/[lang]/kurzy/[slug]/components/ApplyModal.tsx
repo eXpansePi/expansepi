@@ -83,6 +83,20 @@ function getTranslations(lang: string): ModalTranslations {
     return t[lang] || t.cs
 }
 
+async function hashData(value: string): Promise<string | null> {
+    if (!value) return null;
+    try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(value);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    } catch {
+        // Fallback for environments lacking crypto.subtle (e.g. non-secure contexts)
+        return null;
+    }
+}
+
 export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: ApplyModalProps) {
     const t = getTranslations(lang)
     const defaultMsg = t.defaultMessage(courseTitle)
@@ -153,6 +167,47 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
 
             if (response.ok && data.success) {
                 setStatus("success")
+
+                // Fire Google Ads conversion event with Enhanced Conversions
+                if (typeof window !== "undefined" && typeof window.gtag === "function") {
+                    const conversionId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
+                    const conversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
+
+                    if (conversionId && conversionLabel) {
+                        try {
+                            const normalizedEmail = formData.email.trim().toLowerCase();
+                            const sha256_email = await hashData(normalizedEmail);
+
+                            let sha256_phone_number: string | null = null;
+                            if (formData.phone) {
+                                // Google Ads expects digits only with optional '+' sign
+                                const normalizedPhone = formData.phone.replace(/[^\d+]/g, '');
+                                if (normalizedPhone) {
+                                    sha256_phone_number = await hashData(normalizedPhone);
+                                }
+                            }
+
+                            const userData: Record<string, string> = {};
+                            if (sha256_email) userData.sha256_email = sha256_email;
+                            if (sha256_phone_number) userData.sha256_phone_number = sha256_phone_number;
+
+                            window.gtag('event', 'conversion', {
+                                'send_to': `${conversionId}/${conversionLabel}`,
+                                'value': 1.0,
+                                'currency': 'CZK',
+                                ...(Object.keys(userData).length > 0 && { 'user_data': userData })
+                            });
+                        } catch {
+                            // Fallback if hashing logic utterly fails
+                            window.gtag('event', 'conversion', {
+                                'send_to': `${conversionId}/${conversionLabel}`,
+                                'value': 1.0,
+                                'currency': 'CZK'
+                            });
+                        }
+                    }
+                }
+
                 // Auto-close after a delay
                 setTimeout(() => {
                     onClose()
@@ -288,7 +343,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                                         value={formData.phone}
                                         onChange={handleChange}
                                         placeholder={t.phonePlaceholder}
-                                        pattern="^\+?[0-9\s\-()]{7,15}$"
+                                        pattern="^\+?[0-9\s()-]{7,15}$"
                                         className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white hover:border-gray-300"
                                     />
                                 </div>
