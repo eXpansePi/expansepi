@@ -61,6 +61,11 @@ export default function Footer({ lang }: FooterProps) {
                   {t.common.blog}
                 </Link>
               </li>
+              <li>
+                <Link href={getRoutePath(lang, 'gdpr')} className="hover:text-white transition-colors">
+                  {t.common.gdpr}
+                </Link>
+              </li>
             </ul>
           </div>
 

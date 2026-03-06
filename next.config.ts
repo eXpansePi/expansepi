@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
       { source: '/ru/glavnaya', destination: '/ru/home' },
       // Czech routes -> internal routes (for consistency, though they match)
       { source: '/cs/domu', destination: '/cs/home' },
+
+      // GDPR routes (map localized URLs to internal gdpr route)
+      { source: '/cs/ochrana-osobnich-udaju', destination: '/cs/gdpr' },
+      { source: '/en/privacy-policy', destination: '/en/gdpr' },
+      { source: '/ru/politika-konfidencialnosti', destination: '/ru/gdpr' },
     ];
   },
 };

@@ -2,6 +2,9 @@
 
 import { useState, FormEvent, useEffect } from "react"
 import { createPortal } from "react-dom"
+import Link from "next/link"
+import { getRoutePath } from "@/lib/routes"
+import { type Language } from "@/i18n/config"
 
 interface ApplyModalProps {
     courseTitle: string
@@ -42,7 +45,7 @@ function getTranslations(lang: string): ModalTranslations {
             success: "Přihláška byla úspěšně odeslána. Budeme Vás kontaktovat.",
             error: "Chyba při odesílání. Zkuste to prosím znovu.",
             defaultMessage: (title: string) =>
-                `Dobrý den, rád bych se zařadil do rekvalifikačního kurzu "${title}".`,
+                `Dobrý den,\nrád bych se zařadil do rekvalifikačního kurzu "${title}".`,
         },
         en: {
             title: "Apply for the course",
@@ -181,7 +184,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden animate-[slideUp_300ms_ease-out]">
+            <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-[slideUp_300ms_ease-out]">
                 {/* Accent bar */}
                 <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-blue-500 to-sky-400" />
 
@@ -339,6 +342,17 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                                     </>
                                 )}
                             </button>
+
+                            {/* GDPR Consent Info */}
+                            <p className="text-sm sm:text-base text-gray-600 text-center mt-3 px-2">
+                                {lang === 'cs' ? (
+                                    <>Odesláním formuláře souhlasím se <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">zpracováním osobních údajů.</Link></>
+                                ) : lang === 'en' ? (
+                                    <>By submitting this form, I agree to the <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">processing of personal data.</Link></>
+                                ) : (
+                                    <>Отправляя форму, я соглашаюсь на <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">обработку персональных данных.</Link></>
+                                )}
+                            </p>
                         </form>
                     )}
                 </div>

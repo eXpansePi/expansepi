@@ -5,7 +5,7 @@
 
 import { Language } from '@/i18n/config'
 
-export type RouteKey = 'courses' | 'blog' | 'vacancies' | 'about' | 'contact' | 'home'
+export type RouteKey = 'courses' | 'blog' | 'vacancies' | 'about' | 'contact' | 'home' | 'gdpr'
 
 /**
  * Route mapping: language -> route key -> URL slug
@@ -18,6 +18,7 @@ const routeMap: Record<Language, Record<RouteKey, string>> = {
     about: 'o-nas',
     contact: 'kontakt',
     home: 'domu',
+    gdpr: 'gdpr',
   },
   en: {
     courses: 'courses',
@@ -26,6 +27,7 @@ const routeMap: Record<Language, Record<RouteKey, string>> = {
     about: 'about',
     contact: 'contact',
     home: 'home',
+    gdpr: 'gdpr',
   },
   ru: {
     courses: 'kursy',
@@ -34,6 +36,7 @@ const routeMap: Record<Language, Record<RouteKey, string>> = {
     about: 'o-nas',
     contact: 'kontakt',
     home: 'glavnaya',
+    gdpr: 'gdpr',
   },
 }
 
@@ -49,6 +52,7 @@ const internalRouteMap: Record<string, RouteKey> = {
   'o-nas': 'about',
   'kontakt': 'contact',
   'domu': 'home',
+  'gdpr': 'gdpr',
   // English routes
   'courses': 'courses',
   'vacancies': 'vacancies',
@@ -110,28 +114,28 @@ export function getPublicPath(internalPath: string, targetLang: Language): strin
   if (/^\/(cs|en|ru)$/.test(internalPath)) {
     return `/${targetLang}`
   }
-  
+
   // Extract language and route segments
   const match = internalPath.match(/\/(cs|en|ru)\/([^/]+)(?:\/(.*))?$/)
   if (!match) {
     // If no match, try to preserve the path structure
     return internalPath.replace(/^\/(cs|en|ru)/, `/${targetLang}`)
   }
-  
+
   const [, currentLang, routeSegment, restOfPath] = match
   const routeKey = getInternalRoute(routeSegment)
-  
+
   if (!routeKey) {
     // If route segment not found in map, try direct replacement
     return internalPath.replace(`/${currentLang}/${routeSegment}`, `/${targetLang}/${routeSegment}`)
   }
-  
+
   // Get the language-specific slug for the target language
   const targetSlug = getRoute(targetLang, routeKey)
-  const newPath = restOfPath 
+  const newPath = restOfPath
     ? `/${targetLang}/${targetSlug}/${restOfPath}`
     : `/${targetLang}/${targetSlug}`
-  
+
   return newPath
 }
 

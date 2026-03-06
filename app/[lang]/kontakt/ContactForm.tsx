@@ -1,6 +1,9 @@
 "use client"
 
 import { useState, FormEvent } from "react"
+import Link from "next/link"
+import { getRoutePath } from "@/lib/routes"
+import { type Language } from "@/i18n/config"
 
 interface ContactFormProps {
   lang: string
@@ -193,6 +196,17 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
                 </>
               )}
             </button>
+
+            {/* GDPR Consent Info */}
+            <p className="text-sm sm:text-base text-gray-600 text-center mt-4 px-2">
+              {lang === 'cs' ? (
+                <>Odesláním formuláře souhlasím se <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">zpracováním osobních údajů.</Link></>
+              ) : lang === 'en' ? (
+                <>By submitting this form, I agree to the <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">processing of personal data.</Link></>
+              ) : (
+                <>Отправляя форму, я соглашаюсь на <Link href={getRoutePath(lang as Language, 'gdpr')} target="_blank" className="font-semibold text-gray-800 underline hover:text-blue-600 transition-colors">обработку персональных данных.</Link></>
+              )}
+            </p>
           </form>
         )}
       </div>
