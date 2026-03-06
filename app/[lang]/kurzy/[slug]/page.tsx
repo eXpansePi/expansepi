@@ -10,6 +10,7 @@ import ExpandableSyllabus from "./components/ExpandableSyllabus"
 import AnimatedPrice from "./components/AnimatedPrice"
 import ApplyButton from "./components/ApplyButton"
 import { getRoutePath, getDetailRoutePath, getAllDetailRoutePaths } from "@/lib/routes"
+import PyCharmPromo from "./components/PyCharmPromo"
 
 interface CourseDetailProps {
   params: Promise<{ lang: string; slug: string }>
@@ -318,6 +319,15 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
             </article>
           </div>
         </section>
+
+        {/* ── PyCharm Promo (Python only) ────────────────────────────────── */}
+        {resolvedParams.slug === 'programator-www-aplikaci-v-pythonu' && (
+          <section className="px-4 sm:px-6 relative z-10 mb-8 sm:mb-10">
+            <div className="max-w-5xl mx-auto">
+              <PyCharmPromo lang={lang} />
+            </div>
+          </section>
+        )}
 
         {/* ── Description ─────────────────────────────────────────────── */}
         <section className="px-4 sm:px-6 mb-8 sm:mb-10">
