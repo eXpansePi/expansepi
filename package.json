@@ -9,6 +9,14 @@
     "start": "next start",
     "lint": "eslint"
   },
+  "browserslist": [
+    "Chrome >= 87",
+    "Firefox >= 78",
+    "Safari >= 14",
+    "Edge >= 88",
+    "Opera >= 80",
+    "not dead"
+  ],
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
     "next": "^16.1.6",

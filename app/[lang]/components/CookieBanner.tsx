@@ -128,7 +128,7 @@ export function CookieBanner({ lang }: CookieBannerProps) {
                     </svg>
                 </div>
                 <div>
-                    <h3 className="text-base font-semibold text-gray-900 mb-1">{t.title}</h3>
+                    <p className="text-base font-semibold text-gray-900 mb-1">{t.title}</p>
                     <p className="text-sm text-gray-600 leading-relaxed pr-2">{t.text}</p>
                     <Link
                         href={getRoutePath(lang as Language, "gdpr")}
