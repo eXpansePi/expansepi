@@ -26,11 +26,12 @@ export default function PyCharmPromo({ lang }: PyCharmPromoProps) {
     const t = translations[lang]
 
     return (
-        <div className="glow-box relative bg-gray-900 rounded-2xl p-6 sm:p-8 shadow-2xl overflow-hidden group">
-            {/* Background gradients for premium feel */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-transparent to-blue-500/10 pointer-events-none" />
-            <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none" />
+        <div className="glow-box relative bg-white rounded-2xl p-6 sm:p-8 shadow-lg overflow-hidden group border border-gray-100">
+            {/* Background gradients for subtle accent */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/60 via-transparent to-sky-50/40 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-sky-100/40 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-sky-400 to-emerald-400" />
 
             {/* Content wrapper */}
             <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-center gap-6 sm:gap-8">
@@ -40,11 +41,11 @@ export default function PyCharmPromo({ lang }: PyCharmPromoProps) {
                     href="https://www.jetbrains.com/pycharm/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-shrink-0 bg-white/5 p-5 sm:p-6 rounded-2xl border border-white/10 backdrop-blur-sm shadow-inner group-hover:scale-105 transition-transform duration-500 flex items-center justify-center cursor-pointer"
+                    className="flex-shrink-0 bg-white p-5 sm:p-6 rounded-2xl border-2 border-blue-200 shadow-md group-hover:scale-105 transition-transform duration-500 flex items-center justify-center cursor-pointer ring-1 ring-blue-100"
                     title="Official JetBrains PyCharm website"
                 >
                     <Image
-                        src="/jetbrains/PyCharm-white.svg"
+                        src="/jetbrains/PyCharm.svg"
                         alt="PyCharm Logo"
                         width={160}
                         height={160}
@@ -54,13 +55,13 @@ export default function PyCharmPromo({ lang }: PyCharmPromoProps) {
 
                 {/* Text area */}
                 <div className="flex-1 text-center sm:text-left mt-1 sm:mt-0">
-                    <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-white text-sm sm:text-base font-extrabold tracking-wider shadow-md border border-pink-400/30">
+                    <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-gradient-to-r from-blue-600 to-sky-500 text-white text-sm sm:text-base font-extrabold tracking-wider shadow-md">
                         {t.badge}
                     </div>
-                    <h3 className="text-xl sm:text-xl font-extrabold text-white mb-3 tracking-tight leading-tight">
+                    <h3 className="text-xl sm:text-xl font-extrabold text-gray-900 mb-3 tracking-tight leading-tight">
                         {t.title}
                     </h3>
-                    <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-medium">
+                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed font-medium">
                         {t.description}
                     </p>
                 </div>

@@ -4,7 +4,9 @@
     "languages": {
       "cs": {
         "title": "Programátor www aplikací v jazyce Python",
-        "description": "Akreditovaný rekvalifikační kurz zaměřený na tvorbu webových aplikací v jazyce Python s využitím frameworku Django. Kurz probíhá kombinovanou formou – hlavní část online v podobě 13 školení a 2 prezenční školení v Praze. Kurz je plně hrazen Úřadem práce ČR. Účastníci se naučí programovat v Pythonu, pracovat s databázemi a vyvíjet webové aplikace včetně závěrečného projektu vhodného do portfolia.",
+        "heroHeadline": "Z nuly do IT za 3 měsíce – kurz plně hrazený Úřadem práce",
+        "heroSubheadline": "Přestaňte přemýšlet, začněte jednat. Žádné předchozí IT zkušenosti nepotřebujete. Za 3 měsíce budete umět to, za co firmy platí 50–80 tisíc měsíčně – programovat webové aplikace v Pythonu.",
+        "description": "Proč Python? Protože je to nejpopulárnější programovací jazyk na světě a zároveň nejpřístupnější pro začátečníky. Používají ho firmy jako Google, Instagram nebo Spotify. A proč Django? Protože vám umožní vytvořit kompletní webovou aplikaci – od databáze po hotový produkt – rychleji než jakýkoliv jiný framework. To je přesně to, co zaměstnavatelé hledají. Tento akreditovaný rekvalifikační kurz vás za 3 měsíce provede od úplné nuly až po funkční webovou aplikaci, kterou si přidáte do portfolia. Hlavní část probíhá online, doplněná o 2 prezenční školení v Praze. Umělá inteligence programátory nenahradí – naopak. Vývojáři, kteří umí AI nástroje využívat, jsou na trhu práce ještě žádanější. V kurzu se naučíte programovat tak, abyste AI využívali jako svého asistenta, ne aby vás nahradila.",
         "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
         "level": "Začátečník",
         "accreditation": "Akreditováno Ministerstvem školství, mládeže a tělovýchovy (MŠMT)",
@@ -29,15 +31,62 @@
           "16.5.2026 - 22.8.2026"
         ],
         "highlights": [
-          "Hlavní část online – studujte odkudkoliv",
-          "Praktická výuka na reálných projektech",
-          "Součástí je týmové programování a závěrečný projekt",
-          "Kurz je zcela zdarma – hrazen Úřadem práce ČR"
+          "Kurz je zcela ZDARMA – plně hrazený Úřadem práce ČR",
+          "Nástupní plat junior Python vývojáře: až 70 000 Kč",
+          "Hlavní část online – studujte z domova, z kavárny, odkudkoliv",
+          "Reálný projekt do portfolia – s čím jít na pohovor",
+          "Obor s budoucností – poptávka po vývojářích každý rok roste",
+          "AI vás nenahradí – naučíte se ji využívat jako svůj nástroj"
+        ],
+        "faq": [
+          {
+            "question": "Zvládnu kurz, i když nemám žádné IT zkušenosti?",
+            "answer": "Ano – kurz je navržen přesně pro vás. Většina našich studentů přichází z úplně jiných oborů: administrativa, logistika, služby, obchod. Začínáme od naprostých základů a postupujeme krok za krokem. Lektoři z MFF UK a firem jako Rapid7 mají bohaté zkušenosti s výukou úplných začátečníků."
+          },
+          {
+            "question": "Je kurz opravdu zdarma? Jak to funguje?",
+            "answer": "Ano, kurz je 100% zdarma. Je akreditován MŠMT a Úřad práce ČR ho plně hradí. Stačí být v evidenci ÚP nebo o zařazení požádat – pomůžeme vám s celým procesem krok za krokem. Běžná cena kurzu je 49 900 Kč, vy nezaplatíte ani korunu."
+          },
+          {
+            "question": "Co budu umět po absolvování kurzu?",
+            "answer": "Budete schopni vytvořit kompletní webovou aplikaci od nuly – napsat backend v Pythonu, navrhnout databázi, vytvořit uživatelské rozhraní a aplikaci nasadit na internet. Zvládnete pracovat s Gitem (nástroj, který používá každý vývojář), spolupracovat v týmu a rozumět kódu natolik, abyste uspěli na juniorním pohovoru. Součástí kurzu je týmový projekt, se kterým půjdete na pohovor."
+          },
+          {
+            "question": "Pomůžete mi najít práci po kurzu?",
+            "answer": "Získáte oficiální osvědčení o rekvalifikaci uznávané zaměstnavateli v celé ČR. Váš závěrečný projekt bude sloužit jako ukázka dovedností pro pohovory. Navíc vás propojíme s naší komunitou, poradíme s životopisem a přípravou na technický pohovor. IT je obor, kde je chronický nedostatek lidí – firmy aktivně hledají juniorní vývojáře."
+          },
+          {
+            "question": "Kolik času týdně musím kurzu věnovat?",
+            "answer": "Kurz trvá přibližně 3 měsíce. Počítejte s cca 10–15 hodinami týdně (online školení + samostudium a domácí úkoly). Hlavní část probíhá online, takže si čas můžete rozvrhnout podle svých možností – lze zvládnout i při částečném úvazku."
+          },
+          {
+            "question": "Nenahradí programátory umělá inteligence?",
+            "answer": "Ne. AI je nástroj, který programátory posiluje, ne nahrazuje. Stejně jako kalkulačka nenahradila účetní – udělala je efektivnějšími. Vývojáři, kteří umí AI využívat, jsou na trhu práce ještě žádanější a lépe placení. V kurzu se naučíte programovat tak, abyste AI používali jako svého pomocníka."
+          }
         ]
       },
       "en": {
-        "title": "Python Web Application Developer Course",
-        "description": "An accredited hybrid retraining course focused on creating web applications using the Python programming language and Django framework. The course is primarily conducted online through 13 live sessions and 2 in-person workshops in Prague. It is fully funded by the Czech Labour Office. Students learn Python programming, web development, databases, and teamwork through a final project that demonstrates their skills and can be added to their portfolio.",
+        "title": "Python Web Application Development",
+        "heroHeadline": "From zero to IT in 3 months – fully funded by the Labour Office",
+        "heroSubheadline": "Stop thinking, start doing. No prior IT experience needed. In 3 months, you'll have the skills companies pay 50–80k CZK/month for – building web applications in Python.",
+        "description": "This accredited retraining course takes you from absolute zero to a working web application in 3 months, ready for your portfolio. The course is primarily online, supplemented by 2 in-person workshops in Prague.",
+        "descriptionBlocks": [
+          {
+            "title": "Why Python?",
+            "text": "The most popular programming language in the world and the most accessible for beginners. Used by Google, Instagram, and Spotify.",
+            "icon": "python"
+          },
+          {
+            "title": "Why Django?",
+            "text": "Build a complete web application – from database to finished product – faster than any other framework. Exactly what employers are looking for.",
+            "icon": "django"
+          },
+          {
+            "title": "AI won't replace you – it'll empower you",
+            "text": "Developers who can leverage AI tools are even more in demand and better paid. Learn to code with AI as your assistant.",
+            "icon": "ai"
+          }
+        ],
         "duration": "120 teaching hours (13 online + 2 in-person sessions in Prague)",
         "level": "Beginner",
         "syllabus": [
@@ -61,15 +110,62 @@
           "16.5.2026 - 22.8.2026"
         ],
         "highlights": [
-          "Primarily online – study from anywhere",
-          "Hands-on learning with real programming tasks",
-          "Includes team programming and a final project",
-          "Completely funded by the Czech Labour Office"
+          "Completely FREE – fully funded by the Czech Labour Office",
+          "Starting salary for a junior Python developer: up to 70,000 CZK",
+          "Primarily online – study from home, a café, or anywhere",
+          "A real project for your portfolio – ready for job interviews",
+          "A future-proof field – demand for developers grows every year",
+          "AI won't replace you – you'll learn to use it as your tool"
+        ],
+        "faq": [
+          {
+            "question": "Can I do this course with no IT experience?",
+            "answer": "Yes – the course is designed exactly for you. Most of our students come from completely different fields: administration, logistics, services, sales. We start from absolute basics and progress step by step. Lecturers from Charles University and companies like Rapid7 have extensive experience teaching complete beginners."
+          },
+          {
+            "question": "Is the course really free? How does it work?",
+            "answer": "Yes, the course is 100% free. It is accredited by the Ministry of Education and the Czech Labour Office fully covers it. You just need to be registered with the Labour Office or request enrollment – we'll help you through the entire process step by step. The regular price is 49,900 CZK, you pay nothing."
+          },
+          {
+            "question": "What will I be able to do after the course?",
+            "answer": "You'll be able to build a complete web application from scratch – write a Python backend, design a database, create a user interface, and deploy it to the internet. You'll know how to work with Git (a tool every developer uses), collaborate in a team, and understand code well enough to succeed in a junior interview. The course includes a team project you'll take to interviews."
+          },
+          {
+            "question": "Will you help me find a job after the course?",
+            "answer": "You'll receive an official retraining certificate recognized by employers across the Czech Republic. Your final project will serve as a skill showcase for interviews. We'll also connect you with our community, help with your CV, and advise on technical interview preparation. IT has a chronic shortage of people – companies are actively looking for junior developers."
+          },
+          {
+            "question": "How much time per week does the course require?",
+            "answer": "The course lasts approximately 3 months. Expect around 10–15 hours per week (online sessions + self-study and homework). The main part is online, so you can schedule your time flexibly – it's manageable even with a part-time job."
+          },
+          {
+            "question": "Won't AI replace programmers?",
+            "answer": "No. AI is a tool that empowers programmers, not replaces them. Just like calculators didn't replace accountants – they made them more efficient. Developers who know how to use AI are even more in demand and better paid. In this course, you'll learn to code with AI as your assistant."
+          }
         ]
       },
       "ru": {
-        "title": "Разработчик веб-приложений на Python",
-        "description": "Аккредитованный курс переподготовки, направленный на разработку веб-приложений с использованием языка Python и фреймворка Django. Курс проводится в гибридном формате: 13 онлайн-занятий и 2 очных семинара в Праге. Обучение полностью финансируется Чешским центром занятости. Участники изучают Python, базы данных, веб-разработку и создают собственный итоговый проект для портфолио.",
+        "title": "Разработка веб-приложений на Python",
+        "heroHeadline": "От нуля до IT за 3 месяца – курс полностью за счёт Центра занятости",
+        "heroSubheadline": "Хватит думать – начните действовать. IT-опыт не нужен. За 3 месяца вы освоите навыки, за которые компании платят 50–80 тыс. крон в месяц – разработку веб-приложений на Python.",
+        "description": "Аккредитованный курс переподготовки проведёт вас за 3 месяца от нуля до работающего веб-приложения для портфолио. Основная часть проходит онлайн, дополненная 2 очными занятиями в Праге.",
+        "descriptionBlocks": [
+          {
+            "title": "Почему Python?",
+            "text": "Самый популярный язык программирования в мире и при этом самый доступный для новичков. Его используют Google, Instagram и Spotify.",
+            "icon": "python"
+          },
+          {
+            "title": "Почему Django?",
+            "text": "Создайте полноценное веб-приложение – от базы данных до готового продукта – быстрее, чем с любым другим фреймворком. Именно это ищут работодатели.",
+            "icon": "django"
+          },
+          {
+            "title": "AI вас не заменит – усилит вас",
+            "text": "Разработчики с навыками AI ещё более востребованы и лучше оплачиваются. Научитесь программировать с AI как своим ассистентом.",
+            "icon": "ai"
+          }
+        ],
         "duration": "120 учебных часов (13 онлайн + 2 очных занятия в Праге)",
         "level": "Начальный",
         "syllabus": [
@@ -93,10 +189,38 @@
           "16.5.2026 - 22.8.2026"
         ],
         "highlights": [
-          "Основная часть онлайн – учитесь из любого места",
-          "Практическое обучение с реальными задачами",
-          "Командная работа и итоговый проект",
-          "Полностью бесплатное обучение – финансируется Центром занятости"
+          "Курс полностью БЕСПЛАТНЫЙ – финансируется Центром занятости",
+          "Начальная зарплата junior Python-разработчика: до 70 000 крон",
+          "Основная часть онлайн – учитесь из дома, кафе или откуда угодно",
+          "Реальный проект для портфолио – с чем идти на собеседование",
+          "Отрасль с будущим – спрос на разработчиков растёт каждый год",
+          "AI вас не заменит – вы научитесь использовать её как инструмент"
+        ],
+        "faq": [
+          {
+            "question": "Справлюсь ли я без IT-опыта?",
+            "answer": "Да – курс создан именно для вас. Большинство наших студентов приходят из совсем других сфер: администрация, логистика, услуги, продажи. Мы начинаем с самых основ и продвигаемся шаг за шагом. Преподаватели из Карлова университета и компаний типа Rapid7 имеют большой опыт обучения полных новичков."
+          },
+          {
+            "question": "Курс действительно бесплатный? Как это работает?",
+            "answer": "Да, курс на 100% бесплатный. Он аккредитован Министерством образования и полностью финансируется Центром занятости. Достаточно быть на учёте или подать заявку – мы поможем на каждом этапе. Обычная цена курса 49 900 крон – вы не платите ни короны."
+          },
+          {
+            "question": "Что я буду уметь после курса?",
+            "answer": "Вы сможете создать полноценное веб-приложение с нуля – написать бэкенд на Python, спроектировать базу данных, создать интерфейс и развернуть приложение в интернете. Вы освоите Git, командную разработку и будете готовы к junior-собеседованию. В курс входит командный проект для портфолио."
+          },
+          {
+            "question": "Поможете найти работу после курса?",
+            "answer": "Вы получите официальный сертификат переподготовки, признанный работодателями по всей Чехии. Итоговый проект послужит демонстрацией навыков. Мы поможем с резюме, подготовкой к собеседованию и подключим к сообществу. В IT хронический недостаток специалистов – компании активно ищут junior-разработчиков."
+          },
+          {
+            "question": "Сколько времени в неделю нужно уделять курсу?",
+            "answer": "Курс длится примерно 3 месяца. Рассчитывайте на 10–15 часов в неделю (онлайн-занятия + самостоятельная работа). Основная часть проходит онлайн – можно совмещать с частичной занятостью."
+          },
+          {
+            "question": "AI заменит программистов?",
+            "answer": "Нет. AI – это инструмент, который усиливает разработчиков, а не заменяет. Как калькулятор не заменил бухгалтеров – он сделал их эффективнее. Разработчики с навыками AI ещё более востребованы и лучше оплачиваются. На курсе вы научитесь использовать AI как своего помощника."
+          }
         ]
       }
     },

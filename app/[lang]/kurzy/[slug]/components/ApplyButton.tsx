@@ -10,15 +10,20 @@ interface ApplyButtonProps {
     variant?: "hero" | "card" | "bottom"
 }
 
-function getLabel(lang: string) {
-    if (lang === "en") return "Apply for the course"
-    if (lang === "ru") return "Записаться на курс"
-    return "Přihlásit se do kurzu"
+function getLabel(lang: string, variant: string) {
+    if (variant === "bottom") {
+        if (lang === "en") return "I'm interested – get in touch"
+        if (lang === "ru") return "Мне интересно – свяжитесь со мной"
+        return "Mám zájem – ozvěte se mi"
+    }
+    if (lang === "en") return "Find out how to start"
+    if (lang === "ru") return "Узнать, как начать"
+    return "Zjistit, jak začít"
 }
 
 export default function ApplyButton({ courseTitle, lang, variant = "hero" }: ApplyButtonProps) {
     const [isOpen, setIsOpen] = useState(false)
-    const label = getLabel(lang)
+    const label = getLabel(lang, variant)
 
     const baseClasses =
         "inline-flex items-center justify-center gap-2 font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200"

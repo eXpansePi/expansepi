@@ -250,7 +250,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                 {lecturers.map((lecturer, index) => (
-                  <LecturerCard key={lecturer.id} lecturer={lecturer} index={index} />
+                  <div key={lecturer.id} id={`lecturer-${lecturer.id}`}>
+                    <LecturerCard lecturer={lecturer} index={index} />
+                  </div>
                 ))}
               </div>
             </div>

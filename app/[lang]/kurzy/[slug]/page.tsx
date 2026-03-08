@@ -11,6 +11,8 @@ import AnimatedPrice from "./components/AnimatedPrice"
 import ApplyButton from "./components/ApplyButton"
 import { getRoutePath, getDetailRoutePath, getAllDetailRoutePaths } from "@/lib/routes"
 import PyCharmPromo from "./components/PyCharmPromo"
+import CourseTrustSection from "./components/CourseTrustSection"
+import CourseFAQ from "./components/CourseFAQ"
 
 interface CourseDetailProps {
   params: Promise<{ lang: string; slug: string }>
@@ -18,7 +20,10 @@ interface CourseDetailProps {
 
 interface MultilingualCourseData {
   title: string
+  heroHeadline?: string
+  heroSubheadline?: string
   description: string
+  descriptionBlocks?: { title: string; text: string; icon: string }[]
   duration: string
   level: string
   accreditation?: string
@@ -29,6 +34,7 @@ interface MultilingualCourseData {
   funding?: string
   highlights?: string[]
   dates?: string[]
+  faq?: { question: string; answer: string }[]
 }
 
 function getCourseData(slug: string, lang: Language): MultilingualCourseData | null {
@@ -145,6 +151,7 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
   const lang = (isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage) as Language
   const t = getTranslations(lang)
   const courseData = getCourseData(resolvedParams.slug, lang)
+  const rawCourse = (coursesData as any[]).find((c: any) => c.slug === resolvedParams.slug)
 
   if (!courseData) {
     return (
@@ -237,19 +244,29 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
               </span>
             </div>
 
+            {/* Benefit-oriented tagline + title */}
+            {courseData.heroHeadline && (
+              <p className="text-sm sm:text-base text-blue-600 font-semibold mb-2 tracking-wide">
+                {courseData.heroHeadline}
+              </p>
+            )}
+
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 tracking-tight">
               {courseData.title}
             </h1>
 
-            {courseData.accreditation && (
-              <p className="text-sm sm:text-base text-gray-500 italic font-medium mb-4 sm:mb-5">
-                {courseData.accreditation}
+            {courseData.heroSubheadline && (
+              <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 sm:mb-5">
+                {courseData.heroSubheadline}
               </p>
             )}
 
             {/* Apply CTA in hero */}
-            <div className="mt-2">
+            <div className="mt-2 flex flex-col items-start gap-2">
               <ApplyButton courseTitle={courseData.title} lang={lang} variant="hero" />
+              <span className="text-xs sm:text-sm text-gray-400">
+                {lang === 'cs' ? 'Nezávaznĕ • Nic neplatíte • Ozveme se do 24 hodin' : lang === 'en' ? 'No commitment • Free • We\'ll reply within 24 hours' : 'Без обязательств • Бесплатно • Ответим в течение 24 часов'}
+              </span>
             </div>
           </div>
         </section>
@@ -332,7 +349,32 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
         {/* ── Description ─────────────────────────────────────────────── */}
         <section className="px-4 sm:px-6 mb-8 sm:mb-10">
           <div className="max-w-5xl mx-auto">
-            <p className="text-base sm:text-lg leading-relaxed text-gray-700">{courseData.description}</p>
+            <p className="text-base sm:text-lg leading-relaxed text-gray-700 mb-6">{courseData.description}</p>
+
+            {courseData.descriptionBlocks && courseData.descriptionBlocks.length > 0 && (
+              <div className="grid sm:grid-cols-3 gap-4 sm:gap-5">
+                {courseData.descriptionBlocks.map((block, i) => (
+                  <div key={i} className="glow-box bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
+                    <div className={`h-1 ${i === 0 ? 'bg-gradient-to-r from-yellow-400 to-amber-500' : i === 1 ? 'bg-gradient-to-r from-green-500 to-emerald-400' : 'bg-gradient-to-r from-violet-500 to-purple-400'}`} />
+                    <div className="p-5 sm:p-6">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${i === 0 ? 'bg-amber-100' : i === 1 ? 'bg-green-100' : 'bg-violet-100'}`}>
+                          {block.icon === 'python' ? (
+                            <svg className="w-5 h-5 text-amber-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                          ) : block.icon === 'django' ? (
+                            <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                          ) : (
+                            <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                          )}
+                        </div>
+                        <h3 className="text-base font-bold text-gray-900">{block.title}</h3>
+                      </div>
+                      <p className="text-sm text-gray-600 leading-relaxed">{block.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -341,9 +383,9 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
           <section className="px-4 sm:px-6 mb-8 sm:mb-10">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
-                {lang === 'cs' ? 'Hlavní výhody' : lang === 'en' ? 'Key Highlights' : 'Основные преимущества'}
+                {lang === 'cs' ? 'Proč tento kurz změní váš život' : lang === 'en' ? 'Why this course will change your life' : 'Почему этот курс изменит вашу жизнь'}
               </h2>
-              <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                 {courseData.highlights.map((highlight, i) => (
                   <div key={i} className="glow-box flex items-start gap-3 p-4 sm:p-5 bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
                     <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -366,6 +408,14 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
               <ExpandableSyllabus syllabus={courseData.syllabus} lang={lang} />
             </div>
           </section>
+        )}
+
+        {/* ── Trust & Lecturers Section ──────────────────────────────── */}
+        <CourseTrustSection lang={lang} />
+
+        {/* ── FAQ Section ─────────────────────────────────────────── */}
+        {courseData.faq && courseData.faq.length > 0 && (
+          <CourseFAQ faq={courseData.faq} lang={lang} />
         )}
 
         {/* ── Course Details Grid ─────────────────────────────────────── */}
@@ -454,17 +504,22 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
             </div>
 
             {/* Bottom actions */}
-            <div className="mt-8 sm:mt-10 flex flex-wrap items-center gap-4">
-              <ApplyButton courseTitle={courseData.title} lang={lang} variant="bottom" />
-              <Link
-                href={getRoutePath(lang, 'courses')}
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 text-sm sm:text-base"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                {t.common.backToList}
-              </Link>
+            <div className="mt-8 sm:mt-10 flex flex-col items-start gap-3">
+              <div className="flex flex-wrap items-center gap-4">
+                <ApplyButton courseTitle={courseData.title} lang={lang} variant="bottom" />
+                <Link
+                  href={getRoutePath(lang, 'courses')}
+                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 text-sm sm:text-base"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  {t.common.backToList}
+                </Link>
+              </div>
+              <span className="text-xs sm:text-sm text-gray-400">
+                {lang === 'cs' ? 'Nezávazné • Nic neplatíte • Ozveme se do 24 hodin' : lang === 'en' ? 'No commitment • Free • We\'ll reply within 24 hours' : 'Без обязательств • Бесплатно • Ответим в течение 24 часов'}
+              </span>
             </div>
           </div>
         </section>
