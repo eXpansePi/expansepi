@@ -1,71 +1,108 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useEffect, useSyncExternalStore } from "react";
+import { getRoutePath } from "@/lib/routes";
+import { type Language } from "@/i18n/config";
+
+const CONSENT_KEY = "cookie_consent";
+const CONSENT_UPDATED_AT_KEY = "cookie_consent_updated_at";
+const CONSENT_EVENT = "expansepi:cookie-consent-change";
+
+type ConsentState = "granted" | "denied" | null | "unknown";
+
+function getConsentSnapshot(): ConsentState {
+    if (typeof window === "undefined") {
+        return "unknown";
+    }
+
+    const value = window.localStorage.getItem(CONSENT_KEY);
+    if (value === "granted" || value === "denied") {
+        return value;
+    }
+
+    return null;
+}
+
+function subscribeToConsent(callback: () => void) {
+    if (typeof window === "undefined") {
+        return () => undefined;
+    }
+
+    const handleChange = () => callback();
+    window.addEventListener("storage", handleChange);
+    window.addEventListener(CONSENT_EVENT, handleChange);
+
+    return () => {
+        window.removeEventListener("storage", handleChange);
+        window.removeEventListener(CONSENT_EVENT, handleChange);
+    };
+}
+
+function persistConsent(consent: Exclude<ConsentState, null | "unknown">) {
+    window.localStorage.setItem(CONSENT_KEY, consent);
+    window.localStorage.setItem(CONSENT_UPDATED_AT_KEY, new Date().toISOString());
+    window.dispatchEvent(new Event(CONSENT_EVENT));
+}
+
+function updateGoogleConsent(consent: Exclude<ConsentState, null | "unknown">) {
+    if (typeof window === "undefined" || typeof window.gtag !== "function") {
+        return;
+    }
+
+    const granted = consent === "granted";
+    window.gtag("consent", "update", {
+        ad_storage: granted ? "granted" : "denied",
+        analytics_storage: granted ? "granted" : "denied",
+        ad_user_data: granted ? "granted" : "denied",
+        ad_personalization: granted ? "granted" : "denied",
+    });
+}
 
 interface CookieBannerProps {
     lang: string;
 }
 
 export function CookieBanner({ lang }: CookieBannerProps) {
-    const [show, setShow] = useState(false);
+    const consent = useSyncExternalStore(subscribeToConsent, getConsentSnapshot, () => "unknown");
 
     useEffect(() => {
-        // Check if consent has already been given
-        const consent = localStorage.getItem("cookie_consent");
-        if (!consent) {
-            setShow(true);
-        } else if (consent === "granted") {
-            // Hydrate default state if granted from previous session
-            if (typeof window !== "undefined" && typeof window.gtag === "function") {
-                window.gtag('consent', 'update', {
-                    'ad_storage': 'granted',
-                    'analytics_storage': 'granted',
-                    'ad_user_data': 'granted',
-                    'ad_personalization': 'granted'
-                });
-            }
+        if (consent === "granted" || consent === "denied") {
+            updateGoogleConsent(consent);
         }
-    }, []);
+    }, [consent]);
 
     const handleAccept = () => {
-        // Update Google Ads consent
-        if (typeof window !== "undefined" && typeof window.gtag === "function") {
-            window.gtag('consent', 'update', {
-                'ad_storage': 'granted',
-                'analytics_storage': 'granted',
-                'ad_user_data': 'granted',
-                'ad_personalization': 'granted'
-            });
-        }
-        localStorage.setItem("cookie_consent", "granted");
-        setShow(false);
+        persistConsent("granted");
     };
 
     const handleDecline = () => {
-        localStorage.setItem("cookie_consent", "denied");
-        setShow(false);
+        persistConsent("denied");
     };
 
-    if (!show) return null;
+    if (consent !== null) return null;
 
     const translations = {
         cs: {
             title: "Vaše soukromí je pro nás důležité",
-            text: "Tento web používá cookies pro měření návštěvnosti a marketing. Souhlasíte s jejich použitím?",
+            text: "Používáme analytické a reklamní cookies až po vašem souhlasu. Podrobnosti najdete v zásadách ochrany osobních údajů.",
             accept: "Povolit",
-            decline: "Jen nezbytné"
+            decline: "Jen nezbytné",
+            privacy: "Zásady ochrany osobních údajů"
         },
         en: {
             title: "Your privacy matters",
-            text: "This site uses cookies for analytics and marketing. Do you accept their use?",
+            text: "We only use analytics and advertising cookies after your consent. See the privacy policy for details.",
             accept: "Accept",
-            decline: "Essential only"
+            decline: "Essential only",
+            privacy: "Privacy policy"
         },
         ru: {
             title: "Ваша конфиденциальность важна",
-            text: "Этот сайт использует файлы cookie для аналитики и маркетинга. Вы согласны с их использованием?",
+            text: "Мы используем аналитические и рекламные cookie только после вашего согласия. Подробности смотрите в политике конфиденциальности.",
             accept: "Принять",
-            decline: "Только необходимые"
+            decline: "Только необходимые",
+            privacy: "Политика конфиденциальности"
         }
     };
 
@@ -85,19 +122,25 @@ export function CookieBanner({ lang }: CookieBannerProps) {
                 <div>
                     <h3 className="text-base font-semibold text-gray-900 mb-1">{t.title}</h3>
                     <p className="text-sm text-gray-600 leading-relaxed pr-2">{t.text}</p>
+                    <Link
+                        href={getRoutePath(lang as Language, "gdpr")}
+                        className="mt-2 inline-flex text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-800"
+                    >
+                        {t.privacy}
+                    </Link>
                 </div>
             </div>
 
             <div className="flex flex-col-reverse sm:flex-row gap-3 mt-2 sm:mt-1">
                 <button
                     onClick={handleDecline}
-                    className="flex-1 w-full text-sm font-semibold text-gray-700 hover:text-gray-900 px-4 py-2.5 border border-gray-300 rounded-xl hover:bg-white/60 transition-colors"
+                    className="flex-1 w-full text-sm font-semibold text-gray-900 px-4 py-2.5 border border-gray-400 rounded-xl bg-white hover:bg-gray-50 transition-colors shadow-sm"
                 >
                     {t.decline}
                 </button>
                 <button
                     onClick={handleAccept}
-                    className="flex-1 w-full text-sm font-semibold text-white px-4 py-2.5 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 rounded-xl shadow-[0_4px_12px_rgba(37,99,235,0.2)] hover:shadow-[0_6px_16px_rgba(37,99,235,0.3)] hover:-translate-y-0.5 transition-all"
+                    className="flex-1 w-full text-sm font-semibold text-white px-4 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-xl border border-blue-700 transition-colors shadow-sm"
                 >
                     {t.accept}
                 </button>

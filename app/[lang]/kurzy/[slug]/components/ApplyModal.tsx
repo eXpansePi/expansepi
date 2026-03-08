@@ -83,6 +83,28 @@ function getTranslations(lang: string): ModalTranslations {
     return t[lang] || t.cs
 }
 
+function hasTrackingConsent() {
+    if (typeof window === "undefined") {
+        return false
+    }
+
+    return window.localStorage.getItem("cookie_consent") === "granted"
+}
+
+async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, timeoutMs: number) {
+    const controller = new AbortController()
+    const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs)
+
+    try {
+        return await fetch(input, {
+            ...init,
+            signal: controller.signal,
+        })
+    } finally {
+        window.clearTimeout(timeoutId)
+    }
+}
+
 async function hashData(value: string): Promise<string | null> {
     if (!value) return null;
     try {
@@ -146,10 +168,15 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        if (status === "sending") {
+            return
+        }
+
         setStatus("sending")
 
         try {
-            const response = await fetch("/api/contact", {
+            const response = await fetchWithTimeout("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -161,7 +188,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                         : formData.message,
                     surname: formData.surname,
                 }),
-            })
+            }, 10000)
 
             const data = await response.json()
 
@@ -170,7 +197,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
 
                 // Fire Google Ads conversion event with Enhanced Conversions
                 // Skip conversion for honeypot submissions (bot-filled hidden field)
-                if (!formData.surname && typeof window !== "undefined" && typeof window.gtag === "function") {
+                if (!formData.surname && hasTrackingConsent() && typeof window !== "undefined" && typeof window.gtag === "function") {
                     const conversionId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
                     const conversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
 

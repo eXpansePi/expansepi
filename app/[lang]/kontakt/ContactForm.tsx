@@ -10,6 +10,20 @@ interface ContactFormProps {
   t: any
 }
 
+async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, timeoutMs: number) {
+  const controller = new AbortController()
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs)
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: controller.signal,
+    })
+  } finally {
+    window.clearTimeout(timeoutId)
+  }
+}
+
 export default function ContactForm({ lang, t }: ContactFormProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -23,11 +37,16 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (status === "sending") {
+      return
+    }
+
     setStatus("sending")
 
     try {
       // Send email via API route
-      const response = await fetch('/api/contact', {
+      const response = await fetchWithTimeout('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +60,7 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
             : formData.message,
           surname: formData.surname,
         }),
-      })
+      }, 10000)
 
       const data = await response.json()
 

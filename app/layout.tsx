@@ -53,6 +53,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID
+
   return (
     <html lang="cs" suppressHydrationWarning style={{ background: '#ffffff' }}>
       <body
@@ -62,45 +64,49 @@ export default function RootLayout({
         <LangSetter />
         <AnimationManager />
 
-        {/* 1. Consent Mode defaults (must run before gtag.js loads) */}
-        <Script
-          id="gtag-consent-defaults"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
+        {googleAdsId ? (
+          <>
+            {/* 1. Consent Mode defaults (must run before gtag.js loads) */}
+            <Script
+              id="gtag-consent-defaults"
+              strategy="beforeInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
 
-              gtag('consent', 'default', {
-                'ad_storage': 'denied',
-                'analytics_storage': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'wait_for_update': 500
-              });
-            `,
-          }}
-        />
+                  gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'analytics_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'wait_for_update': 500
+                  });
+                `,
+              }}
+            />
 
-        {/* 2. Load gtag.js library */}
-        <Script
-          strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}`}
-        />
+            {/* 2. Load gtag.js library */}
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}
+            />
 
-        {/* 3. Configure gtag after library is available */}
-        <Script
-          id="gtag-config"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');
-            `,
-          }}
-        />
+            {/* 3. Configure gtag after library is available */}
+            <Script
+              id="gtag-config"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${googleAdsId}', { send_page_view: false });
+                `,
+              }}
+            />
+          </>
+        ) : null}
 
         <Suspense fallback={null}>
           <AnalyticsTracker />

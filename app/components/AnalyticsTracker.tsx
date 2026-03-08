@@ -1,20 +1,32 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
+
+function hasAnalyticsConsent() {
+    if (typeof window === "undefined") {
+        return false;
+    }
+
+    return window.localStorage.getItem("cookie_consent") === "granted";
+}
 
 export function AnalyticsTracker() {
     const pathname = usePathname();
-    const searchParams = useSearchParams();
 
     useEffect(() => {
-        if (pathname && typeof window !== 'undefined' && typeof window.gtag === 'function') {
-            const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "");
-            window.gtag('event', 'page_view', {
-                page_path: url,
-            });
+        if (!pathname || typeof window === "undefined" || typeof window.gtag !== "function") {
+            return;
         }
-    }, [pathname, searchParams]);
+
+        if (!hasAnalyticsConsent()) {
+            return;
+        }
+
+            window.gtag('event', 'page_view', {
+                page_path: pathname,
+            });
+    }, [pathname]);
 
     return null;
 }
