@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.doubleclick.net",
               "font-src 'self'",
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://*.vercel-insights.com https://*.vercel-analytics.com",
+              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com https://*.vercel-insights.com https://*.vercel-analytics.com",
               "frame-src 'self' https://td.doubleclick.net",
               "frame-ancestors 'none'",
               "base-uri 'self'",
