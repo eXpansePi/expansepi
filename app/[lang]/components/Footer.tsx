@@ -1,10 +1,19 @@
+"use client"
+
 import Link from "next/link"
 import { getRoutePath } from "@/lib/routes"
 import { type Language } from "@/i18n/config"
 import { getTranslations } from "@/i18n/index"
+import { resetConsent } from "@/lib/consent"
 
 interface FooterProps {
   lang: Language
+}
+
+const cookieSettingsLabels: Record<string, string> = {
+  cs: "Nastavení cookies",
+  en: "Cookie settings",
+  ru: "Настройки cookie",
 }
 
 export default function Footer({ lang }: FooterProps) {
@@ -65,6 +74,14 @@ export default function Footer({ lang }: FooterProps) {
                 <Link href={getRoutePath(lang, 'gdpr')} className="hover:text-white transition-colors">
                   {t.common.gdpr}
                 </Link>
+              </li>
+              <li>
+                <button
+                  onClick={resetConsent}
+                  className="hover:text-white transition-colors text-left"
+                >
+                  {cookieSettingsLabels[lang] || cookieSettingsLabels.cs}
+                </button>
               </li>
             </ul>
           </div>

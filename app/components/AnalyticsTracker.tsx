@@ -2,14 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-
-function hasAnalyticsConsent() {
-    if (typeof window === "undefined") {
-        return false;
-    }
-
-    return window.localStorage.getItem("cookie_consent") === "granted";
-}
+import { hasTrackingConsent } from "@/lib/consent";
 
 export function AnalyticsTracker() {
     const pathname = usePathname();
@@ -19,7 +12,7 @@ export function AnalyticsTracker() {
             return;
         }
 
-        if (!hasAnalyticsConsent()) {
+        if (!hasTrackingConsent()) {
             return;
         }
 

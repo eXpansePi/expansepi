@@ -65,11 +65,6 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        // Open mailto link only if email wasn't sent via Resend (fallback mode)
-        if (data.mailtoLink) {
-          window.location.href = data.mailtoLink
-        }
-
         setStatus("success")
         // Clear form after showing success message
         setTimeout(() => {

@@ -5,6 +5,7 @@ import { createPortal } from "react-dom"
 import Link from "next/link"
 import { getRoutePath } from "@/lib/routes"
 import { type Language } from "@/i18n/config"
+import { hasTrackingConsent } from "@/lib/consent"
 
 interface ApplyModalProps {
     courseTitle: string
@@ -81,14 +82,6 @@ function getTranslations(lang: string): ModalTranslations {
         },
     }
     return t[lang] || t.cs
-}
-
-function hasTrackingConsent() {
-    if (typeof window === "undefined") {
-        return false
-    }
-
-    return window.localStorage.getItem("cookie_consent") === "granted"
 }
 
 async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, timeoutMs: number) {

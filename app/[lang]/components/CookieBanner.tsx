@@ -4,10 +4,7 @@ import Link from "next/link";
 import { useEffect, useSyncExternalStore } from "react";
 import { getRoutePath } from "@/lib/routes";
 import { type Language } from "@/i18n/config";
-
-const CONSENT_KEY = "cookie_consent";
-const CONSENT_UPDATED_AT_KEY = "cookie_consent_updated_at";
-const CONSENT_EVENT = "expansepi:cookie-consent-change";
+import { CONSENT_KEY, CONSENT_UPDATED_AT_KEY, CONSENT_EVENT, CONSENT_MAX_AGE_MS } from "@/lib/consent";
 
 type ConsentState = "granted" | "denied" | null | "unknown";
 
@@ -17,11 +14,22 @@ function getConsentSnapshot(): ConsentState {
     }
 
     const value = window.localStorage.getItem(CONSENT_KEY);
-    if (value === "granted" || value === "denied") {
-        return value;
+    if (value !== "granted" && value !== "denied") {
+        return null;
     }
 
-    return null;
+    // Check if consent has expired (12 months)
+    const updatedAt = window.localStorage.getItem(CONSENT_UPDATED_AT_KEY);
+    if (updatedAt) {
+        const age = Date.now() - new Date(updatedAt).getTime();
+        if (age > CONSENT_MAX_AGE_MS) {
+            window.localStorage.removeItem(CONSENT_KEY);
+            window.localStorage.removeItem(CONSENT_UPDATED_AT_KEY);
+            return null;
+        }
+    }
+
+    return value;
 }
 
 function subscribeToConsent(callback: () => void) {
