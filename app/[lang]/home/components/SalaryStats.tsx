@@ -1,9 +1,13 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import anime from "animejs/lib/anime.es.js"
 import { type Language } from "@/i18n/config"
 import { getTranslations } from "@/i18n/index"
+
+// easeOutQuart: t => 1 - (1 - t)^4
+function easeOutQuart(t: number): number {
+  return 1 - Math.pow(1 - t, 4)
+}
 
 interface SalaryStatsProps {
   lang: Language
@@ -18,7 +22,7 @@ interface MarketReadinessData {
 function SalaryStats({ lang }: SalaryStatsProps) {
   const t = getTranslations(lang)
   const [animatedPercentages, setAnimatedPercentages] = useState<number[]>([])
-  const animationRef = useRef<any[]>([])
+  const rafRef = useRef<number | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const hasAnimatedRef = useRef(false)
 
@@ -41,36 +45,28 @@ function SalaryStats({ lang }: SalaryStatsProps) {
 
   useEffect(() => {
     const marketData = getMarketReadinessData()
-    // Initialize animated values to 0
     setAnimatedPercentages(new Array(marketData.length).fill(0))
 
-    // Check if component is in viewport
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAnimatedRef.current) {
             hasAnimatedRef.current = true
+            const duration = 2500
+            const start = performance.now()
 
-            // Create a target object for each data point
-            const targets = marketData.map(() => ({ value: 0 }))
-
-            // Single animation instance for all bars to improve performance
-            const anim = anime({
-              targets: targets,
-              value: (el: any, i: number) => marketData[i].percentage,
-              duration: 2500,
-              delay: 0,
-              easing: 'easeOutQuart',
-              update: () => {
-                // Bulk update state once per frame for all percentages
-                setAnimatedPercentages(targets.map(t => t.value))
-              },
-              complete: () => {
+            const tick = (now: number) => {
+              const elapsed = now - start
+              const progress = Math.min(elapsed / duration, 1)
+              const eased = easeOutQuart(progress)
+              setAnimatedPercentages(marketData.map(item => eased * item.percentage))
+              if (progress < 1) {
+                rafRef.current = requestAnimationFrame(tick)
+              } else {
                 setAnimatedPercentages(marketData.map(item => item.percentage))
               }
-            })
-
-            animationRef.current = [anim]
+            }
+            rafRef.current = requestAnimationFrame(tick)
           }
         })
       },
@@ -83,7 +79,7 @@ function SalaryStats({ lang }: SalaryStatsProps) {
 
     return () => {
       observer.disconnect()
-      animationRef.current.forEach((anim) => anim.pause())
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
     }
   }, [lang])
 

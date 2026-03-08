@@ -11,11 +11,13 @@ import { AnalyticsTracker } from "./components/AnalyticsTracker"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 })
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -86,16 +88,16 @@ export default function RootLayout({
               }}
             />
 
-            {/* 2. Load gtag.js library */}
+            {/* 2. Load gtag.js library (lazyOnload: non-critical for initial paint) */}
             <Script
-              strategy="afterInteractive"
+              strategy="lazyOnload"
               src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}
             />
 
             {/* 3. Configure gtag after library is available */}
             <Script
               id="gtag-config"
-              strategy="afterInteractive"
+              strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];

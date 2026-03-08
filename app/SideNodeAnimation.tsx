@@ -43,6 +43,9 @@ export default function SideNodeAnimation() {
   useEffect(() => {
     if (isHomePage) return
 
+    // Skip animation on mobile devices for better performance
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return
+
     const canvas = canvasRef.current
     const ctx = canvas?.getContext("2d")
     if (!canvas || !ctx) return

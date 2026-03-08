@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import anime from "animejs/lib/anime.es.js"
 import Navigation from "./components/Navigation"
 import { getTranslations } from "@/i18n/index"
 import { type Language } from "@/i18n/config"
@@ -57,12 +56,15 @@ export default function HomeClient({ lang }: HomeClientProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouse = useRef({ x: 0, y: 0, active: false })
   const prefersReducedMotion = useRef(false)
+  const isMobileDevice = useRef(false)
 
-  // Check prefers-reduced-motion once on mount
+  // Check prefers-reduced-motion and mobile viewport once on mount
   useEffect(() => {
-    prefersReducedMotion.current =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (typeof window !== 'undefined') {
+      prefersReducedMotion.current =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      isMobileDevice.current = window.innerWidth < 768
+    }
   }, [])
 
   const t = getTranslations(lang)
@@ -114,8 +116,8 @@ export default function HomeClient({ lang }: HomeClientProps) {
     const ctx = canvas?.getContext("2d")
     if (!canvas || !ctx) return
 
-    // Skip canvas animation for users who prefer reduced motion
-    if (prefersReducedMotion.current) {
+    // Skip canvas animation on mobile devices or for users who prefer reduced motion
+    if (prefersReducedMotion.current || isMobileDevice.current) {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
       ctx.fillStyle = "#f9fafb"
@@ -427,24 +429,25 @@ export default function HomeClient({ lang }: HomeClientProps) {
     const titleTranslate = isMobile ? '3rem' : '4rem'
     const subtitleTranslate = isMobile ? '1.5rem' : '2rem'
     const buttonTranslate = isMobile ? '1rem' : '1.25rem'
+    const easing = 'cubic-bezier(0.33, 1, 0.68, 1)' // easeOutCubic
 
-    anime({
-      targets: ".hero-title span",
-      translateY: [titleTranslate, 0],
-      opacity: [0, 1],
-      delay: anime.stagger(55),
-      easing: "easeOutCubic",
-      duration: 750,
-    })
+    // Hero title spans — staggered fade-in
+    const titleSpans = document.querySelectorAll('.hero-title span')
+    const titleAnimations = Array.from(titleSpans).map((el, i) =>
+      el.animate(
+        [{ transform: `translateY(${titleTranslate})`, opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+        { duration: 750, delay: i * 55, easing, fill: 'forwards' }
+      )
+    )
 
-    anime({
-      targets: ".hero-subtitle",
-      opacity: [0, 1],
-      translateY: [subtitleTranslate, 0],
-      delay: 280,
-      easing: "easeOutCubic",
-      duration: 600,
-    })
+    // Hero subtitles — fade-in
+    const subtitles = document.querySelectorAll('.hero-subtitle')
+    const subtitleAnimations = Array.from(subtitles).map(el =>
+      el.animate(
+        [{ transform: `translateY(${subtitleTranslate})`, opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+        { duration: 600, delay: 280, easing, fill: 'forwards' }
+      )
+    )
 
     const typewriterDelay = 650
     const typewriterSpeed = 25
@@ -463,28 +466,29 @@ export default function HomeClient({ lang }: HomeClientProps) {
     }, typewriterDelay)
 
     const buttonDelay = typewriterDelay + fullText.length * typewriterSpeed + 200
-    anime({
-      targets: ".cta-button",
-      opacity: [0, 1],
-      scale: [0.9, 1],
-      translateY: [buttonTranslate, 0],
-      delay: buttonDelay,
-      easing: "easeOutCubic",
-      duration: 650,
-    })
 
-    anime({
-      targets: ".partners-section",
-      opacity: [0, 1],
-      translateY: [20, 0],
-      delay: buttonDelay + 200,
-      easing: "easeOutCubic",
-      duration: 500,
-    })
+    // CTA buttons — fade-in with scale
+    const buttons = document.querySelectorAll('.cta-button')
+    const buttonAnimations = Array.from(buttons).map(el =>
+      el.animate(
+        [{ transform: `translateY(${buttonTranslate}) scale(0.9)`, opacity: 0 }, { transform: 'translateY(0) scale(1)', opacity: 1 }],
+        { duration: 650, delay: buttonDelay, easing, fill: 'forwards' }
+      )
+    )
+
+    // Partners section — fade-in
+    const partners = document.querySelectorAll('.partners-section')
+    const partnerAnimations = Array.from(partners).map(el =>
+      el.animate(
+        [{ transform: 'translateY(20px)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+        { duration: 500, delay: buttonDelay + 200, easing, fill: 'forwards' }
+      )
+    )
 
     return () => {
       clearTimeout(timeoutId)
       if (typeInterval) clearInterval(typeInterval)
+      ;[...titleAnimations, ...subtitleAnimations, ...buttonAnimations, ...partnerAnimations].forEach(a => a.cancel())
     }
   }, [fullText])
 

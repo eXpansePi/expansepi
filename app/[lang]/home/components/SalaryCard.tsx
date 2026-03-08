@@ -1,9 +1,13 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import anime from "animejs/lib/anime.es.js"
 import { type Language } from "@/i18n/config"
 import { getTranslations } from "@/i18n/index"
+
+// easeOutQuart: t => 1 - (1 - t)^4
+function easeOutQuart(t: number): number {
+  return 1 - Math.pow(1 - t, 4)
+}
 
 interface SalaryCardProps {
   lang: Language
@@ -16,32 +20,31 @@ interface SalaryCardProps {
 function SalaryCard({ lang, icon, level, salary, gradient }: SalaryCardProps) {
   const t = getTranslations(lang)
   const [animatedValue, setAnimatedValue] = useState(0)
-  const animationRef = useRef<any>(null)
+  const rafRef = useRef<number | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const hasAnimatedRef = useRef(false)
 
   useEffect(() => {
-    // Check if component is in viewport
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAnimatedRef.current) {
             hasAnimatedRef.current = true
-            // Start animation
-            const target = { value: 0 }
-            const anim = anime({
-              targets: target,
-              value: salary,
-              duration: 2500,
-              easing: 'easeOutQuart',
-              update: () => {
-                setAnimatedValue(Math.round(target.value))
-              },
-              complete: () => {
+            const duration = 2500
+            const start = performance.now()
+
+            const tick = (now: number) => {
+              const elapsed = now - start
+              const progress = Math.min(elapsed / duration, 1)
+              const eased = easeOutQuart(progress)
+              setAnimatedValue(Math.round(eased * salary))
+              if (progress < 1) {
+                rafRef.current = requestAnimationFrame(tick)
+              } else {
                 setAnimatedValue(salary)
               }
-            })
-            animationRef.current = anim
+            }
+            rafRef.current = requestAnimationFrame(tick)
           }
         })
       },
@@ -54,9 +57,7 @@ function SalaryCard({ lang, icon, level, salary, gradient }: SalaryCardProps) {
 
     return () => {
       observer.disconnect()
-      if (animationRef.current) {
-        animationRef.current.pause()
-      }
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
     }
   }, [salary])
 
