@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const resolvedParams = await params
   const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
   const meta = langMetadata[lang]
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
 
   return {
     title: {
@@ -57,24 +58,24 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       shortcut: '/favicon.ico',
     },
     alternates: {
-      canonical: `https://expansepi.com/${lang}`,
+      canonical: `${baseUrl}/${lang}`,
       languages: {
-        'cs': 'https://expansepi.com/cs',
-        'en': 'https://expansepi.com/en',
-        'ru': 'https://expansepi.com/ru',
-        'x-default': 'https://expansepi.com/cs'
+        'cs': `${baseUrl}/cs`,
+        'en': `${baseUrl}/en`,
+        'ru': `${baseUrl}/ru`,
+        'x-default': `${baseUrl}/cs`
       }
     },
     openGraph: {
       type: "website",
       locale: meta.locale,
-      url: `https://expansepi.com/${lang}`,
+      url: `${baseUrl}/${lang}`,
       siteName: "eXpansePi",
       title: meta.title,
       description: meta.description,
       images: [
         {
-          url: `https://expansepi.com/og-image.png`,
+          url: `${baseUrl}/og-image.png`,
           width: 1200,
           height: 630,
           alt: "eXpansePi - IT Education",
@@ -86,7 +87,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       title: meta.title,
       description: meta.description,
       creator: "@expansepi",
-      images: ["https://expansepi.com/og-image.png"],
+      images: [`${baseUrl}/og-image.png`],
     },
     robots: {
       index: true,

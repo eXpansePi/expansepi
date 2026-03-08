@@ -4,7 +4,9 @@ import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getOpenVacancies } from "@/data/vacancies"
 import { VacancyCard } from "./components"
-import { getRoutePath } from "@/lib/routes"
+import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
+
+const localeMap: Record<string, string> = { cs: 'cs_CZ', en: 'en_US', ru: 'ru_RU' }
 
 interface VacanciesPageProps {
   params: Promise<{ lang: string }>
@@ -14,9 +16,34 @@ export async function generateMetadata({ params }: VacanciesPageProps): Promise<
   const resolvedParams = await params
   const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
   const t = getTranslations(lang)
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
+  const allRoutes = getAllRoutePaths('vacancies')
+
   return {
     title: t.vacancies.title,
-    description: t.vacancies.title,
+    description: t.vacancies.description,
+    alternates: {
+      canonical: `${baseUrl}${allRoutes[lang]}`,
+      languages: {
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`,
+        'x-default': `${baseUrl}${allRoutes.cs}`,
+      },
+    },
+    openGraph: {
+      title: t.vacancies.title,
+      description: t.vacancies.description,
+      url: `${baseUrl}${allRoutes[lang]}`,
+      siteName: 'eXpansePi',
+      locale: localeMap[lang],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t.vacancies.title,
+      description: t.vacancies.description,
+    },
   }
 }
 

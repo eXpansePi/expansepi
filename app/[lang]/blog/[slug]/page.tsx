@@ -123,7 +123,7 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
           <div className="prose prose-sm sm:prose-base prose-gray max-w-none">
             <p className="text-base sm:text-lg leading-relaxed">{post.excerpt}</p>
             {post.content && (
-              <div dangerouslySetInnerHTML={{ __html: post.content }} />
+              <div>{post.content}</div>
             )}
           </div>
           <div className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-gray-200">

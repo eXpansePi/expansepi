@@ -6,6 +6,8 @@ import { getPublishedPosts } from "@/data/posts"
 import { BlogCard } from "./components"
 import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
 
+const localeMap: Record<string, string> = { cs: 'cs_CZ', en: 'en_US', ru: 'ru_RU' }
+
 interface BlogPageProps {
   params: Promise<{ lang: string }>
 }
@@ -14,9 +16,34 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   const resolvedParams = await params
   const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
   const t = getTranslations(lang)
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
+  const allRoutes = getAllRoutePaths('blog')
+
   return {
     title: t.blog.title,
-    description: t.blog.title,
+    description: t.blog.description,
+    alternates: {
+      canonical: `${baseUrl}${allRoutes[lang]}`,
+      languages: {
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`,
+        'x-default': `${baseUrl}${allRoutes.cs}`,
+      },
+    },
+    openGraph: {
+      title: t.blog.title,
+      description: t.blog.description,
+      url: `${baseUrl}${allRoutes[lang]}`,
+      siteName: 'eXpansePi',
+      locale: localeMap[lang],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t.blog.title,
+      description: t.blog.description,
+    },
   }
 }
 

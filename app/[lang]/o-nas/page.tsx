@@ -3,10 +3,12 @@ import Navigation from "../components/Navigation"
 import Footer from "../components/Footer"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
-import { getRoutePath } from "@/lib/routes"
+import { getRoutePath, getAllRoutePaths } from "@/lib/routes"
 import { getAllTeamMembers, getAllLecturers } from "@/data/team"
 import TeamMemberCard from "./components/TeamMemberCard"
 import LecturerCard from "./components/LecturerCard"
+
+const localeMap: Record<string, string> = { cs: 'cs_CZ', en: 'en_US', ru: 'ru_RU' }
 
 interface AboutPageProps {
   params: Promise<{ lang: string }>
@@ -16,9 +18,34 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
   const resolvedParams = await params
   const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
   const t = getTranslations(lang)
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
+  const allRoutes = getAllRoutePaths('about')
+
   return {
     title: t.about.title,
     description: t.about.description,
+    alternates: {
+      canonical: `${baseUrl}${allRoutes[lang]}`,
+      languages: {
+        'cs': `${baseUrl}${allRoutes.cs}`,
+        'en': `${baseUrl}${allRoutes.en}`,
+        'ru': `${baseUrl}${allRoutes.ru}`,
+        'x-default': `${baseUrl}${allRoutes.cs}`,
+      },
+    },
+    openGraph: {
+      title: t.about.title,
+      description: t.about.description,
+      url: `${baseUrl}${allRoutes[lang]}`,
+      siteName: 'eXpansePi',
+      locale: localeMap[lang],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t.about.title,
+      description: t.about.description,
+    },
   }
 }
 
