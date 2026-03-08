@@ -4,24 +4,11 @@ import { useState, FormEvent } from "react"
 import Link from "next/link"
 import { getRoutePath } from "@/lib/routes"
 import { type Language } from "@/i18n/config"
+import { fetchWithTimeout } from "@/lib/form-utils"
 
 interface ContactFormProps {
   lang: string
-  t: any
-}
-
-async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, timeoutMs: number) {
-  const controller = new AbortController()
-  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs)
-
-  try {
-    return await fetch(input, {
-      ...init,
-      signal: controller.signal,
-    })
-  } finally {
-    window.clearTimeout(timeoutId)
-  }
+  t: Record<string, any>
 }
 
 export default function ContactForm({ lang, t }: ContactFormProps) {
@@ -54,10 +41,9 @@ export default function ContactForm({ lang, t }: ContactFormProps) {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
+          phone: formData.phone || undefined,
           subject: formData.subject,
-          message: formData.phone
-            ? `${formData.message}\n\nTelefon: ${formData.phone}`
-            : formData.message,
+          message: formData.message,
           surname: formData.surname,
         }),
       }, 10000)

@@ -4,18 +4,19 @@
 import rawPosts from './posts.json'
 import { BlogPost } from '@/types/blog'
 
-function isBlogPost(obj: any): obj is BlogPost {
+function isBlogPost(obj: unknown): obj is BlogPost {
+  if (!obj || typeof obj !== 'object') return false
+  const o = obj as Record<string, unknown>
   return (
-    obj &&
-    typeof obj.slug === 'string' &&
-    typeof obj.title === 'string' &&
-    typeof obj.description === 'string' &&
-    typeof obj.excerpt === 'string' &&
-    typeof obj.content === 'string' &&
-    typeof obj.date === 'string' &&
-    typeof obj.author === 'string' &&
-    Array.isArray(obj.tags) &&
-    (obj.status === 'published' || obj.status === 'draft')
+    typeof o.slug === 'string' &&
+    typeof o.title === 'string' &&
+    typeof o.description === 'string' &&
+    typeof o.excerpt === 'string' &&
+    typeof o.content === 'string' &&
+    typeof o.date === 'string' &&
+    typeof o.author === 'string' &&
+    Array.isArray(o.tags) &&
+    (o.status === 'published' || o.status === 'draft')
   )
 }
 
@@ -23,8 +24,8 @@ let cache: BlogPost[] | null = null
 
 export function getAllPosts(): BlogPost[] {
   if (cache) return cache
-  const arr = rawPosts as any
-  if (!Array.isArray(arr)) throw new Error('posts.json must be an array')
+  const arr: unknown[] = Array.isArray(rawPosts) ? rawPosts : []
+  if (!Array.isArray(rawPosts)) throw new Error('posts.json must be an array')
   const validated = arr.filter(isBlogPost)
   if (validated.length !== arr.length) {
     console.warn(`Warning: ${arr.length - validated.length} invalid post(s) filtered out`)

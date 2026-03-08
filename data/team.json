@@ -47,7 +47,7 @@
   ],
   "lecturers": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Aleš Prokop",
       "title": "Software Engineer\nRapid7\nMFF UK",
       "photo": "",
@@ -82,7 +82,7 @@
       }
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Eldar Urmanov",
       "title": "Senior Software Engineer\nRapid7\nMFF UK",
       "photo": "",
@@ -120,7 +120,7 @@
       }
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Kostiantyn Agapov",
       "title": "Senior Software Engineer\nRapid7\n\n",
       "photo": "",
@@ -152,7 +152,7 @@
       }
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Vít Dvořák",
       "title": "Software Engineer\nFreelance\nMFF UK",
       "photo": "",
@@ -187,7 +187,7 @@
       }
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Vlad Karpenko",
       "title": "Software Engineer\nGrant Thornton\nMFF UK",
       "photo": "",
@@ -225,7 +225,7 @@
       }
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Anton Voznia",
       "title": "Senior Software Engineer\nAzul Systems\nČVUT",
       "photo": "",

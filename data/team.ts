@@ -9,101 +9,94 @@ import { TeamMember, Lecturer } from '@/types/team'
 /**
  * Normalize team member data to TeamMember interface (handles both old and multilingual structures)
  */
-function normalizeTeamMember(member: any, lang: string = 'cs'): TeamMember | null {
+function normalizeTeamMember(member: unknown, lang: string = 'cs'): TeamMember | null {
+  if (!member || typeof member !== 'object') return null
+  const m = member as Record<string, unknown>
   // Handle both string and number IDs (convert number to string)
-  const id = typeof member.id === 'string' ? member.id : String(member.id)
+  const id = typeof m.id === 'string' ? m.id : String(m.id)
   
-  if (!member || typeof member !== 'object' || 
-      typeof member.name !== 'string' || typeof member.title !== 'string' ||
-      !(member.role === 'founder' || member.role === 'hr' || member.role === 'other')) {
+  if (typeof m.name !== 'string' || typeof m.title !== 'string' ||
+      !(m.role === 'founder' || m.role === 'hr' || m.role === 'other')) {
     return null
   }
 
   // Check for multilingual structure
-  if ('languages' in member && typeof member.languages === 'object') {
-    const langData = member.languages[lang] || 
-                     member.languages['cs'] || 
-                     member.languages['en'] || 
-                     member.languages['ru'] ||
-                     Object.values(member.languages)[0]
+  if ('languages' in m && typeof m.languages === 'object' && m.languages !== null) {
+    const langs = m.languages as Record<string, unknown>
+    const langData = (langs[lang] || langs['cs'] || langs['en'] || langs['ru'] || Object.values(langs)[0]) as Record<string, unknown> | undefined
     
     if (langData && typeof langData === 'object') {
       // Handle empty photo string as undefined
-      const photo = member.photo && member.photo.trim() !== '' ? member.photo : undefined
+      const photo = typeof m.photo === 'string' && m.photo.trim() !== '' ? m.photo : undefined
       
       return {
         id: id,
-        name: member.name,
-        title: member.title,
-        description: langData.description,
-        specializations: langData.specializations || member.specializations,
+        name: m.name,
+        title: m.title,
+        description: typeof langData.description === 'string' ? langData.description : '',
+        specializations: Array.isArray(langData.specializations) ? langData.specializations as string[] : (Array.isArray(m.specializations) ? m.specializations as string[] : []),
         photo: photo,
-        role: member.role
+        role: m.role as TeamMember['role']
       }
     }
   }
 
-  // Handle old structure (fallback to default language if multilingual not available)
-  // Handle empty photo string as undefined
-  const photo = member.photo && member.photo.trim() !== '' ? member.photo : undefined
+  // Handle old structure (fallback)
+  const photo = typeof m.photo === 'string' && m.photo.trim() !== '' ? m.photo : undefined
   
   return {
     id: id,
-    name: member.name,
-    title: member.title,
-    description: member.description,
-    specializations: member.specializations,
+    name: m.name,
+    title: m.title,
+    description: typeof m.description === 'string' ? m.description : '',
+    specializations: Array.isArray(m.specializations) ? m.specializations as string[] : [],
     photo: photo,
-    role: member.role
+    role: m.role as TeamMember['role']
   }
 }
 
 /**
  * Normalize lecturer data to Lecturer interface (handles both old and multilingual structures)
  */
-function normalizeLecturer(lecturer: any, lang: string = 'cs'): Lecturer | null {
+function normalizeLecturer(lecturer: unknown, lang: string = 'cs'): Lecturer | null {
+  if (!lecturer || typeof lecturer !== 'object') return null
+  const l = lecturer as Record<string, unknown>
   // Handle both string and number IDs (convert number to string)
-  const id = typeof lecturer.id === 'string' ? lecturer.id : String(lecturer.id)
+  const id = typeof l.id === 'string' ? l.id : String(l.id)
   
-  if (!lecturer || typeof lecturer !== 'object' || 
-      typeof lecturer.name !== 'string' || typeof lecturer.title !== 'string') {
+  if (typeof l.name !== 'string' || typeof l.title !== 'string') {
     return null
   }
 
   // Check for multilingual structure
-  if ('languages' in lecturer && typeof lecturer.languages === 'object') {
-    const langData = lecturer.languages[lang] || 
-                     lecturer.languages['cs'] || 
-                     lecturer.languages['en'] || 
-                     lecturer.languages['ru'] ||
-                     Object.values(lecturer.languages)[0]
+  if ('languages' in l && typeof l.languages === 'object' && l.languages !== null) {
+    const langs = l.languages as Record<string, unknown>
+    const langData = (langs[lang] || langs['cs'] || langs['en'] || langs['ru'] || Object.values(langs)[0]) as Record<string, unknown> | undefined
     
     if (langData && typeof langData === 'object' && typeof langData.description === 'string') {
-      // Handle empty photo string as undefined
-      const photo = lecturer.photo && lecturer.photo.trim() !== '' ? lecturer.photo : undefined
+      const photo = typeof l.photo === 'string' && l.photo.trim() !== '' ? l.photo : undefined
       
       return {
         id: id,
-        name: lecturer.name,
-        title: lecturer.title,
+        name: l.name,
+        title: l.title,
         description: langData.description,
-        specializations: langData.specializations || lecturer.specializations,
+        specializations: Array.isArray(langData.specializations) ? langData.specializations as string[] : (Array.isArray(l.specializations) ? l.specializations as string[] : []),
         photo: photo
       }
     }
   }
 
-  // Handle old structure (fallback to default language if multilingual not available)
-  if (typeof lecturer.description === 'string') {
-    // Handle empty photo string as undefined
-    const photo = lecturer.photo && lecturer.photo.trim() !== '' ? lecturer.photo : undefined
+  // Handle old structure (fallback)
+  if (typeof l.description === 'string') {
+    const photo = typeof l.photo === 'string' && l.photo.trim() !== '' ? l.photo : undefined
     
     return {
       id: id,
-      name: lecturer.name,
-      title: lecturer.title,
-      description: lecturer.description,
-      specializations: lecturer.specializations,
+      name: l.name,
+      title: l.title,
+      description: l.description,
+      specializations: Array.isArray(l.specializations) ? l.specializations as string[] : [],
       photo: photo
     }
   }
@@ -124,12 +117,13 @@ export function getAllTeamMembers(lang: string = 'cs'): TeamMember[] {
     return teamMembersCache[lang]
   }
 
-  const arr = (teamData as any).teamMembers
+  const data = teamData as Record<string, unknown>
+  const arr = data.teamMembers
   if (!Array.isArray(arr)) {
     return []
   }
   
-  const validated: TeamMember[] = arr
+  const validated: TeamMember[] = (arr as unknown[])
     .map(member => normalizeTeamMember(member, lang))
     .filter((member): member is TeamMember => member !== null)
   
@@ -147,12 +141,13 @@ export function getAllLecturers(lang: string = 'cs'): Lecturer[] {
     return lecturersCache[lang]
   }
 
-  const arr = (teamData as any).lecturers
+  const data = teamData as Record<string, unknown>
+  const arr = data.lecturers
   if (!Array.isArray(arr)) {
     return []
   }
   
-  const validated: Lecturer[] = arr
+  const validated: Lecturer[] = (arr as unknown[])
     .map(lecturer => normalizeLecturer(lecturer, lang))
     .filter((lecturer): lecturer is Lecturer => lecturer !== null)
   

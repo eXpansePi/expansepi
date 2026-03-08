@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, email, subject, message, surname } = body;
+    const { name, email, phone, subject, message, surname } = body;
 
     // 0. Honeypot check for bots
     if (surname) {
@@ -82,11 +82,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Neplatný formát emailu nebo příliš krátký.' }, { status: 400 });
     }
 
-    // 4. Phone validation (if parsed as part of message or explicit fields in future)
-    // The message includes phone if provided. We check if phone was included in the message string.
-    const phoneMatch = message.match(/Telefon: (.*)/);
-    if (phoneMatch) {
-      const phone = phoneMatch[1];
+    // 4. Phone validation (explicit field)
+    if (phone) {
+      if (typeof phone !== 'string' || phone.length > 20) {
+        return NextResponse.json({ error: 'Neplatný formát telefonního čísla.' }, { status: 400 });
+      }
       const phoneRegex = /^\+?[0-9\s\-()]{7,15}$/;
       if (!phoneRegex.test(phone)) {
         return NextResponse.json({ error: 'Neplatný formát telefonního čísla.' }, { status: 400 });
@@ -104,6 +104,7 @@ export async function POST(req: Request) {
     // 4. Sanitization for HTML context (Prevent HTML Injection/XSS in email client)
     const safeName = escapeHtml(name);
     const safeEmail = escapeHtml(email);
+    const safePhone = phone ? escapeHtml(phone) : '';
     const safeSubject = escapeHtml(subject);
     const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
 
@@ -112,11 +113,12 @@ export async function POST(req: Request) {
       to: 'info@expansepi.com',
       replyTo: email,
       subject: `${safeSubject} (od: ${safeName})`,
-      text: `Jméno: ${name}\nEmail: ${email}\nPředmět: ${subject}\n\nZpráva:\n${message}`,
+      text: `Jméno: ${name}\nEmail: ${email}${phone ? `\nTelefon: ${phone}` : ''}\nPředmět: ${subject}\n\nZpráva:\n${message}`,
       html: `
         <h3>Nová zpráva z kontaktního formuláře</h3>
         <p><strong>Jméno:</strong> ${safeName}</p>
         <p><strong>Email:</strong> ${safeEmail}</p>
+        ${safePhone ? `<p><strong>Telefon:</strong> ${safePhone}</p>` : ''}
         <p><strong>Předmět:</strong> ${safeSubject}</p>
         <p><strong>Zpráva:</strong></p>
         <p>${safeMessage}</p>

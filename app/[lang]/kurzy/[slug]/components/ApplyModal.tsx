@@ -6,6 +6,7 @@ import Link from "next/link"
 import { getRoutePath } from "@/lib/routes"
 import { type Language } from "@/i18n/config"
 import { hasTrackingConsent } from "@/lib/consent"
+import { fetchWithTimeout } from "@/lib/form-utils"
 
 interface ApplyModalProps {
     courseTitle: string
@@ -82,20 +83,6 @@ function getTranslations(lang: string): ModalTranslations {
         },
     }
     return t[lang] || t.cs
-}
-
-async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, timeoutMs: number) {
-    const controller = new AbortController()
-    const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs)
-
-    try {
-        return await fetch(input, {
-            ...init,
-            signal: controller.signal,
-        })
-    } finally {
-        window.clearTimeout(timeoutId)
-    }
 }
 
 async function hashData(value: string): Promise<string | null> {
@@ -175,10 +162,9 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                 body: JSON.stringify({
                     name: formData.name,
                     email: formData.email,
+                    phone: formData.phone || undefined,
                     subject: courseTitle,
-                    message: formData.phone
-                        ? `${formData.message}\n\nTelefon: ${formData.phone}`
-                        : formData.message,
+                    message: formData.message,
                     surname: formData.surname,
                 }),
             }, 10000)

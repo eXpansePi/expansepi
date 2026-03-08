@@ -4,36 +4,37 @@
  */
 
 import vacanciesData from './vacancies.json'
-import { Vacancy, JobStatus } from '@/types/vacancy'
+import { Vacancy, JobStatus, WorkMode, EmploymentType } from '@/types/vacancy'
 
 /**
  * Type guard to validate vacancy object structure (supports both old and multilingual structures)
  */
-function isVacancy(obj: any): obj is Vacancy {
-  if (!obj || typeof obj.slug !== 'string' || !(obj.status === 'open' || obj.status === 'draft' || obj.status === 'closed')) {
+function isVacancy(obj: unknown): obj is Vacancy {
+  if (!obj || typeof obj !== 'object') return false
+  const o = obj as Record<string, unknown>
+  if (typeof o.slug !== 'string' || !(o.status === 'open' || o.status === 'draft' || o.status === 'closed')) {
     return false
   }
 
   // Check for multilingual structure
-  if (obj.languages && typeof obj.languages === 'object') {
-    // Validate that at least one language exists
-    const hasValidLanguage = Object.values(obj.languages).some((langData: any) => 
-      langData && 
-      typeof langData.title === 'string' &&
-      typeof langData.description === 'string' &&
-      typeof langData.location === 'string'
-    )
+  if (o.languages && typeof o.languages === 'object') {
+    const langs = o.languages as Record<string, unknown>
+    const hasValidLanguage = Object.values(langs).some((langData: unknown) => {
+      if (!langData || typeof langData !== 'object') return false
+      const ld = langData as Record<string, unknown>
+      return typeof ld.title === 'string' && typeof ld.description === 'string' && typeof ld.location === 'string'
+    })
     return hasValidLanguage
   }
 
   // Check for old structure
   return (
-    typeof obj.title === 'string' &&
-    typeof obj.description === 'string' &&
-    typeof obj.location === 'string' &&
-    typeof obj.workMode === 'string' &&
-    typeof obj.employmentType === 'string' &&
-    typeof obj.postedAt === 'string'
+    typeof o.title === 'string' &&
+    typeof o.description === 'string' &&
+    typeof o.location === 'string' &&
+    typeof o.workMode === 'string' &&
+    typeof o.employmentType === 'string' &&
+    typeof o.postedAt === 'string'
   )
 }
 
@@ -42,64 +43,61 @@ const cache: Record<string, Vacancy[]> = {}
 /**
  * Normalize vacancy data to Vacancy interface (handles both old and multilingual structures)
  */
-function normalizeVacancy(vacancy: any, lang: string = 'cs'): Vacancy | null {
-  // Validate basic vacancy structure
-  if (!vacancy || typeof vacancy !== 'object' || typeof vacancy.slug !== 'string' || !(vacancy.status === 'open' || vacancy.status === 'draft' || vacancy.status === 'closed')) {
+function normalizeVacancy(vacancy: unknown, lang: string = 'cs'): Vacancy | null {
+  if (!vacancy || typeof vacancy !== 'object') return null
+  const v = vacancy as Record<string, unknown>
+  if (typeof v.slug !== 'string' || !(v.status === 'open' || v.status === 'draft' || v.status === 'closed')) {
     return null
   }
 
   // Check for multilingual structure first
-  if ('languages' in vacancy && typeof vacancy.languages === 'object') {
-    // Try requested language first, then fallback to available languages
-    const langData = vacancy.languages[lang] || 
-                     vacancy.languages['cs'] || 
-                     vacancy.languages['en'] || 
-                     vacancy.languages['ru'] ||
-                     Object.values(vacancy.languages)[0]
+  if ('languages' in v && typeof v.languages === 'object' && v.languages !== null) {
+    const langs = v.languages as Record<string, unknown>
+    const langData = (langs[lang] || langs['cs'] || langs['en'] || langs['ru'] || Object.values(langs)[0]) as Record<string, unknown> | undefined
     
     if (langData && typeof langData === 'object' && 
         typeof langData.title === 'string' &&
         typeof langData.description === 'string' &&
         typeof langData.location === 'string') {
       return {
-        slug: vacancy.slug,
+        slug: v.slug as string,
         title: langData.title,
         description: langData.description,
-        details: langData.details,
+        details: typeof langData.details === 'string' ? langData.details : undefined,
         location: langData.location,
-        workMode: vacancy.workMode,
-        employmentType: vacancy.employmentType,
-        department: vacancy.department,
-        tags: vacancy.tags,
-        status: vacancy.status,
-        postedAt: vacancy.postedAt,
-        updated: vacancy.updated,
-        validThrough: vacancy.validThrough,
+        workMode: v.workMode as WorkMode,
+        employmentType: v.employmentType as EmploymentType,
+        department: typeof v.department === 'string' ? v.department : undefined,
+        tags: Array.isArray(v.tags) ? v.tags as string[] : undefined,
+        status: v.status as Vacancy['status'],
+        postedAt: v.postedAt as string,
+        updated: typeof v.updated === 'string' ? v.updated : undefined,
+        validThrough: typeof v.validThrough === 'string' ? v.validThrough : undefined,
       }
     }
   }
 
-  // Handle old structure (fallback to default language if multilingual not available)
-  if (typeof vacancy.title === 'string' && 
-      typeof vacancy.description === 'string' &&
-      typeof vacancy.location === 'string' &&
-      typeof vacancy.workMode === 'string' &&
-      typeof vacancy.employmentType === 'string' &&
-      typeof vacancy.postedAt === 'string') {
+  // Handle old structure (fallback)
+  if (typeof v.title === 'string' && 
+      typeof v.description === 'string' &&
+      typeof v.location === 'string' &&
+      typeof v.workMode === 'string' &&
+      typeof v.employmentType === 'string' &&
+      typeof v.postedAt === 'string') {
     return {
-      slug: vacancy.slug,
-      title: vacancy.title,
-      description: vacancy.description,
-      details: vacancy.details,
-      location: vacancy.location,
-      workMode: vacancy.workMode,
-      employmentType: vacancy.employmentType,
-      department: vacancy.department,
-      tags: vacancy.tags,
-      status: vacancy.status,
-      postedAt: vacancy.postedAt,
-      updated: vacancy.updated,
-      validThrough: vacancy.validThrough,
+      slug: v.slug as string,
+      title: v.title,
+      description: v.description,
+      details: typeof v.details === 'string' ? v.details : undefined,
+      location: v.location,
+      workMode: v.workMode as WorkMode,
+      employmentType: v.employmentType as EmploymentType,
+      department: typeof v.department === 'string' ? v.department : undefined,
+      tags: Array.isArray(v.tags) ? v.tags as string[] : undefined,
+      status: v.status as Vacancy['status'],
+      postedAt: v.postedAt,
+      updated: typeof v.updated === 'string' ? v.updated : undefined,
+      validThrough: typeof v.validThrough === 'string' ? v.validThrough : undefined,
     }
   }
 
@@ -115,8 +113,8 @@ function normalizeVacancy(vacancy: any, lang: string = 'cs'): Vacancy | null {
 export function getAllVacancies(lang: string = 'cs'): Vacancy[] {
   if (cache[lang]) return cache[lang]
   
-  const arr = vacanciesData as any
-  if (!Array.isArray(arr)) {
+  const arr: unknown[] = Array.isArray(vacanciesData) ? vacanciesData : []
+  if (!Array.isArray(vacanciesData)) {
     throw new Error('vacancies.json must be an array')
   }
   

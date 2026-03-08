@@ -56,6 +56,14 @@ export default function HomeClient({ lang }: HomeClientProps) {
   const [typedText, setTypedText] = useState("")
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouse = useRef({ x: 0, y: 0, active: false })
+  const prefersReducedMotion = useRef(false)
+
+  // Check prefers-reduced-motion once on mount
+  useEffect(() => {
+    prefersReducedMotion.current =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }, [])
 
   const t = getTranslations(lang)
   const fullText = t.home.tagline
@@ -105,6 +113,15 @@ export default function HomeClient({ lang }: HomeClientProps) {
     const canvas = canvasRef.current
     const ctx = canvas?.getContext("2d")
     if (!canvas || !ctx) return
+
+    // Skip canvas animation for users who prefer reduced motion
+    if (prefersReducedMotion.current) {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+      ctx.fillStyle = "#f9fafb"
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      return
+    }
 
     let width = (canvas.width = window.innerWidth)
     let height = (canvas.height = window.innerHeight)
@@ -400,6 +417,12 @@ export default function HomeClient({ lang }: HomeClientProps) {
   // ── Hero entry animations ───────────────────────────────────────────────────
 
   useEffect(() => {
+    // If reduced motion is preferred, show everything instantly without animation
+    if (prefersReducedMotion.current) {
+      setTypedText(fullText)
+      return
+    }
+
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
     const titleTranslate = isMobile ? '3rem' : '4rem'
     const subtitleTranslate = isMobile ? '1.5rem' : '2rem'
