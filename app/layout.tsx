@@ -62,16 +62,15 @@ export default function RootLayout({
         <LangSetter />
         <AnimationManager />
 
-        {/* 1. Inicializace dataLayer a Consent Mode */}
+        {/* 1. Consent Mode defaults (must run before gtag.js loads) */}
         <Script
-          id="gtag-init"
-          strategy="afterInteractive"
+          id="gtag-consent-defaults"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
 
-              // Výchozí stav pro Consent Mode v2 (vše zamítnuto)
               gtag('consent', 'default', {
                 'ad_storage': 'denied',
                 'analytics_storage': 'denied',
@@ -79,18 +78,28 @@ export default function RootLayout({
                 'ad_personalization': 'denied',
                 'wait_for_update': 500
               });
-
-              gtag('js', new Date());
-              // Zakladni konfigurace
-              gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');
             `,
           }}
         />
 
-        {/* 2. Načtení samotné knihovny */}
+        {/* 2. Load gtag.js library */}
         <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}`}
+        />
+
+        {/* 3. Configure gtag after library is available */}
+        <Script
+          id="gtag-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');
+            `,
+          }}
         />
 
         <Suspense fallback={null}>
