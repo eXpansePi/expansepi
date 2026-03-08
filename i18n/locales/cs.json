@@ -171,6 +171,7 @@
       "title": "Napište nám",
       "name": "Jméno",
       "namePlaceholder": "Vaše jméno",
+      "phone": "Telefon",
       "email": "Email",
       "emailPlaceholder": "vas@email.cz",
       "subject": "Předmět",
