@@ -39,7 +39,7 @@ function getTranslations(lang: string): ModalTranslations {
             namePlaceholder: "Vaše jméno",
             email: "Email",
             emailPlaceholder: "vas@email.cz",
-            phone: "Telefon (nepovinné)",
+            phone: "Telefon",
             phonePlaceholder: "+420",
             message: "Zpráva",
             send: "Odeslat – je to nezávazné",
@@ -55,7 +55,7 @@ function getTranslations(lang: string): ModalTranslations {
             namePlaceholder: "Your name",
             email: "Email",
             emailPlaceholder: "your@email.com",
-            phone: "Phone (optional)",
+            phone: "Phone",
             phonePlaceholder: "+420",
             message: "Message",
             send: "Send – no commitment",
@@ -71,7 +71,7 @@ function getTranslations(lang: string): ModalTranslations {
             namePlaceholder: "Ваше имя",
             email: "Email",
             emailPlaceholder: "ваш@email.com",
-            phone: "Телефон (необязательно)",
+            phone: "Телефон",
             phonePlaceholder: "+420",
             message: "Сообщение",
             send: "Отправить – без обязательств",
@@ -349,6 +349,7 @@ export default function ApplyModal({ courseTitle, lang, isOpen, onClose }: Apply
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
+                                        required
                                         placeholder={t.phonePlaceholder}
                                         pattern="^\+?[0-9\s()-]{7,15}$"
                                         className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white hover:border-gray-300"
