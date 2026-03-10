@@ -102,8 +102,8 @@
     "noData": "Žádné kurzy nejsou dostupné",
     "price": "49 900 Kč",
     "priceFrom": "od 0 Kč",
-    "priceNote": "Může být plně hrazeno Úřadem práce",
-    "installments": "Možnost uhrazení ve 3 splátkách bez navýšení"
+    "priceNote": "Může být plně financováno Úřadem práce",
+    "installments": "Pro samoplátce: možnost uhrazení ve 3 splátkách bez navýšení"
   },
   "blog": {
     "title": "Blog",
