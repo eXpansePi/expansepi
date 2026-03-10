@@ -12,9 +12,9 @@ interface ApplyButtonProps {
 
 function getLabel(lang: string, variant: string) {
     if (variant === "bottom") {
-        if (lang === "en") return "I'm interested – get in touch"
-        if (lang === "ru") return "Мне интересно – свяжитесь со мной"
-        return "Mám zájem – ozvěte se mi"
+        if (lang === "en") return "I'm interested"
+        if (lang === "ru") return "Мне интересно"
+        return "Chci vědět víc"
     }
     if (lang === "en") return "Find out how to start"
     if (lang === "ru") return "Узнать, как начать"
