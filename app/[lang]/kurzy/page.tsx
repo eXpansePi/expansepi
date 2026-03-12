@@ -20,10 +20,10 @@ export async function generateMetadata({ params }: CoursesPageProps): Promise<Me
   const allRoutes = getAllRoutePaths('courses')
 
   const seoDescription = lang === 'cs'
-    ? 'IT kurzy plně hrazené Úřadem práce ČR. Rekvalifikační IT kurzy - Python, Java, C#, JavaScript, PHP. Naučte se programovat s experty z Matfyzu UK a ČVUT.'
+    ? 'IT kurzy plně hrazené Úřadem práce ČR. Rekvalifikační IT kurzy - Python, Java, C#, JavaScript, PHP. Naučte se programovat s experty z oboru a absolventy z Matfyzu UK a ČVUT.'
     : lang === 'en'
-      ? 'IT courses fully funded by the Czech Labour Office. IT reskilling courses - Python, Java, C#, JavaScript, PHP. Learn programming with experts from Charles University and Czech Technical University.'
-      : 'IT курсы, полностью финансируемые Чешским центром занятости. Курсы переквалификации IT - Python, Java, C#, JavaScript, PHP.'
+      ? 'IT courses fully funded by the Czech Labour Office. IT reskilling courses - Python, Java, C#, JavaScript, PHP. Learn programming with experts from the industry and graduates from Charles University and Czech Technical University.'
+      : 'IT курсы, полностью финансируемые Чешским центром занятости. Курсы переквалификации IT - Python, Java, C#, JavaScript, PHP. Изучите программирование с экспертами из отрасли и выпускниками Карлова университета и Чешского технического университета.'
 
   return {
     title: lang === 'cs' ? 'IT Kurzy eXpansePi - Rekvalifikační kurzy plně hrazené Úřadem práce' : t.courses.title,

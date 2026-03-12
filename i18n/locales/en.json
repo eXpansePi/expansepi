@@ -28,7 +28,7 @@
   "home": {
     "title": "eXpansePi - IT Education of the Future",
     "subtitle": "Building the next generation of software engineers",
-    "tagline": "IT reskilling courses with experts from top European universities",
+    "tagline": "IT Reskilling Courses by Experts from Leading Tech Firms",
     "cta": "Enter the world of IT",
     "ctaSecondary": "About us",
     "viewAll": "View all →",
@@ -142,7 +142,7 @@
     "description": "Meet our team and vision",
     "whoWeAre": "Who We Are",
     "content": [
-      "**Charles University & CTU expertise meets real-world practice. IT courses built for absolute beginners.**",
+      "**Expertise gained through years in the industry. IT courses built for absolute beginners.**",
       "We're a team of developers who believe coding shouldn't be intimidating. We've broken down complex topics into bite-sized pieces to create courses anyone can follow.",
       "We’ll teach you how to think like a software engineer, even if you’ve never written a single line of code. Forget dry theory—we dive straight into hands-on practice. We explain things in plain English, with endless patience, using real-world projects.",
       "With years of experience in cybersecurity, app development, and cloud architecture under our belts, we’re here to share our know-how with you. You'll get a rock-solid foundation from industry pros, giving you the confidence to kickstart your IT career."
@@ -157,7 +157,7 @@
     "lecturerDefinition": "Our lecturers are experienced professionals with practical experience in IT."
   },
   "footer": {
-    "companyDescription": "IT education of the future. Reskilling courses with experts from Charles University and Czech Technical University.",
+    "companyDescription": "IT education of the future. IT Reskilling Courses by Experts from Leading Tech Firms.",
     "quickLinks": "Quick Links",
     "moreInfo": "More Information",
     "copyright": "All rights reserved."

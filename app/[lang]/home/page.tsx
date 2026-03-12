@@ -145,7 +145,7 @@ export default async function HomePage({ params }: HomePageProps) {
               </div>
 
               {/* Main headline */}
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-gray-900 leading-tight mb-4 sm:mb-5 max-w-2xl md:max-w-3xl mx-auto text-balance">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-gray-900 leading-tight mb-4 sm:mb-5 max-w-2xl md:max-w-4xl mx-auto text-balance">
                 {t.home.f1Analogy.headline}
               </h2>
 
@@ -157,7 +157,7 @@ export default async function HomePage({ params }: HomePageProps) {
               </div>
 
               {/* Subtext */}
-              <p className="text-lg sm:text-xl text-gray-600 text-center max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto leading-relaxed text-pretty">
+              <p className="text-xl sm:text-2xl text-gray-600 text-center max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto leading-relaxed text-pretty">
                 {t.home.f1Analogy.subtext}
               </p>
             </div>

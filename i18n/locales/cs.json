@@ -28,7 +28,7 @@
   "home": {
     "title": "eXpansePi - IT Vzdělávání budoucnosti",
     "subtitle": "Budujeme novou generaci softwarových inženýrů",
-    "tagline": "Rekvalifikační IT kurzy s experty z Matfyzu UK a ČVUT",
+    "tagline": "Rekvalifikační IT kurzy pod vedením expertů ze špičkových firem",
     "cta": "Vstupte do světa IT",
     "ctaSecondary": "Více o nás",
     "viewAll": "Zobrazit všechny →",
@@ -138,7 +138,7 @@
     "description": "Poznáte náš tým a vizi",
     "whoWeAre": "Kdo jsme",
     "content": [
-      "**Expertíza z Matfyzu a ČVUT. Roky v oboru.\nNyní v kurzech pro úplné začátečníky.**",
+      "**Expertíza získaná léty v oboru.\nNyní v kurzech pro úplné začátečníky.**",
       "Jsme tým vývojářů, kteří věří, že programování nemusí být strašák. Komplexní témata jsme rozebrali na součástky a poskládali z nich kurzy, které zvládne každý.",
       "Naučíme vás myslet jako ajťák, i když jste nikdy neprogramovali. Místo suché teorie jdeme rovnou do praxe. Vysvětlujeme vše lidsky, s trpělivostí a na projektech z reálného světa.",
       "Máme za sebou roky v kyberbezpečnosti, vývoji aplikací i cloudu. Teď jsme tady, abychom naše know-how předali vám. Získáte pevné základy od profesionálů, díky kterým do IT naskočíte s jistotou a sebevědomím."
@@ -153,7 +153,7 @@
     "lecturerDefinition": "Naši lektoři jsou zkušení odborníci s praktickými zkušenostmi v oblasti IT."
   },
   "footer": {
-    "companyDescription": "IT vzdělávání budoucnosti. Rekvalifikační kurzy s experty z Matfyzu UK a ČVUT.",
+    "companyDescription": "IT vzdělávání budoucnosti. Rekvalifikační IT kurzy pod vedením expertů ze špičkových firem",
     "quickLinks": "Rychlé odkazy",
     "moreInfo": "Více informací",
     "copyright": "Všechna práva vyhrazena."
