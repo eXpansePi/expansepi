@@ -5,14 +5,13 @@ import { type Language } from "@/i18n/config"
 
 interface CourseTrustSectionProps {
     lang: Language
+    lecturerIds?: string[]
 }
 
 interface LecturerLangData {
     specializations: string[]
     description: string
 }
-
-const FEATURED_LECTURER_IDS = ["1", "5"]
 
 const translations = {
     cs: {
@@ -57,11 +56,12 @@ function parseTitleLines(title: string) {
     return title.split("\n").filter(Boolean)
 }
 
-export default function CourseTrustSection({ lang }: CourseTrustSectionProps) {
+export default function CourseTrustSection({ lang, lecturerIds = ["5"] }: CourseTrustSectionProps) {
     const t = translations[lang]
 
-    const featuredLecturers = teamData.lecturers.filter(l =>
-        FEATURED_LECTURER_IDS.includes(l.id)
+    const allMembers = [...teamData.lecturers, ...teamData.teamMembers]
+    const featuredLecturers = allMembers.filter(l =>
+        lecturerIds.includes(l.id)
     )
 
     return (

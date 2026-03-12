@@ -411,7 +411,10 @@ export default async function CourseDetail({ params }: CourseDetailProps) {
         )}
 
         {/* ── Trust & Lecturers Section ──────────────────────────────── */}
-        <CourseTrustSection lang={lang} />
+        <CourseTrustSection 
+          lang={lang} 
+          lecturerIds={resolvedParams.slug === 'programator-www-aplikaci-v-pythonu' ? ["example-founder", "5"] : ["5"]} 
+        />
 
         {/* ── FAQ Section ─────────────────────────────────────────── */}
         {courseData.faq && courseData.faq.length > 0 && (
