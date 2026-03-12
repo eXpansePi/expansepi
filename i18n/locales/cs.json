@@ -39,6 +39,11 @@
     "heroTitle": "Rekvalifikační kurzy, které změní Vaši kariéru",
     "heroDescription": "Naučte se Python, datovou analýzu, web development a další dovednosti.",
     "ourCourses": "Naše kurzy",
+    "f1Analogy": {
+      "headline": "Je to, jako kdyby vás v\u00A0autoškole učili závodníci Formule\u00A01",
+      "subtext": "Naši lektoři vystudovali Matfyz UK a\u00A0ČVUT, dnes pracují v\u00A0mezinárodních technologických firmách. Odbornost z\u00A0praxe podávají studentům lidsky a\u00A0srozumitelně.",
+      "badge": "Proč jsme jiní"
+    },
     "benefits": {
       "title": "Proč si vybrat nás",
       "european": {

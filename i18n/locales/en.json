@@ -39,6 +39,11 @@
     "heroTitle": "Reskilling courses that will change your career",
     "heroDescription": "Learn Python, data analysis, web development and other skills.",
     "ourCourses": "Our courses",
+    "f1Analogy": {
+      "headline": "It's like being taught to drive by Formula\u00A01 racers",
+      "subtext": "Our lecturers graduated from Charles University and Czech Technical University. Today they work at international tech companies\u00A0— bringing real-world expertise and delivering it to students in an approachable, human way.",
+      "badge": "Why we're different"
+    },
     "benefits": {
       "title": "Why choose us",
       "european": {

@@ -129,6 +129,40 @@ export default async function HomePage({ params }: HomePageProps) {
             </p>
           </div>
 
+          {/* F1 Analogy Section */}
+          <div className="glow-box bg-white rounded-xl shadow-lg overflow-hidden mb-8 sm:mb-12">
+            {/* Gradient accent bar — matches page palette */}
+            <div className="h-1.5 bg-gradient-to-r from-blue-500 via-sky-400 to-teal-400" />
+            <div className="px-6 py-8 sm:px-10 sm:py-12 lg:px-16 lg:py-14 bg-gradient-to-br from-blue-50/50 via-white to-sky-50/40">
+              {/* Badge */}
+              <div className="flex justify-center mb-5 sm:mb-6">
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs sm:text-sm font-medium text-blue-600 tracking-wide uppercase">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                  </svg>
+                  {t.home.f1Analogy.badge}
+                </span>
+              </div>
+
+              {/* Main headline */}
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-gray-900 leading-tight mb-4 sm:mb-5 max-w-2xl md:max-w-3xl mx-auto text-balance">
+                {t.home.f1Analogy.headline}
+              </h2>
+
+              {/* Decorative divider */}
+              <div className="flex items-center justify-center gap-3 mb-5 sm:mb-6">
+                <div className="h-[2px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-blue-400/60 rounded-full" />
+                <div className="w-2 h-2 rounded-full bg-blue-400/80" />
+                <div className="h-[2px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-blue-400/60 rounded-full" />
+              </div>
+
+              {/* Subtext */}
+              <p className="text-lg sm:text-xl text-gray-600 text-center max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto leading-relaxed text-pretty">
+                {t.home.f1Analogy.subtext}
+              </p>
+            </div>
+          </div>
+
           {/* Salary Showcase */}
           <SalaryShowcase lang={lang} />
 
