@@ -1,5 +1,69 @@
 # eXpansePi - Dokumentace projektu
 
+Visual and UX decisions **MUST** follow [design-principles.md](design-principles.md). This guide explains implementation and publishing; it does not define a separate design system. If an older example conflicts with the principles, the principles take precedence.
+
+## Catalog And Brand
+
+- `data/courses.json` is the source of course availability, topics, prices, schedules and localized details. Do not duplicate course facts in homepage components.
+- `status: "active"` publishes a course in the homepage preview, full catalog, contact selector and sitemap. The homepage shows up to six courses in source order; the catalog shows all of them.
+- `status: "upcoming"` shows a clearly marked preparation entry, without an application button, price or timetable. Set this status until the offer is ready. AI is currently a preparation entry only.
+- The homepage's next-start link is selected from all published courses. Add `sessions` as `{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }`. Already-started cohorts are excluded using the Prague calendar date.
+- `price` is the confirmed full CZK price, not the student's possible funded contribution. Omit it or use `null` until confirmed; neither the UI nor structured data should invent a free offer.
+- `softwareLicense` records an included JetBrains licence with `product`, `months`, `logo` and `url`. Set it for each confirmed course benefit; other courses must not inherit Python's product or licence duration.
+- `topics` supplies the technology labels. Localized `heroSubheadline`, `durationLabel`, `formatLabel`, `level`, `form`, `syllabus`, `exam`, `certification`, `funding` and `faq` describe that specific course. Missing facts must not fall back to Python's details.
+- `experience: "python-web"` opts into the existing Python learning demo and course-format content. Do not copy this flag to unrelated courses. Other courses use the general data-driven detail template.
+- Add `cs`, `en` and `ru` content when publishing. The data layer supports fallback, but fully translated records avoid mixed-language catalog pages.
+- Blog records support `contentLanguage` independently of route language. Legacy records default to Czech; rendered text and `BlogPosting.inLanguage` use that source language. Do not label fallback content as translated.
+
+## Lecturer Credentials
+
+[data/team.json](data/team.json), under `lecturers`, is the source for the university and employer lists. Each lecturer can have `universities` (completed education only) and `currentEmployers` arrays. For example, these fields can be added to a verified lecturer record:
+
+```json
+{
+  "universities": ["MFF UK"],
+  "currentEmployers": ["Microsoft"]
+}
+```
+
+- Keep `title` for the professional role only; current employers and universities are appended to the profile from these arrays. A work arrangement such as `Freelance` may remain in `title`, but is not an employer.
+- Add a new lecturer with their own unique `id`, `name`, `title`, localized biography and verified credential arrays. The homepage, about page and published course pages aggregate credentials from all lecturer records, including people outside the featured profile selection.
+- `getLecturerCredentials` in [data/team.ts](data/team.ts) trims names and removes exact duplicates in first-appearance order. Use the same spelling and capitalization across records. Omit unknown fields or use empty arrays; names are never inferred from titles or biography text.
+- On a job change, replace the lecturer's `currentEmployers`. The previous company remains in the overview only if another lecturer still works there. Previous employment belongs in the biography, not this array. Update any outdated statements in localized biographies separately; prose is not rewritten automatically.
+- Each institution has a separate, wrapping list item. There is no fixed institution count, and groups with no names are hidden. These facts describe lecturers, not eXpansePi partnerships or course accreditation.
+- JSON is imported into the application bundle. Development updates through hot reload; production changes require a new build and deployment. The overview is derived from data, not fetched from a live employer directory.
+
+## Reading And Spacing
+
+The authoritative values and rationale are in [Typography](design-principles.md#typography), [Layout And Composition](design-principles.md#layout-and-composition), and [Components](design-principles.md#components).
+
+- Implement shared values in [app/globals.css](app/globals.css); do not copy them into a second documentation table or route-specific stylesheet.
+- Reuse the owning components listed in the [implementation map](design-principles.md#implementation-map). `SectionHeading`, `CourseFacts`, `ProcessSteps`, and `CourseGrid` encode the shared composition relationships.
+- The container token controls both width and maximum width because Tailwind otherwise contributes its own container cap.
+- Native dialogs require deliberate focus management; pointer activation explicitly focuses the trigger so Safari restores focus correctly.
+- Form boundaries use `--control-border`, not the low-contrast decorative divider token. The browser suite checks its contrast and standalone target sizes.
+
+## Verification
+
+Use Node.js 22.6 or later for the TypeScript regression tests.
+
+```sh
+npm test
+npx tsc --noEmit
+npx playwright install chromium
+npx playwright install webkit
+npm run dev
+E2E_URL=http://localhost:3000 npm run test:browser
+E2E_URL=http://localhost:3000 E2E_BROWSER=webkit npm run test:browser
+npm run build
+```
+
+For a separate review server, use `NEXT_OUTPUT_DIR=.next/review WATCHPACK_POLLING=true npm run dev -- --port 3001 --webpack`. The optional output directory avoids conflicting with another Next.js process. Development-only CSP permits the Webpack runtime; production does not permit `unsafe-eval`.
+
+Browser tests cover 320–2560px layouts across the core funnel, blog, articles, vacancies and privacy page, plus shared composition anchors, partner and FAQ alignment, reading sizes, section rhythm, varied six-course fixtures, accessibility, languages, assets, consent, the learning demo, and application success/error/focus handling. Screenshots are written to ignored `test-results/`. Pass `--output=.next/composition-qa/review` to Playwright when retaining a review separately from a later focused test run. Form responses are intercepted: tests do not send real enquiries or email. The API tests use invalid or honeypot payloads only.
+
+Before launch, confirm course-specific attendance and timetable details, and supply real instructor photographs in `data/team.json`. No substitute portraits or student outcomes have been invented. The legacy localized `/home` routes redirect permanently to the main language homepage.
+
 ## 📁 Struktura projektu
 
 ```
@@ -179,30 +243,9 @@ Systém automaticky:
 
 ## 🎨 Jak změnit vizuální styl
 
-### Status barvy a styly
+Nejdříve postupujte podle [design-principles.md](design-principles.md), zejména pravidel pro [barvy](design-principles.md#color), [komponenty](design-principles.md#components) a [rozhodování](design-principles.md#design-decision-rules).
 
-Uprav `lib/course-constants.ts`:
-
-```typescript
-export const COURSE_STATUS_CONFIG = {
-  active: {
-    label: 'Probíhá',
-    badgeClass: 'bg-green-100 text-green-800',  // ← změň barvy
-    cardClass: 'border-green-200 bg-gradient-to-br from-white to-green-50',
-    icon: '✓',  // ← změň ikonu
-  }
-}
-```
-
-### Level barvy
-
-```typescript
-export const COURSE_LEVEL_CONFIG = {
-  'Začátečníci': {
-    badgeClass: 'bg-blue-100 text-blue-700'  // ← změň barvy
-  }
-}
-```
+Aktuální katalog používá [CourseCard.tsx](app/%5Blang%5D/kurzy/components/CourseCard.tsx) a sdílené tokeny v [app/globals.css](app/globals.css). Starší barevné konfigurace nejsou předlohou pro nové komponenty. Změna sdíleného pravidla musí současně upravit dokument principů, implementaci a příslušné kontroly.
 
 ---
 

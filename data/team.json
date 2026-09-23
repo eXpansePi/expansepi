@@ -49,7 +49,9 @@
     {
       "id": "2",
       "name": "Eldar Urmanov",
-      "title": "Senior Software Engineer\nRapid7\nMFF UK",
+      "title": "Senior Software Engineer",
+      "universities": ["MFF UK"],
+      "currentEmployers": ["Rapid7"],
       "photo": "",
       "languages": {
         "cs": {
@@ -60,6 +62,7 @@
             "Backend",
             "Algoritmy a datové struktury"
           ],
+          "summary": "Specializuje se na backend a cloudové systémy. Složité technické principy vysvětluje na příkladech z profesionálního vývoje.",
           "description": "Seniorní vývojář v Rapid7, specializující se na antivirové a cloudové technologie s důrazem na vysoký výkon a robustní backendový vývoj. Absolvent obecné informatiky na MFF UK (Theoretical Computer Science). Ve své práci se zaměřuje na škálovatelnou architekturu, optimalizaci a spolehlivé zpracování dat. Jako lektor dokáže složité technické principy vysvětlit jasně a prakticky, s důrazem na reálné scénáře z profesionálního vývoje."
         },
         "en": {
@@ -70,6 +73,7 @@
             "Backend",
             "Algorithms and data structures"
           ],
+          "summary": "Specialises in backend engineering and cloud systems. Explains complex technical principles through examples from professional development.",
           "description": "A senior developer at Rapid7, focusing on antivirus and cloud technologies with an emphasis on high performance and robust backend engineering. He holds a degree in General Computer Science (Theoretical Computer Science) from the Faculty of Mathematics and Physics, Charles University. His work centers on scalable architecture, performance optimization, and reliable data processing. As an instructor, he explains complex technical concepts clearly and practically, drawing on real-world experience from professional software development."
         },
         "ru": {
@@ -80,6 +84,7 @@
             "Backend",
             "Алгоритмы и структуры данных"
           ],
+          "summary": "Специализируется на backend-разработке и облачных системах. Объясняет сложные технические принципы на примерах из профессиональной практики.",
           "description": "Senior разработчик в Rapid7, специализирующийся на антивирусных и облачных технологиях с упором на высокую производительность и надёжную backend-разработку. Окончил направление теоретической информатики на факультете математики и физики Карлова университета. В работе сосредоточен на масштабируемой архитектуре, оптимизации производительности и надёжной обработке данных. Как преподаватель, он ясно и практично объясняет сложные технические принципы, опираясь на реальный опыт профессиональной разработки."
         }
       }
@@ -87,7 +92,8 @@
     {
       "id": "3",
       "name": "Kostiantyn Agapov",
-      "title": "Senior Software Engineer\nRapid7\n\n",
+      "title": "Senior Software Engineer",
+      "currentEmployers": ["Rapid7"],
       "photo": "",
       "languages": {
         "cs": {
@@ -119,7 +125,8 @@
     {
       "id": "4",
       "name": "Vít Dvořák",
-      "title": "Software Engineer\nFreelance\nMFF UK",
+      "title": "Software Engineer\nFreelance",
+      "universities": ["MFF UK"],
       "photo": "",
       "languages": {
         "cs": {
@@ -154,7 +161,9 @@
     {
       "id": "5",
       "name": "Vlad Karpenko",
-      "title": "Software Engineer\nGrant Thornton\nMFF UK",
+      "title": "Software Engineer",
+      "universities": ["MFF UK"],
+      "currentEmployers": ["Grant Thornton"],
       "photo": "",
       "languages": {
         "cs": {
@@ -165,6 +174,7 @@
             "Power BI",
             "Algoritmy a datové struktury"
           ],
+          "summary": "Propojuje Python, webový vývoj a práci s daty. Do výuky přináší zkušenosti s automatizací firemních procesů a praktickými projekty.",
           "description": "Absolvent teoretické informatiky na MFF UK a zkušený lektor programování. Má zkušenosti s webovým vývojem, datovou analýzou i IT consultingem. V Grant Thornton automatizuje firemní procesy v Pythonu a Power BI. Do výuky přenáší praktické znalosti moderních technologií, práce s daty a reálných firemních projektů."
         },
         "en": {
@@ -175,6 +185,7 @@
             "Power BI",
             "Algorithms and data structures"
           ],
+          "summary": "Connects Python, web development and data work. Brings experience in business-process automation and practical projects into his teaching.",
           "description": "A graduate of Theoretical Computer Science at the Faculty of Mathematics and Physics, Charles University, and an experienced programming instructor. He has experience in web development, data analysis, and IT consulting. At Grant Thornton, he automates business processes using Python and Power BI. He brings practical knowledge of modern technologies, data work, and real-world corporate projects into his teaching."
         },
         "ru": {
@@ -185,6 +196,7 @@
             "Power BI",
             "Алгоритмы и структуры данных"
           ],
+          "summary": "Объединяет Python, веб-разработку и работу с данными. В преподавании использует опыт автоматизации бизнес-процессов и практических проектов.",
           "description": "Выпускник теоретической информатики на факультете математики и физики Карлова университета и опытный преподаватель программирования. Имеет опыт в веб-разработке, анализе данных и IT-консалтинге. В Grant Thornton автоматизирует бизнес-процессы с помощью Python и Power BI. В обучении использует практические знания современных технологий, работы с данными и реальных корпоративных проектов."
         }
       }
@@ -192,7 +204,9 @@
     {
       "id": "6",
       "name": "Anton Voznia",
-      "title": "Senior Software Engineer\nAzul Systems\nČVUT",
+      "title": "Senior Software Engineer",
+      "universities": ["ČVUT"],
+      "currentEmployers": ["Azul Systems"],
       "photo": "",
       "languages": {
         "cs": {

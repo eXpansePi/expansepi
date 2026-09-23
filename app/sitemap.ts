@@ -18,12 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}${getRoutePath(lang as Language, 'home')}`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
       url: `${baseUrl}${getRoutePath(lang as Language, 'courses')}`,
       lastModified: currentDate,
       changeFrequency: 'weekly',

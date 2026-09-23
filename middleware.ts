@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
-    pathname === '/manifest.json' ||
+    pathname.startsWith('/.well-known/') ||
     pathname === '/manifest.webmanifest' ||
     pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|json|webmanifest|xml|txt)$/)
   ) {

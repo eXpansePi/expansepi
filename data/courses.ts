@@ -36,8 +36,7 @@ function normalizeLevel(level: string): Course['level'] {
   const matched = standardLevels.find(l => l.toLowerCase() === normalized)
   if (matched) return matched
 
-  // Default fallback to beginner
-  return 'Začátečníci'
+  return 'Upřesníme'
 }
 
 /**
@@ -50,6 +49,11 @@ function normalizeCourse(course: unknown, lang: string = 'cs'): Course | null {
   if (typeof obj.slug !== 'string' || !(obj.status === 'active' || obj.status === 'upcoming')) {
     return null
   }
+
+  const license = obj.softwareLicense && typeof obj.softwareLicense === 'object' ? obj.softwareLicense as Record<string, unknown> : undefined
+  const softwareLicense = license && typeof license.product === 'string' && typeof license.months === 'number' && Number.isInteger(license.months) && license.months > 0 && typeof license.logo === 'string' && typeof license.url === 'string'
+    ? { product: license.product, months: license.months, logo: license.logo, url: license.url }
+    : undefined
 
   // Check for multilingual structure first
   if ('languages' in obj && typeof obj.languages === 'object' && obj.languages !== null) {
@@ -68,6 +72,14 @@ function normalizeCourse(course: unknown, lang: string = 'cs'): Course | null {
           slug: obj.slug as string,
           title: ld.title,
           description: ld.description,
+          summary: typeof ld.heroSubheadline === 'string' ? ld.heroSubheadline : undefined,
+          topics: Array.isArray(obj.topics) ? obj.topics.filter((topic): topic is string => typeof topic === 'string') : undefined,
+          durationLabel: typeof ld.durationLabel === 'string' ? ld.durationLabel : undefined,
+          formatLabel: typeof ld.formatLabel === 'string' ? ld.formatLabel : undefined,
+          levelLabel: ld.level,
+          experience: obj.experience === 'python-web' ? obj.experience : undefined,
+          faq: Array.isArray(ld.faq) ? ld.faq.filter((item): item is { question: string; answer: string } => !!item && typeof item === 'object' && typeof item.question === 'string' && typeof item.answer === 'string') : undefined,
+          softwareLicense,
           duration: ld.duration,
           level: normalizeLevel(ld.level),
           status: obj.status as Course['status'],
@@ -77,6 +89,11 @@ function normalizeCourse(course: unknown, lang: string = 'cs'): Course | null {
           image: typeof ld.image === 'string' ? ld.image : undefined,
           funding: typeof ld.funding === 'string' ? ld.funding : undefined,
           dates: Array.isArray(ld.dates) ? (ld.dates as string[]) : undefined,
+          sessions: Array.isArray(obj.sessions) ? obj.sessions as Course['sessions'] : undefined,
+          price: typeof obj.price === 'number' ? obj.price : undefined,
+          form: typeof ld.form === 'string' ? ld.form : undefined,
+          exam: typeof ld.exam === 'string' ? ld.exam : undefined,
+          certification: typeof ld.certification === 'string' ? ld.certification : undefined,
         }
       }
     }
@@ -93,6 +110,12 @@ function normalizeCourse(course: unknown, lang: string = 'cs'): Course | null {
       slug: obj.slug as string,
       title: obj.title,
       description: obj.description,
+      summary: typeof obj.summary === 'string' ? obj.summary : undefined,
+      topics: Array.isArray(obj.topics) ? obj.topics.filter((topic): topic is string => typeof topic === 'string') : undefined,
+      durationLabel: typeof obj.durationLabel === 'string' ? obj.durationLabel : undefined,
+      formatLabel: typeof obj.formatLabel === 'string' ? obj.formatLabel : undefined,
+      levelLabel: obj.level,
+      softwareLicense,
       duration: obj.duration,
       level: normalizeLevel(obj.level),
       status: obj.status as Course['status'],

@@ -1,24 +1,14 @@
 import type { Metadata, Viewport } from "next"
 import { Suspense } from "react"
-import { Analytics } from "@vercel/analytics/next"
-import { Geist, Geist_Mono } from "next/font/google"
 import Script from "next/script"
+import "@fontsource-variable/manrope"
+import "@fontsource/ibm-plex-mono/latin-400.css"
+import "@fontsource/ibm-plex-mono/latin-ext-400.css"
+import "@fontsource/ibm-plex-mono/cyrillic-400.css"
 import "./globals.css"
 import LangSetter from "./LangSetter"
-import AnimationManager from "./AnimationManager"
 import { AnalyticsTracker } from "./components/AnalyticsTracker"
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-})
+import { ConsentedAnalytics } from "./components/ConsentedAnalytics"
 
 export const metadata: Metadata = {
   title: {
@@ -58,63 +48,40 @@ export default function RootLayout({
   const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID
 
   return (
-    <html lang="cs" suppressHydrationWarning style={{ background: '#ffffff' }}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ background: '#ffffff' }}
-      >
+    <html lang="cs" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body>
         <LangSetter />
-        <AnimationManager />
 
-        {googleAdsId ? (
-          <>
-            {/* 1. Consent Mode defaults (must run before gtag.js loads) */}
-            <Script
-              id="gtag-consent-defaults"
-              strategy="beforeInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
+        {/*
+          Declares the gtag queue and denies every storage purpose before any
+          tag can run. It issues no request and writes no cookie, so it is safe
+          pre-consent; ConsentedAnalytics loads the actual tags once consent is
+          granted and lib/consent flips these purposes to granted.
+        */}
+        <Script
+          id="gtag-consent-defaults"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
 
-                  gtag('consent', 'default', {
-                    'ad_storage': 'denied',
-                    'analytics_storage': 'denied',
-                    'ad_user_data': 'denied',
-                    'ad_personalization': 'denied',
-                    'wait_for_update': 500
-                  });
-                `,
-              }}
-            />
-
-            {/* 2. Load gtag.js library (lazyOnload: non-critical for initial paint) */}
-            <Script
-              strategy="lazyOnload"
-              src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}
-            />
-
-            {/* 3. Configure gtag after library is available */}
-            <Script
-              id="gtag-config"
-              strategy="lazyOnload"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${googleAdsId}', { send_page_view: false });
-                `,
-              }}
-            />
-          </>
-        ) : null}
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'wait_for_update': 500
+              });
+            `,
+          }}
+        />
 
         <Suspense fallback={null}>
           <AnalyticsTracker />
         </Suspense>
         {children}
-        <Analytics />
+        <ConsentedAnalytics googleAdsId={googleAdsId} />
       </body>
     </html>
   )

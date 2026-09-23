@@ -6,6 +6,11 @@
 import teamData from './team.json'
 import { TeamMember, Lecturer } from '@/types/team'
 
+function normalizeInstitutionNames(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return [...new Set(value.filter((name): name is string => typeof name === 'string').map(name => name.trim()).filter(Boolean))]
+}
+
 /**
  * Normalize team member data to TeamMember interface (handles both old and multilingual structures)
  */
@@ -34,6 +39,7 @@ function normalizeTeamMember(member: unknown, lang: string = 'cs'): TeamMember |
         name: m.name,
         title: m.title,
         description: typeof langData.description === 'string' ? langData.description : '',
+        summary: typeof langData.summary === 'string' ? langData.summary : undefined,
         specializations: Array.isArray(langData.specializations) ? langData.specializations as string[] : (Array.isArray(m.specializations) ? m.specializations as string[] : []),
         photo: photo,
         role: m.role as TeamMember['role']
@@ -49,6 +55,7 @@ function normalizeTeamMember(member: unknown, lang: string = 'cs'): TeamMember |
     name: m.name,
     title: m.title,
     description: typeof m.description === 'string' ? m.description : '',
+    summary: typeof m.summary === 'string' ? m.summary : undefined,
     specializations: Array.isArray(m.specializations) ? m.specializations as string[] : [],
     photo: photo,
     role: m.role as TeamMember['role']
@@ -81,6 +88,9 @@ function normalizeLecturer(lecturer: unknown, lang: string = 'cs'): Lecturer | n
         name: l.name,
         title: l.title,
         description: langData.description,
+        summary: typeof langData.summary === 'string' ? langData.summary : undefined,
+        universities: normalizeInstitutionNames(l.universities),
+        currentEmployers: normalizeInstitutionNames(l.currentEmployers),
         specializations: Array.isArray(langData.specializations) ? langData.specializations as string[] : (Array.isArray(l.specializations) ? l.specializations as string[] : []),
         photo: photo
       }
@@ -96,6 +106,9 @@ function normalizeLecturer(lecturer: unknown, lang: string = 'cs'): Lecturer | n
       name: l.name,
       title: l.title,
       description: l.description,
+      summary: typeof l.summary === 'string' ? l.summary : undefined,
+      universities: normalizeInstitutionNames(l.universities),
+      currentEmployers: normalizeInstitutionNames(l.currentEmployers),
       specializations: Array.isArray(l.specializations) ? l.specializations as string[] : [],
       photo: photo
     }
@@ -153,6 +166,14 @@ export function getAllLecturers(lang: string = 'cs'): Lecturer[] {
   
   lecturersCache[lang] = validated
   return validated
+}
+
+export function getLecturerCredentials(lang: string = 'cs'): { universities: string[]; currentEmployers: string[] } {
+  const lecturers = getAllLecturers(lang)
+  return {
+    universities: [...new Set(lecturers.flatMap(lecturer => lecturer.universities || []))],
+    currentEmployers: [...new Set(lecturers.flatMap(lecturer => lecturer.currentEmployers || []))],
+  }
 }
 
 /**

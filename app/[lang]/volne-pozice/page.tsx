@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Navigation from "../components/Navigation"
+import Footer from "../components/Footer"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getOpenVacancies } from "@/data/vacancies"
@@ -54,26 +55,25 @@ export default async function VacanciesPage({ params }: VacanciesPageProps) {
   const openVacancies = getOpenVacancies(lang)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <>
       <Navigation activePage={getRoutePath(lang, 'vacancies')} lang={lang} t={t} />
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">{t.vacancies.title}</h1>
-          <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8">{t.vacancies.description}</p>
-
+      <main id="main-content" className="site-main">
+        <section className="page-intro"><div className="container"><p className="eyebrow">eXpansePi / {t.common.vacancies}</p><h1>{t.vacancies.title}</h1><p className="lead">{t.vacancies.description}</p></div></section>
+        <section className="section" aria-label={t.vacancies.title}><div className="container">
           {openVacancies.length > 0 ? (
-            <div className="space-y-4 sm:space-y-5">
+            <div className="editorial-list">
               {openVacancies.map(vacancy => (
                 <VacancyCard key={vacancy.slug} vacancy={vacancy} lang={lang} />
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 sm:py-10">
-              <p className="text-base sm:text-lg text-gray-600">{t.vacancies.noVacancies}</p>
+            <div className="vacancies-empty">
+              <p className="reading-copy">{t.vacancies.noVacancies}</p>
             </div>
           )}
-        </div>
+        </div></section>
       </main>
-    </div>
+      <Footer lang={lang} />
+    </>
   )
 }

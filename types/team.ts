@@ -23,6 +23,7 @@ export interface TeamMember {
   
   /** Optional description (localized) */
   description?: string
+  summary?: string
   
   /** Optional specializations (localized) */
   specializations?: string[]
@@ -49,6 +50,9 @@ export interface Lecturer {
   
   /** Lecturer's description (localized) */
   description: string
+  summary?: string
+  universities?: string[]
+  currentEmployers?: string[]
   
   /** Optional specializations (localized) */
   specializations?: string[]

@@ -1,5 +1,11 @@
 import type { Metadata } from "next"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import Markdown from "react-markdown"
+import { ArrowLeft, ArrowUpRight } from "lucide-react"
 import Navigation from "../../components/Navigation"
+import Footer from "../../components/Footer"
+import { JsonLd } from "@/app/components/JsonLd"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getOpenVacancies, getVacancyBySlug } from "@/data/vacancies"
@@ -80,17 +86,7 @@ export default async function VacancyDetail({ params }: VacancyDetailProps) {
   const vacancy = getVacancyBySlug(resolvedParams.slug, lang)
 
   if (!vacancy || vacancy.status !== 'open') {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <Navigation activePage={getRoutePath(lang, 'vacancies')} lang={lang} t={t} />
-        <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
-          <div className="max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">{t.common.notFound}</h1>
-            <a href={getRoutePath(lang, 'vacancies')} className="text-blue-600 font-semibold hover:underline">{t.common.backToList}</a>
-          </div>
-        </main>
-      </div>
-    )
+    notFound()
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
@@ -102,41 +98,26 @@ export default async function VacancyDetail({ params }: VacancyDetailProps) {
   ])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+    <>
+      <JsonLd data={jobSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Navigation activePage={getRoutePath(lang, 'vacancies')} lang={lang} t={t} />
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
-        <article className="max-w-2xl mx-auto">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">{vacancy.title}</h1>
-          <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
-            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-semibold">{vacancy.employmentType}</span>
-            <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-semibold">{vacancy.workMode}</span>
-          </div>
-          <div className="prose prose-sm sm:prose-base prose-gray max-w-none mb-5 sm:mb-6">
-            <p className="text-sm sm:text-base leading-relaxed">{vacancy.description}</p>
+      <main id="main-content" className="site-main">
+        <article>
+          <header className="page-intro"><div className="article-container"><Link href={getRoutePath(lang, "vacancies")} className="text-link article-back"><ArrowLeft aria-hidden="true" />{t.common.vacancies}</Link><h1>{vacancy.title}</h1><div className="article-meta"><span className="tag tag-blue">{vacancy.employmentType}</span><span className="tag">{vacancy.workMode}</span></div></div></header>
+          <div className="article-container article-content reading-content">
+            <p className="lead">{vacancy.description}</p>
             {vacancy.details && (
-              <div dangerouslySetInnerHTML={{ __html: vacancy.details }} />
+              <Markdown skipHtml>{vacancy.details}</Markdown>
             )}
-          </div>
-          <div className="mt-6 sm:mt-8 pt-4 sm:pt-5 border-t border-gray-200">
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <button className="w-full sm:w-auto bg-blue-600 text-white px-4 sm:px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-xs sm:text-sm">
-                {t.common.applyNow}
-              </button>
-              <a href={getRoutePath(lang, 'vacancies')} className="w-full sm:w-auto text-center sm:text-left text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center justify-center gap-2 text-xs sm:text-sm">
-                ← {t.common.backToList}
-              </a>
+            <div className="article-bottom button-row">
+              <a className="button button-primary" href={`mailto:info@expansepi.com?subject=${encodeURIComponent(vacancy.title)}`}>{t.common.applyNow}<ArrowUpRight aria-hidden="true" /></a>
+              <Link href={getRoutePath(lang, "vacancies")} className="text-link"><ArrowLeft aria-hidden="true" />{t.common.backToList}</Link>
             </div>
           </div>
         </article>
       </main>
-    </div>
+      <Footer lang={lang} />
+    </>
   )
 }

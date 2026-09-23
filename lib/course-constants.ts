@@ -40,6 +40,10 @@ export const COURSE_LEVEL_CONFIG = {
   'Pokročilí': {
     color: 'orange',
     badgeClass: 'bg-orange-100 text-orange-700'
+  },
+  'Upřesníme': {
+    color: 'gray',
+    badgeClass: 'bg-gray-100 text-gray-700'
   }
 } as const
 
