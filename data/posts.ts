@@ -16,6 +16,7 @@ function isBlogPost(obj: unknown): obj is BlogPost {
     typeof o.date === 'string' &&
     typeof o.author === 'string' &&
     Array.isArray(o.tags) &&
+    (o.contentLanguage === undefined || o.contentLanguage === 'cs' || o.contentLanguage === 'en' || o.contentLanguage === 'ru') &&
     (o.status === 'published' || o.status === 'draft')
   )
 }
@@ -31,7 +32,7 @@ export function getAllPosts(): BlogPost[] {
     console.warn(`Warning: ${arr.length - validated.length} invalid post(s) filtered out`)
   }
   // Sort newest first by date
-  cache = validated.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  cache = validated.map(post => ({ ...post, contentLanguage: post.contentLanguage ?? 'cs' })).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   return cache
 }
 

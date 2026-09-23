@@ -1,4 +1,5 @@
 interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: Record<string, any>[];
+    gtag: (...args: unknown[]) => void;
+    /** gtag pushes its `arguments` object, not a plain record. */
+    dataLayer: IArguments[];
 }

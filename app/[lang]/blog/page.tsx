@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Navigation from "../components/Navigation"
+import Footer from "../components/Footer"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getPublishedPosts } from "@/data/posts"
@@ -54,20 +55,19 @@ export default async function BlogPage({ params }: BlogPageProps) {
   const posts = getPublishedPosts()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <>
       <Navigation activePage={getRoutePath(lang, 'blog')} lang={lang} t={t} />
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">{t.blog.title}</h1>
-          <p className="text-base sm:text-lg text-gray-700 mb-6 sm:mb-8">{t.blog.description}</p>
-
-          <div className="space-y-5 sm:space-y-6">
+      <main id="main-content" className="site-main">
+        <section className="page-intro"><div className="container"><p className="eyebrow">eXpansePi / {t.common.blog}</p><h1>{t.blog.title}</h1><p className="lead">{t.blog.description}</p></div></section>
+        <section className="section" aria-label={t.blog.title}>
+          <div className="container editorial-list">
             {posts.map(post => (
               <BlogCard key={post.slug} post={post} lang={lang} />
             ))}
           </div>
-        </div>
+        </section>
       </main>
-    </div>
+      <Footer lang={lang} />
+    </>
   )
 }

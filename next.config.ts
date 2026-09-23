@@ -1,8 +1,50 @@
 import type { NextConfig } from "next";
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+/**
+ * Origins reached only after the visitor accepts analytics and advertising.
+ * They stay in the policy because a response header cannot depend on a consent
+ * decision that lives in the browser; ConsentedAnalytics is what actually
+ * decides whether anything is ever loaded from them.
+ */
+const GOOGLE_TAG_ORIGINS = [
+  'https://www.googletagmanager.com',
+  'https://www.google-analytics.com',
+  'https://googleads.g.doubleclick.net',
+];
+
+/**
+ * `script-src` keeps 'unsafe-inline' deliberately.
+ *
+ * Removing it requires per-request nonces, and Next.js can only apply a nonce
+ * while rendering dynamically: nonces disable static generation, ISR and CDN
+ * caching for every page (documented at nextjs.org/docs/app/guides/
+ * content-security-policy). This site is almost entirely prerendered content,
+ * so that trade is not worth making. Hashes are not an alternative either,
+ * because Next emits per-page inline bootstrap scripts whose contents differ
+ * on every route. Revisit if the site ever handles authenticated sessions.
+ */
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' ${isDevelopment ? "'unsafe-eval' " : ""}${GOOGLE_TAG_ORIGINS.join(' ')}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.doubleclick.net https://www.googleadservices.com",
+  "font-src 'self'",
+  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://ad.doubleclick.net https://pagead2.googlesyndication.com https://www.google.com https://www.googleadservices.com https://*.vercel-insights.com https://*.vercel-analytics.com",
+  "frame-src 'self' https://td.doubleclick.net",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "object-src 'none'",
+  "manifest-src 'self'",
+  "upgrade-insecure-requests",
+].join('; ');
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  distDir: process.env.NEXT_OUTPUT_DIR || ".next",
 
   async headers() {
     return [
@@ -12,25 +54,15 @@ const nextConfig: NextConfig = {
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()' },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
           {
             key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.doubleclick.net https://www.googleadservices.com",
-              "font-src 'self'",
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://pagead2.googlesyndication.com https://www.google.com https://www.googleadservices.com https://*.vercel-insights.com https://*.vercel-analytics.com",
-              "frame-src 'self' https://td.doubleclick.net",
-              "frame-ancestors 'none'",
-              "base-uri 'self'",
-              "form-action 'self'",
-            ].join('; '),
+            value: contentSecurityPolicy,
           },
         ],
       },

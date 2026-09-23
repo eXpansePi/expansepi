@@ -13,7 +13,12 @@ export type CourseStatus = 'active' | 'upcoming'
 /**
  * Course difficulty level
  */
-export type CourseLevel = 'Začátečníci' | 'Středně pokročilí' | 'Pokročilí'
+export type CourseLevel = 'Začátečníci' | 'Středně pokročilí' | 'Pokročilí' | 'Upřesníme'
+
+export interface CourseSession {
+  start: string
+  end: string
+}
 
 /**
  * Complete course data structure
@@ -27,6 +32,20 @@ export interface Course {
 
   /** Short course description */
   description: string
+
+  summary?: string
+  topics?: string[]
+  durationLabel?: string
+  formatLabel?: string
+  levelLabel?: string
+  experience?: "python-web"
+  faq?: { question: string; answer: string }[]
+  softwareLicense?: {
+    product: string
+    months: number
+    logo: string
+    url: string
+  }
 
   /** Course duration (e.g., "8 týdnů") */
   duration: string
@@ -60,6 +79,10 @@ export interface Course {
 
   /** Optional dates/cycles to display */
   dates?: string[]
+  sessions?: CourseSession[]
+  form?: string
+  exam?: string
+  certification?: string
 }
 
 /**

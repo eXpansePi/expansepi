@@ -1,5 +1,11 @@
 import type { Metadata } from "next"
 import Navigation from "../../components/Navigation"
+import Footer from "../../components/Footer"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import Markdown from "react-markdown"
+import { ArrowLeft } from "lucide-react"
+import { JsonLd } from "@/app/components/JsonLd"
 import { getTranslations } from "@/i18n/index"
 import { isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getPublishedPosts, getPostBySlug } from "@/data/posts"
@@ -80,17 +86,7 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
   const post = getPostBySlug(resolvedParams.slug)
 
   if (!post || post.status !== 'published') {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-        <Navigation activePage={getRoutePath(lang, 'blog')} lang={lang} t={t} />
-        <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
-          <div className="max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">{t.common.notFound}</h1>
-            <a href={getRoutePath(lang, 'blog')} className="text-blue-600 font-semibold hover:underline">{t.common.backToList}</a>
-          </div>
-        </main>
-      </div>
-    )
+    notFound()
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://expansepi.com'
@@ -102,37 +98,27 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
   ])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+    <>
+      <JsonLd data={blogSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Navigation activePage={getRoutePath(lang, 'blog')} lang={lang} t={t} />
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6">
-        <article className="max-w-2xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">{post.title}</h1>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-gray-600 text-xs sm:text-sm mb-5 sm:mb-6 pb-4 sm:pb-5 border-b border-gray-200">
-            <span>{new Date(post.date).toLocaleDateString(lang === 'cs' ? 'cs-CZ' : lang === 'ru' ? 'ru-RU' : 'en-US')}</span>
-            <span className="hidden sm:inline">•</span>
-            <span>{post.author}</span>
-          </div>
-          <div className="prose prose-sm sm:prose-base prose-gray max-w-none">
-            <p className="text-base sm:text-lg leading-relaxed">{post.excerpt}</p>
+      <main id="main-content" className="site-main">
+        <article>
+          <header className="page-intro"><div className="article-container">
+            <Link href={getRoutePath(lang, "blog")} className="text-link article-back"><ArrowLeft aria-hidden="true" />{t.common.blog}</Link>
+            <h1 lang={post.contentLanguage ?? "cs"}>{post.title}</h1>
+            <div className="article-meta"><time dateTime={post.date}>{new Date(post.date).toLocaleDateString(lang === 'cs' ? 'cs-CZ' : lang === 'ru' ? 'ru-RU' : 'en-US')}</time><span>{post.author}</span></div>
+          </div></header>
+          <div className="article-container article-content reading-content" lang={post.contentLanguage ?? "cs"}>
+            <p className="lead">{post.excerpt}</p>
             {post.content && (
-              <div>{post.content}</div>
+              <Markdown skipHtml components={{ h1: "h2" }}>{post.content}</Markdown>
             )}
-          </div>
-          <div className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-gray-200">
-            <a href={getRoutePath(lang, 'blog')} className="text-sm sm:text-base text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-2">
-              ← {t.common.backToList}
-            </a>
+            <div className="article-bottom"><Link href={getRoutePath(lang, 'blog')} lang={lang} className="text-link"><ArrowLeft aria-hidden="true" />{t.common.backToList}</Link></div>
           </div>
         </article>
       </main>
-    </div>
+      <Footer lang={lang} />
+    </>
   )
 }

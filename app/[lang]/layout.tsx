@@ -1,22 +1,23 @@
 import type { Metadata } from "next"
 import { languages, isValidLanguage, defaultLanguage, type Language } from "@/i18n/config"
 import { getOrganizationSchema } from "@/lib/seo"
+import { JsonLd } from "@/app/components/JsonLd"
 import { CookieBanner } from "./components/CookieBanner"
 
 const langMetadata: Record<Language, { title: string; description: string; locale: string }> = {
   cs: {
-    title: "eXpansePi - Rekvalifikační IT kurzy | Python, Datová analýza, Web Development",
-    description: "Rekvalifikační IT kurzy s experty z Matfyzu UK a ČVUT. Naučte se Python, datovou analýzu, web development. Budujeme novou generaci IT specialistů.",
+    title: "eXpansePi - Praktické IT a rekvalifikační kurzy",
+    description: "Vyberte si svůj směr v IT. Praktické kurzy s vývojáři z oboru, přehledným obsahem a jasnými podmínkami. Nabídku postupně rozšiřujeme.",
     locale: "cs_CZ"
   },
   en: {
-    title: "eXpansePi - IT Reskilling Courses | Python, Data Analysis, Web Development",
-    description: "IT reskilling courses with experts from Charles University and Czech Technical University. Learn Python, data analysis, web development. Building the next generation of IT specialists.",
+    title: "eXpansePi - Practical IT and Reskilling Courses",
+    description: "Find your direction in IT. Practical courses with practising developers, clear curricula and transparent conditions. Our catalog is growing.",
     locale: "en_US"
   },
   ru: {
-    title: "eXpansePi - Курсы переквалификации IT | Python, анализ данных, веб-разработка",
-    description: "Курсы переквалификации IT с экспертами из Карлова университета и Чешского технического университета. Изучите Python, анализ данных, веб-разработку. Создаем новое поколение IT специалистов.",
+    title: "eXpansePi - Практические IT-курсы и переподготовка",
+    description: "Найдите своё направление в IT. Практические курсы с разработчиками, понятными программами и прозрачными условиями. Каталог постепенно расширяется.",
     locale: "ru_RU"
   }
 }
@@ -118,13 +119,10 @@ export default async function RootLayout({
       */}
       <script
         dangerouslySetInnerHTML={{
-          __html: `document.documentElement.lang = "${lang}";`,
+          __html: `document.documentElement.lang = ${JSON.stringify(lang)};`,
         }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
+      <JsonLd data={organizationSchema} />
       {children}
       <CookieBanner lang={lang} />
     </>

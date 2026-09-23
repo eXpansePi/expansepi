@@ -1,10 +1,11 @@
 import Link from "next/link"
-import Image from "next/image"
-import { Course } from "@/types/course"
-import { COURSE_STATUS_CONFIG, COURSE_LEVEL_CONFIG } from "@/lib/course-constants"
+import { ArrowUpRight, Braces, ShieldCheck } from "lucide-react"
+import type { Course } from "@/types/course"
+import { isValidLanguage } from "@/i18n/config"
+import { getSiteCopy } from "@/i18n/site"
 import { getDetailRoutePath } from "@/lib/routes"
-import { type Language } from "@/i18n/config"
-import { getTranslations } from "@/i18n/index"
+import { getUpcomingSessions } from "@/lib/course-schedule"
+import { CourseFacts, CoursePrice } from "../../components/CourseSections"
 
 interface CourseCardProps {
   course: Course
@@ -12,131 +13,39 @@ interface CourseCardProps {
 }
 
 export default function CourseCard({ course, lang }: CourseCardProps) {
-  const isDraft = course.status === 'upcoming'
-  const config = COURSE_STATUS_CONFIG[course.status]
-  const levelConfig = COURSE_LEVEL_CONFIG[course.level] || {
-    color: 'gray',
-    badgeClass: 'bg-gray-100 text-gray-700'
-  }
-  const t = getTranslations(lang as Language)
+  const language = isValidLanguage(lang) ? lang : "cs"
+  const copy = getSiteCopy(language)
+  const preparing = course.status === "upcoming"
+  const hasDates = getUpcomingSessions(course.sessions).length > 0
 
   return (
-    <article
-      className={`glow-box bg-white rounded-xl shadow-lg p-4 sm:p-5 transition-all duration-300 flex flex-col ${isDraft ? 'opacity-90' : 'hover:shadow-xl'
-        }`}
-    >
-      {/* Course Image */}
-      {course.image && (
-        <div className="mb-3 flex items-center justify-center h-16 sm:h-20 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg relative">
-          <Image
-            src={course.image}
-            alt={course.title}
-            fill
-            className="object-contain p-2"
-            sizes="(max-width: 640px) 4rem, 5rem"
-          />
-        </div>
-      )}
-
-      {/* Accreditation Badge */}
-      {course.accreditation && (
-        <div className="mb-2">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            {lang === 'cs' ? 'Akreditováno MŠMT' : lang === 'en' ? 'MŠMT Accredited' : 'Аккредитовано МШМТ'}
-          </span>
-        </div>
-      )}
-
-      <div className="flex flex-col lg:flex-row justify-between items-start gap-4 mb-4 w-full">
-        {/* Left side: Title and basic info */}
-        <div className="flex-grow">
-          <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-2">{course.title}</h2>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mb-3 lg:mb-0">
-            <div className="flex items-center gap-1.5">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>{course.duration}</span>
-            </div>
-            <span className="hidden sm:inline text-gray-300">•</span>
-            <span className={`px-2 py-0.5 rounded text-xs font-semibold ${levelConfig.badgeClass}`}>
-              {course.level}
-            </span>
-          </div>
-        </div>
-
-        {/* Right side: Price & Funding or Draft badge */}
-        <div className="flex-shrink-0 w-full lg:w-auto">
-          {!isDraft ? (
-            <div className="flex flex-col items-start lg:items-end gap-2">
-              <div className="flex items-baseline gap-3">
-                <span className="text-5xl font-black text-green-600 tracking-tight">
-                  {t.courses.priceFrom}
-                </span>
-                <span className="text-2xl text-gray-500 font-bold line-through decoration-red-500 decoration-[3px] opacity-90">
-                  {t.courses.price}
-                </span>
-              </div>
-              {course.funding && (
-                <div className="inline-flex items-center gap-1.5 bg-green-100 border border-green-300 rounded-lg px-3 py-1.5 shadow-sm">
-                  <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <p className="text-sm font-bold text-green-800 whitespace-nowrap">{course.funding}</p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <span className={`text-xs px-2.5 py-1 rounded font-semibold ${config.badgeClass} whitespace-nowrap block w-max`}>
-              {config.label}
-            </span>
-          )}
-        </div>
+    <article className={`catalog-card${preparing ? " catalog-card-planned" : ""}`} data-course-slug={course.slug}>
+      <div className="catalog-card-top">
+        <span className="catalog-topic">{course.topics?.[0] || <Braces aria-hidden="true" />}</span>
+        <span className={`tag${preparing ? "" : " tag-blue"}`}>{preparing ? copy.catalog.planned : hasDates ? copy.course.available : copy.course.pending}</span>
       </div>
-
-      {/* Dates Section */}
-      {!isDraft && course.dates && course.dates.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {course.dates.map((date, idx) => (
-            <span key={idx} className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg px-3 py-1.5 text-sm font-bold shadow-sm">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              {date}
-            </span>
-          ))}
-        </div>
-      )}
-      {/* Description + Accreditation Logo */}
-      <div className="flex items-start gap-4 mb-3 flex-grow">
-        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed flex-grow">{course.description}</p>
-        {course.accreditationLogo && (
-          <div className="flex-shrink-0 hidden sm:block">
-            <Image
-              src={course.accreditationLogo}
-              alt={course.accreditation || 'Accreditation'}
-              width={160}
-              height={80}
-              className="object-contain"
-            />
-          </div>
-        )}
+      <h3>{course.title}</h3>
+      <p className="catalog-description">{course.summary || course.description}</p>
+      <div className="catalog-card-support">
+        {course.topics && <ul className="catalog-topics">{course.topics.map(topic => <li key={topic}>{topic}</li>)}</ul>}
+        {course.accreditation && <p className="catalog-accreditation"><ShieldCheck aria-hidden="true" />{course.accreditation}</p>}
       </div>
-      {course.status === 'active' ? (
-        <Link
-          href={getDetailRoutePath(lang as Language, 'courses', course.slug)}
-          className="text-sm sm:text-base text-blue-600 font-semibold hover:text-blue-700 transition-colors inline-flex items-center gap-2"
-        >
-          {lang === 'cs' ? 'Více informací' : lang === 'en' ? 'More information' : 'Подробнее'} →
-        </Link>
-      ) : (
-        <span className="text-sm sm:text-base text-gray-400 font-semibold">
-          {lang === 'cs' ? 'Připravujeme' : lang === 'en' ? 'Coming soon' : 'Готовится'}
-        </span>
+      {!preparing && (
+        <>
+          <div className="catalog-card-details"><CourseFacts course={course} lang={language} /></div>
+          <div className="catalog-card-footer">
+            <CoursePrice course={course} lang={language} />
+            <Link className="button button-primary" href={getDetailRoutePath(language, "courses", course.slug)} aria-label={`${copy.course.details}: ${course.title}`}>
+              {copy.course.details}<ArrowUpRight aria-hidden="true" />
+            </Link>
+          </div>
+        </>
       )}
     </article>
   )
+}
+
+export function CourseGrid({ courses, lang }: { courses: Course[]; lang: string }) {
+  const planned = courses.length > 0 && courses.every(course => course.status === "upcoming")
+  return <div className={`course-grid${courses.length === 1 ? " course-grid-single" : courses.length === 2 ? " course-grid-pair" : ""}${planned ? " course-grid-planned" : ""}`}>{courses.map(course => <CourseCard course={course} lang={lang} key={course.slug} />)}</div>
 }

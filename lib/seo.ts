@@ -2,6 +2,22 @@
  * SEO Structured Data (JSON-LD) utilities
  */
 
+/**
+ * Serialises structured data for embedding in an inline `<script>`.
+ *
+ * Escaping `<` is what prevents a value containing `</script>` from closing the
+ * element early; `>` is escaped alongside it so `]]>` and `-->` are inert too.
+ * U+2028/U+2029 are legal inside JSON strings but terminate a statement in
+ * older JavaScript parsers, so they are escaped as well.
+ */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029")
+}
+
 export interface OrganizationSchema {
   "@context": "https://schema.org"
   "@type": "Organization"
@@ -129,6 +145,8 @@ export function getCourseSchema(
     accreditation?: string
     certification?: string
     funding?: string
+    price?: number
+    status?: string
   },
   lang: string,
   courseUrl: string
@@ -150,21 +168,20 @@ export function getCourseSchema(
       url: baseUrl,
     },
     courseCode: course.slug,
-    educationalLevel: course.level || "Beginner",
-    timeRequired: course.duration || "P8W", // ISO 8601 duration
+    ...(course.level && { educationalLevel: course.level }),
+    ...(course.duration && /^P(?=\d|T\d)(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+S)?)?$/.test(course.duration) && { timeRequired: course.duration }),
     inLanguage: langMap[lang] || "cs-CZ",
     url: courseUrl,
-    // Add additional properties for better SEO
-    ...(course.accreditation && {
-      educationalCredentialAwarded: course.certification || "Certificate",
+    ...(course.certification && {
+      educationalCredentialAwarded: course.certification,
     }),
-    ...(course.funding && {
+    ...(typeof course.price === "number" && Number.isFinite(course.price) && course.price >= 0 && course.status !== "upcoming" && {
       offers: {
         "@type": "Offer",
-        price: "0",
+        price: course.price,
         priceCurrency: "CZK",
-        availability: "https://schema.org/InStock",
-        description: course.funding,
+        url: courseUrl,
+        ...(course.funding && { description: course.funding }),
       },
     }),
   }
@@ -178,6 +195,7 @@ export function getBlogPostingSchema(
     author: string
     date: string
     updated?: string
+    contentLanguage?: string
   },
   lang: string
 ): BlogPostingSchema {
@@ -206,7 +224,7 @@ export function getBlogPostingSchema(
       "@type": "WebPage",
       "@id": `${baseUrl}/${lang}/blog/${post.slug}`,
     },
-    inLanguage: langMap[lang] || "cs-CZ",
+    inLanguage: langMap[post.contentLanguage ?? "cs"] || "cs-CZ",
   }
 }
 

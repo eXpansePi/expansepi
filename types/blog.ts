@@ -6,6 +6,7 @@ export type PostStatus = 'published' | 'draft'
 
 export interface BlogPost {
   slug: string
+  contentLanguage?: 'cs' | 'en' | 'ru'
   title: string
   description: string // short meta description
   excerpt: string // listing teaser

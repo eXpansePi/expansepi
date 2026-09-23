@@ -1,110 +1,52 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { getRoutePath } from "@/lib/routes"
-import { type Language } from "@/i18n/config"
+import type { Language } from "@/i18n/config"
 import { getTranslations } from "@/i18n/index"
 import { resetConsent } from "@/lib/consent"
 
-interface FooterProps {
-  lang: Language
+const labels = {
+  cs: { cookies: "Nastavení cookies", tagline: "Nové dovednosti. Nové možnosti. Praktické IT vzdělávání pro vaši další kapitolu.", tools: "Partneři" },
+  en: { cookies: "Cookie settings", tagline: "New skills. New possibilities. Practical IT education for your next chapter.", tools: "Partners" },
+  ru: { cookies: "Настройки cookie", tagline: "Новые навыки. Новые возможности. Практическое IT-образование для вашей новой главы.", tools: "Партнёры" },
 }
 
-const cookieSettingsLabels: Record<string, string> = {
-  cs: "Nastavení cookies",
-  en: "Cookie settings",
-  ru: "Настройки cookie",
-}
-
-export default function Footer({ lang }: FooterProps) {
+export default function Footer({ lang }: { lang: Language }) {
   const t = getTranslations(lang)
-
+  const copy = labels[lang]
   return (
-    <footer className="bg-gray-900 text-gray-300 mt-12 sm:mt-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
-          {/* Company Info */}
+    <footer className="site-footer">
+      <div className="container">
+        <div className="footer-main">
+          <div className="footer-brand"><Link href={`/${lang}`} className="wordmark">eXpanse<span>Pi</span></Link><p>{copy.tagline}</p></div>
           <div>
-            <h3 className="text-white font-bold text-lg mb-3 sm:mb-4">eXpansePi</h3>
-            <p className="text-sm leading-relaxed">{t.footer.companyDescription}</p>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-3 sm:mb-4">{t.footer.quickLinks}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href={getRoutePath(lang, 'home')} className="hover:text-white transition-colors">
-                  {t.common.home}
-                </Link>
-              </li>
-              <li>
-                <Link href={getRoutePath(lang, 'courses')} className="hover:text-white transition-colors">
-                  {t.common.courses}
-                </Link>
-              </li>
-              <li>
-                <Link href={getRoutePath(lang, 'about')} className="hover:text-white transition-colors">
-                  {t.common.about}
-                </Link>
-              </li>
-              <li>
-                <Link href={getRoutePath(lang, 'contact')} className="hover:text-white transition-colors">
-                  {t.common.contact}
-                </Link>
-              </li>
+            <h2 className="footer-heading">{t.footer.quickLinks}</h2>
+            <ul className="footer-links">
+              {(["courses", "about", "contact"] as const).map(route => <li key={route}><Link href={getRoutePath(lang, route)}>{t.common[route]}</Link></li>)}
+              <li><Link href={`/${lang}#otazky`}>{lang === "cs" ? "Časté otázky" : lang === "en" ? "Common questions" : "Частые вопросы"}</Link></li>
             </ul>
           </div>
-
-          {/* More Links */}
           <div>
-            <h4 className="text-white font-semibold mb-3 sm:mb-4">{t.footer.moreInfo}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href={getRoutePath(lang, 'vacancies')} className="hover:text-white transition-colors">
-                  {t.common.vacancies}
-                </Link>
-              </li>
-              <li>
-                <Link href={getRoutePath(lang, 'blog')} className="hover:text-white transition-colors">
-                  {t.common.blog}
-                </Link>
-              </li>
-              <li>
-                <Link href={getRoutePath(lang, 'gdpr')} className="hover:text-white transition-colors">
-                  {t.common.gdpr}
-                </Link>
-              </li>
-              <li>
-                <button
-                  onClick={resetConsent}
-                  className="hover:text-white transition-colors text-left"
-                >
-                  {cookieSettingsLabels[lang] || cookieSettingsLabels.cs}
-                </button>
-              </li>
+            <h2 className="footer-heading">{t.footer.moreInfo}</h2>
+            <ul className="footer-links">
+              {(["blog", "vacancies", "gdpr"] as const).map(route => <li key={route}><Link href={getRoutePath(lang, route)}>{t.common[route]}</Link></li>)}
+              <li><button onClick={resetConsent}>{copy.cookies}</button></li>
             </ul>
           </div>
-
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-white font-semibold mb-3 sm:mb-4">{t.contact.title}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <span className="text-gray-400">{t.contact.address}:</span>
-                <br />
-                <span>{t.contact.addressValue}</span>
-              </li>
-              <li>
-                <span className="text-gray-400">{t.contact.ico}:</span> {t.contact.icoValue}
-              </li>
-            </ul>
+          <div className="footer-contact">
+            <h2 className="footer-heading">{t.contact.title}</h2>
+            <div><a href="mailto:info@expansepi.com">info@expansepi.com</a><br /><a href="tel:+420775715700">+420 775 715 700</a></div>
+            <p>{t.contact.addressValue}<br />{t.contact.ico}: {t.contact.icoValue}</p>
           </div>
         </div>
-
-        {/* Copyright */}
-        <div className="border-t border-gray-800 pt-6 sm:pt-8 text-center text-sm">
-          <p>© {new Date().getFullYear()} eXpansePi. {t.footer.copyright}</p>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} eXpansePi. {t.footer.copyright}</span>
+          <div className="footer-tools" aria-label={copy.tools}>
+            <a href="https://www.jetbrains.com/" target="_blank" rel="noopener noreferrer" aria-label="JetBrains"><Image src="/jetbrains/jetbrains.svg" alt="JetBrains" width={75} height={20} /></a>
+            <a href="https://www.microsoft.com/" target="_blank" rel="noopener noreferrer" aria-label="Microsoft"><Image src="/microsoft/microsoft-white.svg" alt="Microsoft" width={87} height={20} /></a>
+          </div>
         </div>
       </div>
     </footer>

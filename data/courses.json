@@ -1,13 +1,29 @@
 [
   {
     "slug": "programator-www-aplikaci-v-pythonu",
+    "experience": "python-web",
+    "topics": ["Python", "Django", "SQL", "Git"],
+    "price": 49900,
+    "softwareLicense": {
+      "product": "PyCharm Professional",
+      "months": 6,
+      "logo": "/jetbrains/PyCharm.svg",
+      "url": "https://www.jetbrains.com/pycharm/"
+    },
+    "sessions": [
+      { "start": "2026-07-11", "end": "2026-10-17" },
+      { "start": "2026-09-05", "end": "2026-12-26" },
+      { "start": "2026-10-03", "end": "2027-01-30" }
+    ],
     "languages": {
       "cs": {
         "title": "Programátor www aplikací v jazyce Python",
-        "heroHeadline": "Z nuly do IT za 3 měsíce – kurz plně hrazený Úřadem práce",
-        "heroSubheadline": "Přestaňte přemýšlet, začněte jednat. Žádné předchozí IT zkušenosti nepotřebujete. Za 3 měsíce budete umět to, za co firmy platí 50–80 tisíc měsíčně – programovat webové aplikace v Pythonu.",
-        "description": "Proč Python? Protože je to nejpopulárnější programovací jazyk na světě a zároveň nejpřístupnější pro začátečníky. Používají ho firmy jako Google, Instagram nebo Spotify. A proč Django? Protože vám umožní vytvořit kompletní webovou aplikaci – od databáze po hotový produkt – rychleji než jakýkoliv jiný framework. To je přesně to, co zaměstnavatelé hledají. Tento akreditovaný rekvalifikační kurz vás za 3 měsíce provede od úplné nuly až po funkční webovou aplikaci, kterou si přidáte do portfolia. Hlavní část probíhá online, doplněná o 2 prezenční školení v Praze. Umělá inteligence programátory nenahradí – naopak. Vývojáři, kteří umí AI nástroje využívat, jsou na trhu práce ještě žádanější. V kurzu se naučíte programovat tak, abyste AI využívali jako svého asistenta, ne aby vás nahradila.",
+        "heroHeadline": "Od prvního řádku kódu k vlastní webové aplikaci",
+        "heroSubheadline": "Praktický rekvalifikační kurz pro začátečníky. Naučte se Python, databáze a Django, pracujte na týmovém projektu a vytvořte si základ pro další cestu do IT.",
+        "description": "Praktický rekvalifikační kurz pro začátečníky propojuje Python, HTML a CSS, databáze a Django. Naučíte se pracovat s Gitem a své znalosti využijete v týmovém softwarovém projektu. Výuka zahrnuje 120 vyučovacích hodin, 13 online školení a 2 prezenční školení v Praze. Termíny jednotlivých běhů uvádíme zvlášť.",
         "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
+        "durationLabel": "120 vyučovacích hodin",
+        "formatLabel": "Online + 2 setkání v Praze",
         "level": "Začátečník",
         "accreditation": "Akreditováno Ministerstvem školství, mládeže a tělovýchovy (MŠMT)",
         "syllabus": [
@@ -25,71 +41,55 @@
         "form": "Kombinovaná (hlavní část online, doplněno o 2 prezenční školení v Praze)",
         "exam": "Závěrečná písemná zkouška (15 otázek) a odevzdání software projektu",
         "certification": "Osvědčení o rekvalifikaci – Programátor www aplikací v jazyce Python",
-        "funding": "Plně hrazeno Úřadem práce ČR",
+        "funding": "Možnost úhrady Úřadem práce ČR po schválení žádosti",
         "dates": [
           "11.7.2026 - 17.10.2026",
           "5.9.2026 - 26.12.2026",
           "3.10.2026 - 30.1.2027"
         ],
         "highlights": [
-          "Kurz je zcela ZDARMA – plně hrazený Úřadem práce ČR",
-          "Nástupní plat junior Python vývojáře: až 70 000 Kč",
-          "Hlavní část online – studujte z domova, z kavárny, odkudkoliv",
-          "Reálný projekt do portfolia – s čím jít na pohovor",
-          "Obor s budoucností – poptávka po vývojářích každý rok roste",
-          "AI vás nenahradí – naučíte se ji využívat jako svůj nástroj"
+          "Od základů Pythonu k webové aplikaci v Djangu",
+          "120 vyučovacích hodin, 13 online + 2 setkání v Praze",
+          "Práce s Gitem, databázemi a týmovým projektem",
+          "Možnost úhrady Úřadem práce po schválení žádosti"
         ],
         "faq": [
           {
             "question": "Zvládnu kurz, i když nemám žádné IT zkušenosti?",
-            "answer": "Ano – kurz je navržen přesně pro vás. Většina našich studentů přichází z úplně jiných oborů: administrativa, logistika, služby, obchod. Začínáme od naprostých základů a postupujeme krok za krokem. Lektoři z MFF UK a firem jako Rapid7 mají bohaté zkušenosti s výukou úplných začátečníků."
+            "answer": "Kurz je určený začátečníkům a začíná základy. Předchozí programování ani IT titul pro začátek nepotřebujete. Důležitá je ochota učit se a čas na procvičování. Konkrétní vstupní podmínky si potvrdíme před zápisem."
           },
           {
-            "question": "Je kurz opravdu zdarma? Jak to funguje?",
-            "answer": "Ano, kurz je 100% zdarma. Je akreditován MŠMT a Úřad práce ČR ho plně hradí. Stačí být v evidenci ÚP nebo o zařazení požádat – pomůžeme vám s celým procesem krok za krokem. Běžná cena kurzu je 38 000 Kč, vy nezaplatíte ani korunu."
+            "question": "Může kurz uhradit Úřad práce?",
+            "answer": "O úhradu kurzu lze požádat Úřad práce ČR; schválení není automatické a závisí na posouzení vaší žádosti. Při schválení plné úhrady je vaše spoluúčast 0 Kč. Pomůžeme vám zorientovat se v žádosti. Aktuální podmínky a své povinnosti si ověřte přímo u Úřadu práce."
           },
           {
             "question": "Co budu umět po absolvování kurzu?",
-            "answer": "Budete schopni vytvořit kompletní webovou aplikaci od nuly – napsat backend v Pythonu, navrhnout databázi, vytvořit uživatelské rozhraní a aplikaci nasadit na internet. Zvládnete pracovat s Gitem (nástroj, který používá každý vývojář), spolupracovat v týmu a rozumět kódu natolik, abyste uspěli na juniorním pohovoru. Součástí kurzu je týmový projekt, se kterým půjdete na pohovor."
+            "answer": "Cílem je propojit Python, HTML/CSS, databáze a Django do webové aplikace, používat Git a vyzkoušet týmový vývoj. Projekt můžete dál rozvíjet jako ukázku dovedností. Pro pracovní uplatnění je potřeba pokračovat v procvičování a doplňovat znalosti."
           },
           {
             "question": "Pomůžete mi najít práci po kurzu?",
-            "answer": "Získáte oficiální osvědčení o rekvalifikaci uznávané zaměstnavateli v celé ČR. Váš závěrečný projekt bude sloužit jako ukázka dovedností pro pohovory. Navíc vás propojíme s naší komunitou, poradíme s životopisem a přípravou na technický pohovor. IT je obor, kde je chronický nedostatek lidí – firmy aktivně hledají juniorní vývojáře."
+            "answer": "Kurz negarantuje zaměstnání ani konkrétní mzdu. Dává vám základy, zkušenost s projektem a směr pro další rozvoj. O konkrétní podporu s portfoliem, životopisem nebo přípravou na pohovor se informujte před přihlášením."
           },
           {
             "question": "Kolik času týdně musím kurzu věnovat?",
-            "answer": "Kurz trvá přibližně 3 měsíce. Počítejte s cca 10–15 hodinami týdně (online školení + samostudium a domácí úkoly). Hlavní část probíhá online, takže si čas můžete rozvrhnout podle svých možností – lze zvládnout i při částečném úvazku."
+            "answer": "Orientačně počítejte s 10–15 hodinami týdně včetně výuky, samostudia a domácích úkolů. Přesný rozvrh a datum konce se liší podle běhu. Kurz obsahuje také 2 prezenční školení v Praze."
           },
           {
-            "question": "Nenahradí programátory umělá inteligence?",
-            "answer": "Ne. AI je nástroj, který programátory posiluje, ne nahrazuje. Stejně jako kalkulačka nenahradila účetní – udělala je efektivnějšími. Vývojáři, kteří umí AI využívat, jsou na trhu práce ještě žádanější a lépe placení. V kurzu se naučíte programovat tak, abyste AI používali jako svého pomocníka."
+            "question": "Jak je kurz zakončený?",
+            "answer": "Závěr tvoří písemná zkouška s 15 otázkami a odevzdání softwarového projektu. Po úspěšném splnění podmínek získáte osvědčení o rekvalifikaci Programátor www aplikací v jazyce Python."
           }
         ]
       },
       "en": {
         "title": "Python Web Application Development",
-        "heroHeadline": "From zero to IT in 3 months – fully funded by the Labour Office",
-        "heroSubheadline": "Stop thinking, start doing. No prior IT experience needed. In 3 months, you'll have the skills companies pay 50–80k CZK/month for – building web applications in Python.",
-        "description": "This accredited retraining course takes you from absolute zero to a working web application in 3 months, ready for your portfolio. The course is primarily online, supplemented by 2 in-person workshops in Prague.",
-        "descriptionBlocks": [
-          {
-            "title": "Why Python?",
-            "text": "The most popular programming language in the world and the most accessible for beginners. Used by Google, Instagram, and Spotify.",
-            "icon": "python"
-          },
-          {
-            "title": "Why Django?",
-            "text": "Build a complete web application – from database to finished product – faster than any other framework. Exactly what employers are looking for.",
-            "icon": "django"
-          },
-          {
-            "title": "AI won't replace you – it'll empower you",
-            "text": "Developers who can leverage AI tools are even more in demand and better paid. Learn to code with AI as your assistant.",
-            "icon": "ai"
-          }
-        ],
+        "heroHeadline": "From your first line of code to your own web application",
+        "heroSubheadline": "Practical retraining for beginners. Learn Python, databases and Django, collaborate on a project and build a foundation for your next step into IT.",
+        "description": "Practical retraining for beginners connects Python, HTML and CSS, databases and Django. Learn Git and apply your knowledge in a team software project. The course includes 120 teaching hours, 13 online sessions and 2 in-person sessions in Prague. Dates are listed for each cohort.",
         "duration": "120 teaching hours (13 online + 2 in-person sessions in Prague)",
+        "durationLabel": "120 teaching hours",
+        "formatLabel": "Online + 2 sessions in Prague",
         "level": "Beginner",
+        "accreditation": "Accredited by the Czech Ministry of Education (MŠMT)",
         "syllabus": [
           "Introduction and safety at work",
           "HTML & CSS – structure, responsive design, accessibility",
@@ -105,71 +105,55 @@
         "form": "Hybrid (mainly online, supplemented with 2 in-person workshops in Prague)",
         "exam": "Final written exam (15 questions) and submission of a software project",
         "certification": "Official retraining certificate – Python Web Application Developer",
-        "funding": "Fully funded by the Czech Labour Office",
+        "funding": "Czech Labour Office funding available subject to approval",
         "dates": [
           "11.7.2026 - 17.10.2026",
           "5.9.2026 - 26.12.2026",
           "3.10.2026 - 30.1.2027"
         ],
         "highlights": [
-          "Completely FREE – fully funded by the Czech Labour Office",
-          "Starting salary for a junior Python developer: up to 70,000 CZK",
-          "Primarily online – study from home, a café, or anywhere",
-          "A real project for your portfolio – ready for job interviews",
-          "A future-proof field – demand for developers grows every year",
-          "AI won't replace you – you'll learn to use it as your tool"
+          "From Python fundamentals to a Django web application",
+          "120 teaching hours, 13 online + 2 sessions in Prague",
+          "Git, databases and a team project",
+          "Possible Labour Office funding, subject to approval"
         ],
         "faq": [
           {
             "question": "Can I do this course with no IT experience?",
-            "answer": "Yes – the course is designed exactly for you. Most of our students come from completely different fields: administration, logistics, services, sales. We start from absolute basics and progress step by step. Lecturers from Charles University and companies like Rapid7 have extensive experience teaching complete beginners."
+            "answer": "The course is designed for beginners and starts with the fundamentals. Previous programming or an IT degree is not required to begin. You need willingness to learn and time to practise. We will confirm specific entry requirements before enrolment."
           },
           {
-            "question": "Is the course really free? How does it work?",
-            "answer": "Yes, the course is 100% free. It is accredited by the Ministry of Education and the Czech Labour Office fully covers it. You just need to be registered with the Labour Office or request enrollment – we'll help you through the entire process step by step. The regular price is 49,900 CZK, you pay nothing."
+            "question": "Can the Labour Office pay for the course?",
+            "answer": "You can apply for course funding through the Czech Labour Office; approval is not automatic and depends on an individual assessment. If full funding is approved, your contribution is 0 CZK. We can help you understand the application. Confirm current conditions and your obligations with the Labour Office."
           },
           {
             "question": "What will I be able to do after the course?",
-            "answer": "You'll be able to build a complete web application from scratch – write a Python backend, design a database, create a user interface, and deploy it to the internet. You'll know how to work with Git (a tool every developer uses), collaborate in a team, and understand code well enough to succeed in a junior interview. The course includes a team project you'll take to interviews."
+            "answer": "The aim is to connect Python, HTML/CSS, databases and Django into a web application, use Git and experience team development. Continue developing the project as evidence of your skills. Ongoing practice and further learning matter for employment."
           },
           {
             "question": "Will you help me find a job after the course?",
-            "answer": "You'll receive an official retraining certificate recognized by employers across the Czech Republic. Your final project will serve as a skill showcase for interviews. We'll also connect you with our community, help with your CV, and advise on technical interview preparation. IT has a chronic shortage of people – companies are actively looking for junior developers."
+            "answer": "The course does not guarantee employment or a particular salary. It provides foundations, project experience and a direction for further development. Ask about specific portfolio, CV and interview support before enrolling."
           },
           {
             "question": "How much time per week does the course require?",
-            "answer": "The course lasts approximately 3 months. Expect around 10–15 hours per week (online sessions + self-study and homework). The main part is online, so you can schedule your time flexibly – it's manageable even with a part-time job."
+            "answer": "Allow approximately 10–15 hours a week for lessons, self-study and homework. The exact timetable and end date depend on the cohort. The course also includes 2 in-person sessions in Prague."
           },
           {
-            "question": "Won't AI replace programmers?",
-            "answer": "No. AI is a tool that empowers programmers, not replaces them. Just like calculators didn't replace accountants – they made them more efficient. Developers who know how to use AI are even more in demand and better paid. In this course, you'll learn to code with AI as your assistant."
+            "question": "How is the course assessed?",
+            "answer": "The final assessment is a written exam with 15 questions and submission of a software project. Successful fulfilment of the conditions leads to a retraining certificate for Python web application development."
           }
         ]
       },
       "ru": {
         "title": "Разработка веб-приложений на Python",
-        "heroHeadline": "От нуля до IT за 3 месяца – курс полностью за счёт Центра занятости",
-        "heroSubheadline": "Хватит думать – начните действовать. IT-опыт не нужен. За 3 месяца вы освоите навыки, за которые компании платят 50–80 тыс. крон в месяц – разработку веб-приложений на Python.",
-        "description": "Аккредитованный курс переподготовки проведёт вас за 3 месяца от нуля до работающего веб-приложения для портфолио. Основная часть проходит онлайн, дополненная 2 очными занятиями в Праге.",
-        "descriptionBlocks": [
-          {
-            "title": "Почему Python?",
-            "text": "Самый популярный язык программирования в мире и при этом самый доступный для новичков. Его используют Google, Instagram и Spotify.",
-            "icon": "python"
-          },
-          {
-            "title": "Почему Django?",
-            "text": "Создайте полноценное веб-приложение – от базы данных до готового продукта – быстрее, чем с любым другим фреймворком. Именно это ищут работодатели.",
-            "icon": "django"
-          },
-          {
-            "title": "AI вас не заменит – усилит вас",
-            "text": "Разработчики с навыками AI ещё более востребованы и лучше оплачиваются. Научитесь программировать с AI как своим ассистентом.",
-            "icon": "ai"
-          }
-        ],
+        "heroHeadline": "От первой строки кода к своему веб-приложению",
+        "heroSubheadline": "Практическая переподготовка для начинающих. Изучите Python, базы данных и Django, поработайте над командным проектом и заложите основу для перехода в IT.",
+        "description": "Практическая переподготовка для начинающих объединяет Python, HTML и CSS, базы данных и Django. Изучите Git и примените знания в командном программном проекте. Курс включает 120 учебных часов, 13 онлайн-занятий и 2 очные встречи в Праге. Даты указаны отдельно для каждого потока.",
         "duration": "120 учебных часов (13 онлайн + 2 очных занятия в Праге)",
+        "durationLabel": "120 учебных часов",
+        "formatLabel": "Онлайн + 2 встречи в Праге",
         "level": "Начальный",
+        "accreditation": "Аккредитовано Министерством образования Чехии (MŠMT)",
         "syllabus": [
           "Введение и охрана труда",
           "HTML и CSS – структура, адаптивный дизайн, доступность",
@@ -185,44 +169,42 @@
         "form": "Гибридная (в основном онлайн, дополнено 2 очными сессиями в Праге)",
         "exam": "Итоговый письменный экзамен (15 вопросов) и сдача программного проекта",
         "certification": "Официальный сертификат переподготовки – Разработчик веб-приложений на Python",
-        "funding": "Полностью финансируется Чешским центром занятости",
+        "funding": "Возможна оплата Центром занятости Чехии после одобрения заявки",
         "dates": [
           "11.7.2026 - 17.10.2026",
           "5.9.2026 - 26.12.2026",
           "3.10.2026 - 30.1.2027"
         ],
         "highlights": [
-          "Курс полностью БЕСПЛАТНЫЙ – финансируется Центром занятости",
-          "Начальная зарплата junior Python-разработчика: до 70 000 крон",
-          "Основная часть онлайн – учитесь из дома, кафе или откуда угодно",
-          "Реальный проект для портфолио – с чем идти на собеседование",
-          "Отрасль с будущим – спрос на разработчиков растёт каждый год",
-          "AI вас не заменит – вы научитесь использовать её как инструмент"
+          "От основ Python к веб-приложению на Django",
+          "120 учебных часов, 13 онлайн + 2 встречи в Праге",
+          "Git, базы данных и командный проект",
+          "Возможная оплата Центром занятости после одобрения"
         ],
         "faq": [
           {
             "question": "Справлюсь ли я без IT-опыта?",
-            "answer": "Да – курс создан именно для вас. Большинство наших студентов приходят из совсем других сфер: администрация, логистика, услуги, продажи. Мы начинаем с самых основ и продвигаемся шаг за шагом. Преподаватели из Карлова университета и компаний типа Rapid7 имеют большой опыт обучения полных новичков."
+            "answer": "Курс рассчитан на начинающих и начинается с основ. Для начала не требуются опыт программирования и IT-диплом. Важны желание учиться и время на практику. Конкретные условия поступления подтвердим до записи."
           },
           {
-            "question": "Курс действительно бесплатный? Как это работает?",
-            "answer": "Да, курс на 100% бесплатный. Он аккредитован Министерством образования и полностью финансируется Центром занятости. Достаточно быть на учёте или подать заявку – мы поможем на каждом этапе. Обычная цена курса 38 000 крон – вы не платите ни короны."
+            "question": "Может ли Центр занятости оплатить курс?",
+            "answer": "Можно подать заявку на оплату курса в Центр занятости Чехии; решение принимается индивидуально, одобрение не гарантировано. При одобрении полной оплаты ваш взнос составляет 0 крон. Мы поможем разобраться в заявке. Уточните актуальные условия и свои обязательства в Центре занятости."
           },
           {
             "question": "Что я буду уметь после курса?",
-            "answer": "Вы сможете создать полноценное веб-приложение с нуля – написать бэкенд на Python, спроектировать базу данных, создать интерфейс и развернуть приложение в интернете. Вы освоите Git, командную разработку и будете готовы к junior-собеседованию. В курс входит командный проект для портфолио."
+            "answer": "Цель — объединить Python, HTML/CSS, базы данных и Django в приложение, использовать Git и попробовать командную разработку. Проект можно развивать для демонстрации навыков. Для трудоустройства важны дальнейшая практика и обучение."
           },
           {
             "question": "Поможете найти работу после курса?",
-            "answer": "Вы получите официальный сертификат переподготовки, признанный работодателями по всей Чехии. Итоговый проект послужит демонстрацией навыков. Мы поможем с резюме, подготовкой к собеседованию и подключим к сообществу. В IT хронический недостаток специалистов – компании активно ищут junior-разработчиков."
+            "answer": "Курс не гарантирует работу или конкретную зарплату. Он даёт основы, опыт проекта и направление дальнейшего развития. О конкретной поддержке с портфолио, резюме и собеседованием спросите до записи."
           },
           {
             "question": "Сколько времени в неделю нужно уделять курсу?",
-            "answer": "Курс длится примерно 3 месяца. Рассчитывайте на 10–15 часов в неделю (онлайн-занятия + самостоятельная работа). Основная часть проходит онлайн – можно совмещать с частичной занятостью."
+            "answer": "Ориентируйтесь на 10–15 часов в неделю вместе с занятиями, самостоятельной работой и заданиями. Точное расписание и дата окончания зависят от потока. Предусмотрены также 2 очных занятия в Праге."
           },
           {
-            "question": "AI заменит программистов?",
-            "answer": "Нет. AI – это инструмент, который усиливает разработчиков, а не заменяет. Как калькулятор не заменил бухгалтеров – он сделал их эффективнее. Разработчики с навыками AI ещё более востребованы и лучше оплачиваются. На курсе вы научитесь использовать AI как своего помощника."
+            "question": "Как завершается курс?",
+            "answer": "Итог — письменный экзамен из 15 вопросов и сдача программного проекта. После успешного выполнения условий выдаётся свидетельство о переподготовке по разработке веб-приложений на Python."
           }
         ]
       }
@@ -232,74 +214,102 @@
   },
   {
     "slug": "programator-csharp",
+    "topics": ["C#", ".NET"],
     "languages": {
       "cs": {
         "title": "Programátor C#",
         "description": "Rekvalifikační kurz programování v C# .NET. Naučíte se moderní vývoj aplikací s Microsoft technologiemi, ASP.NET MVC, Entity Framework a další pokročilé nástroje.",
         "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
         "level": "Začátečníci"
-      }
+      },
+      "en": { "title": "C# development", "description": "A course in application development with C#, .NET, ASP.NET MVC and Entity Framework is in preparation.", "duration": "120 teaching hours (13 online + 2 in-person sessions in Prague)", "level": "Beginner" },
+      "ru": { "title": "Разработка на C#", "description": "Готовится курс разработки приложений с C#, .NET, ASP.NET MVC и Entity Framework.", "duration": "120 учебных часов (13 онлайн + 2 очные встречи в Праге)", "level": "Начальный" }
     },
     "status": "upcoming"
   },
   {
     "slug": "programator-java",
+    "topics": ["Java", "Spring"],
     "languages": {
       "cs": {
         "title": "Programátor Java",
         "description": "Komplexní kurz programování v Javě. Zahrnuje základy Javy, Spring Framework, vývoj enterprise aplikací a moderní best practices v Java ekosystému.",
         "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
         "level": "Začátečníci"
-      }
+      },
+      "en": { "title": "Java development", "description": "Java fundamentals, Spring and enterprise application development. This course is in preparation.", "duration": "120 teaching hours (13 online + 2 in-person sessions in Prague)", "level": "Beginner" },
+      "ru": { "title": "Разработка на Java", "description": "Основы Java, Spring и разработка корпоративных приложений. Курс готовится.", "duration": "120 учебных часов (13 онлайн + 2 очные встречи в Праге)", "level": "Начальный" }
     },
     "status": "upcoming"
   },
   {
     "slug": "programator-php",
+    "topics": ["PHP", "Laravel"],
     "languages": {
       "cs": {
         "title": "Programátor PHP",
         "description": "Kurz vývoje webových aplikací v PHP. Naučíte se moderní PHP, Laravel framework, práci s databázemi a vývoj REST API.",
         "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
         "level": "Začátečníci"
-      }
+      },
+      "en": { "title": "PHP development", "description": "Web application development with PHP, Laravel, databases and REST APIs. This course is in preparation.", "duration": "120 teaching hours (13 online + 2 in-person sessions in Prague)", "level": "Beginner" },
+      "ru": { "title": "Разработка на PHP", "description": "Веб-приложения с PHP, Laravel, базами данных и REST API. Курс готовится.", "duration": "120 учебных часов (13 онлайн + 2 очные встречи в Праге)", "level": "Начальный" }
     },
     "status": "upcoming"
   },
   {
     "slug": "programator-javascript",
+    "topics": ["JavaScript", "React", "TypeScript"],
     "languages": {
       "cs": {
         "title": "Programátor JavaScript",
         "description": "Kompletní kurz JavaScriptu a moderních frontend technologií. Zahrnuje ES6+, React, Node.js, TypeScript a vývoj full-stack aplikací.",
         "duration": "120 vyučovacích hodin (13 online + 2 prezenční školení v Praze)",
         "level": "Začátečníci"
-      }
+      },
+      "en": { "title": "JavaScript development", "description": "JavaScript, React, Node.js and TypeScript for web development. This course is in preparation.", "duration": "120 teaching hours (13 online + 2 in-person sessions in Prague)", "level": "Beginner" },
+      "ru": { "title": "Разработка на JavaScript", "description": "JavaScript, React, Node.js и TypeScript для веб-разработки. Курс готовится.", "duration": "120 учебных часов (13 онлайн + 2 очные встречи в Праге)", "level": "Начальный" }
     },
     "status": "upcoming"
   },
   {
     "slug": "datova-analyza",
+    "topics": ["Data", "Python"],
     "languages": {
       "cs": {
         "title": "Datová analýza",
         "description": "Pokročilé techniky analýzy dat a vizualizace s Pythonem a moderními nástroji pro data science.",
         "duration": "10 týdnů",
         "level": "Pokročilí"
-      }
+      },
+      "en": { "title": "Data analysis", "description": "Advanced data analysis and visualisation with Python and data science tools. This course is in preparation.", "duration": "10 weeks", "level": "Advanced" },
+      "ru": { "title": "Анализ данных", "description": "Продвинутый анализ и визуализация данных с Python и инструментами data science. Курс готовится.", "duration": "10 недель", "level": "Продвинутый" }
     },
     "status": "upcoming"
   },
   {
     "slug": "web-development",
+    "topics": ["Web", "React", "TypeScript"],
     "languages": {
       "cs": {
         "title": "Web development",
         "description": "Kompletní kurz vývoje moderních webových aplikací s React a TypeScript.",
         "duration": "12 týdnů",
         "level": "Středně pokročilí"
-      }
+      },
+      "en": { "title": "Web development", "description": "Modern web applications with React and TypeScript. This course is in preparation.", "duration": "12 weeks", "level": "Intermediate" },
+      "ru": { "title": "Веб-разработка", "description": "Современные веб-приложения с React и TypeScript. Курс готовится.", "duration": "12 недель", "level": "Средний" }
     },
     "status": "upcoming"
+  },
+  {
+    "slug": "umela-inteligence",
+    "topics": ["AI"],
+    "status": "upcoming",
+    "languages": {
+      "cs": { "title": "Umělá inteligence", "description": "Nové kurzy AI připravujeme. Obsah, vstupní úroveň, termíny a cenu zveřejníme při otevření nabídky.", "duration": "", "level": "Upřesníme" },
+      "en": { "title": "Artificial intelligence", "description": "New AI courses are in development. Content, entry level, dates and prices will be published when the courses open.", "duration": "", "level": "To be confirmed" },
+      "ru": { "title": "Искусственный интеллект", "description": "Новые курсы AI готовятся. Содержание, входной уровень, даты и цены опубликуем при открытии предложения.", "duration": "", "level": "Уточняется" }
+    }
   }
 ]
