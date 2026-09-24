@@ -15,7 +15,7 @@ This is the mandatory source of truth for the visual and UX design of the eXpans
 
 ### The Design Serves A Decision
 
-The primary visitor is considering a new direction in IT and may be unfamiliar with programming, training terminology, or public funding. The design MUST help that person understand the offer and make an informed decision, not merely admire the presentation.
+The individual visitor is considering a new direction in IT and may be unfamiliar with programming, training terminology, or public funding. Business visitors need to develop a team or solve an operational or technical problem, sometimes without a specification. The design MUST help both audiences understand the offer and make an informed decision, not merely admire the presentation.
 
 The customer journey is:
 
@@ -25,7 +25,7 @@ Is this for me? -> Which course fits? -> What will I learn and do?
 -> Can I trust the people and conditions? -> How do I take the next step?
 ```
 
-- The homepage MUST represent the company and its whole course catalog. It MUST NOT make one programming language the identity of eXpansePi.
+- The homepage MUST represent the company, its whole course catalog and its business offering. Course discovery and enrollment MUST remain prominent; business services MUST have a clear entry point without replacing the course journey. One programming language MUST NOT become the identity of eXpansePi.
 - A course page MUST answer the same questions independently; visitors may arrive directly from search or an advertisement.
 - The intended impression is confident, technically credible, approachable, and precise. Visitors MUST NOT need to feel like an insider to understand the offer.
 - Premium means clear hierarchy, controlled composition, readable type, and dependable behavior. It MUST NOT mean tiny text, artificial exclusivity, or large empty areas around sparse information.
@@ -192,10 +192,12 @@ If those conditions cannot be met, regroup the content. Do not keep adjusting ma
 - Badges MUST communicate a concise status or attribute. They MUST NOT become paragraph containers, pretend to be buttons, or imply approval or accreditation unsupported by the course record.
 - Team education and employer credentials SHOULD precede the roster as paired, unframed facts with prominent institution names, aligned labels and explanations, and a stacked layout when space is limited. Labels MUST distinguish graduates' education and instructors' employment from institutional partnerships or course accreditation.
 - Each institution MUST read as a separate list item, with its own bounded surface and spacing, not as part of one combined name. These noninteractive items MUST wrap without truncation as the data grows. Lists MUST derive from explicit lecturer education/current-employer fields, deduplicate names and omit empty groups; biography mentions MUST NOT be treated as current employment or completed education.
+- Team caveats and their adjacent action MUST wrap onto separate rows before long translated copy squeezes the action below its readable width.
 
 ### Forms And Feedback
 
 - Reuse the shared enquiry form. New routes MUST NOT create slightly different versions of the same application workflow.
+- Business enquiries MUST use the shared form's business intent, with relevant subject, optional company information and business-specific feedback. On the business page, all enquiry commands MUST open one shared native dialog, using the same dialog behavior as course applications. Keep the closing invitation compact, without an inline form. Business enquiries MUST NOT require course selection, imply enrollment or trigger a course-application conversion. The general contact page MUST let visitors choose either intent.
 - Require only the information needed for the initial enquiry. Name and email are required in the present enquiry flow; phone and personal message remain optional.
 - Visible labels MUST persist independently of placeholders. Required/optional status and native input types/autocomplete MUST be appropriate to the field.
 - Text inputs and selects MUST share the 50px control height and readable 16px input text. Textareas MUST grow or scroll without clipping their content.
@@ -207,9 +209,10 @@ If those conditions cannot be met, regroup the content. Do not keep adjusting ma
 
 ### Navigation, Dialogs, And Accordions
 
-- Primary navigation MUST reflect the student journey: courses, participation, funding, people, and questions. Vacancies and administrative information MUST remain secondary.
-- A global start/apply action MUST lead to course choice. A published course's action MUST retain that course's context. A preparation page MUST NOT link to a nonexistent application section.
+- Primary navigation MUST preserve course discovery, participation, funding and people, provide direct contact, and include one top-level **Pro firmy** destination (localized in other languages). FAQs remain within page content and footer links, not primary navigation. AI, automation, development and private AI MUST remain within the business section. Vacancies and administrative information MUST remain secondary.
+- A global start/apply action MUST lead to course choice. A published course's action MUST retain that course's context. On the business page, an explicitly business-labeled action MUST lead to the business enquiry instead. A preparation page MUST NOT link to a nonexistent application section.
 - Navigation MUST switch composition before readable labels collide. Do not shrink the desktop menu to preserve it at a narrower width.
+- With the business destination included, navigation uses the mobile menu below 1200px; header height and reading-scale breakpoints remain unchanged. Verify the composition on both sides of this breakpoint in all languages.
 - Mobile navigation and application dialogs MUST support focus containment, Escape, an accessible close control, and focus restoration to their trigger. A pointer click MUST establish the trigger as the return target even in Safari.
 - Use native disclosures for ordinary FAQ content. Questions MUST be understandable without opening them. Essential price, date, audience, or format information MUST NOT exist only in an accordion.
 - FAQ pairs MUST share row and first-line alignment on desktop, with a sensible reading/tab order on phones. Expanded answers MUST remain natural content, not clipped fixed-height panels.
@@ -312,10 +315,12 @@ If those conditions cannot be met, regroup the content. Do not keep adjusting ma
 - Public pages MUST share the same wordmark, header, language navigation, footer, focus treatment, and reading scale. A different content type is not a reason to return to an older visual template.
 - Page introductions MUST establish the topic before the content. Long-form articles may use a narrower, centered reading container, but their heading, metadata, prose, and ending MUST align with that same measure.
 - The homepage MUST offer catalog discovery and explain the broader learning journey without assigning every course the same format or outcome.
+- The business page MUST make employee training, AI and automation, and custom software independently understandable and purchasable. Private/internal AI belongs within the AI offering. Explain concrete problems, deliverables, engagement steps and pricing by agreed scope; a technical specification MUST NOT be a prerequisite for an enquiry.
+- The business page MUST introduce the team's collective development experience without listing individuals or employers. Individual profiles remain on the about and course-related pages. Business credibility MUST NOT imply that team members' employers are eXpansePi clients. Illustrative workflows MUST be labeled as examples, not case studies. Private AI copy MUST distinguish deployment choices, data flows, permissions and operational responsibilities; it MUST NOT imply automatic confidentiality or unsupported security guarantees.
 - Published course pages MUST place pricing and applying together, expose course facts in a scannable overview, then provide curriculum, practical experience, funding where applicable, people, questions, and the next step.
 - Unpublished offerings MUST remain visibly in preparation, without enrollment controls or fabricated dates. Do not create urgency from the mere presence of a catalog entry.
 - Contact pages SHOULD make the form primary while aligning the contact-information and form headings. Company/legal details MUST be grouped separately from the main contact methods.
-- About pages MUST prioritize real people and relevant teaching principles. Biography lengths need not be identical; the roster structure must make the differences natural.
+- About pages MUST prioritize real people and relevant teaching principles while acknowledging the business offering. Biography lengths need not be identical; the roster structure must make the differences natural.
 - Homepage and course-page profiles SHOULD use explicitly authored localized summaries. The about page retains full biographies; do not truncate them with string splitting or line clamping.
 - Blog and vacancy lists SHOULD use editorial rows; detail pages SHOULD use the common reading layout. Short or empty states MUST be truthful and must not be padded into a full-screen brochure.
 - The privacy page SHOULD behave as one document with navigable chapters, not an unrelated stack of promotional cards.
@@ -430,10 +435,11 @@ Do not declare conformance solely because the code compiles or screenshots conta
 | Header, language selection, mobile navigation | [app/[lang]/components/Navigation.tsx](app/%5Blang%5D/components/Navigation.tsx) |
 | Footer and partner presentation | [app/[lang]/components/Footer.tsx](app/%5Blang%5D/components/Footer.tsx), [app/[lang]/components/PartnerSection.tsx](app/%5Blang%5D/components/PartnerSection.tsx) |
 | Enquiry and consent UI | [app/[lang]/components/EnquiryForm.tsx](app/%5Blang%5D/components/EnquiryForm.tsx), [app/[lang]/components/CookieBanner.tsx](app/%5Blang%5D/components/CookieBanner.tsx) |
-| Application dialog | [app/[lang]/kurzy/[slug]/components/ApplyModal.tsx](app/%5Blang%5D/kurzy/%5Bslug%5D/components/ApplyModal.tsx) |
+| Shared enquiry dialog and course application adapter | [app/[lang]/components/EnquiryDialog.tsx](app/%5Blang%5D/components/EnquiryDialog.tsx), [app/[lang]/kurzy/[slug]/components/ApplyModal.tsx](app/%5Blang%5D/kurzy/%5Bslug%5D/components/ApplyModal.tsx) |
 | Catalog presentation | [app/[lang]/kurzy/components/CourseCard.tsx](app/%5Blang%5D/kurzy/components/CourseCard.tsx) |
 | Purposeful hero and learning interactions | [app/[lang]/components/HeroScene.tsx](app/%5Blang%5D/components/HeroScene.tsx), [app/[lang]/components/LearningJourney.tsx](app/%5Blang%5D/components/LearningJourney.tsx) |
 | Shared language-specific customer copy | [i18n/site.ts](i18n/site.ts) |
+| Business offering and localized service copy | [app/[lang]/pro-firmy/page.tsx](app/%5Blang%5D/pro-firmy/page.tsx), [i18n/business.ts](i18n/business.ts) |
 | Course facts and publication status | [data/courses.json](data/courses.json), [data/courses.ts](data/courses.ts) |
 | Date availability | [lib/course-schedule.ts](lib/course-schedule.ts) |
 | Content, layout, accessibility, and interaction regressions | [tests/course-experience.test.mjs](tests/course-experience.test.mjs), [tests/site.spec.ts](tests/site.spec.ts) |

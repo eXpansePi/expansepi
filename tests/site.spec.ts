@@ -7,7 +7,10 @@ const widths = [320, 360, 375, 390, 430, 600, 768, 820, 900, 1024, 1100, 1152, 1
 const pythonPath = "/cs/kurzy/programator-www-aplikaci-v-pythonu"
 
 test.setTimeout(120000)
-test.use({ browserName: process.env.E2E_BROWSER === "webkit" ? "webkit" : "chromium" })
+test.use({
+  browserName: process.env.E2E_BROWSER === "webkit" ? "webkit" : "chromium",
+  ignoreHTTPSErrors: new URL(base).protocol === "https:" && ["localhost", "127.0.0.1"].includes(new URL(base).hostname),
+})
 
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" })
@@ -18,7 +21,7 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/contact", route => route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ success: false }) }))
 })
 
-for (const [name, path] of [["home", "/cs"], ["catalog", "/cs/kurzy"], ["course", pythonPath], ["contact", "/cs/kontakt"], ["about", "/cs/o-nas"], ["blog", "/cs/blog"], ["article", "/cs/blog/zaciname-s-pythonem-prvni-kroky"], ["vacancies", "/cs/volne-pozice"], ["privacy", "/cs/gdpr"]]) {
+for (const [name, path] of [["home", "/cs"], ["catalog", "/cs/kurzy"], ["course", pythonPath], ["business-cs", "/cs/pro-firmy"], ["business-en", "/en/for-business"], ["business-ru", "/ru/dlya-kompaniy"], ["contact", "/cs/kontakt"], ["about", "/cs/o-nas"], ["blog", "/cs/blog"], ["article", "/cs/blog/zaciname-s-pythonem-prvni-kroky"], ["vacancies", "/cs/volne-pozice"], ["privacy", "/cs/gdpr"]]) {
   test(`${name}: responsive layout and accessible content`, async ({ page }, testInfo) => {
     const errors: string[] = []
     page.on("pageerror", error => errors.push(error.message))
@@ -61,6 +64,190 @@ for (const [name, path] of [["home", "/cs"], ["catalog", "/cs/kurzy"], ["course"
     expect(errors).toEqual([])
   })
 }
+
+test("business navigation preserves language, enquiry context and mobile access", async ({ page }) => {
+  const routes = { cs: "/cs/pro-firmy", en: "/en/for-business", ru: "/ru/dlya-kompaniy" }
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto(`${base}${routes.cs}`)
+  for (const [lang, path] of Object.entries(routes)) {
+    await page.locator(".language-switcher summary").click()
+    await page.locator(`.language-switcher a[hreflang="${lang}"]`).click()
+    await expect(page).toHaveURL(`${base}${path}`)
+    await expect(page.locator("html")).toHaveAttribute("lang", lang)
+    await expect(page.locator(`.desktop-nav a[href="${path}"]`)).toHaveCount(1)
+    await expect(page.locator(`.desktop-nav a[href="${path}"]`)).toHaveAttribute("aria-current", "page")
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`${path}$`))
+    await expect(page.locator(".header-apply")).toHaveAttribute("aria-haspopup", "dialog")
+    for (const width of [1200, 1280, 1440]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await expect(page.locator(".desktop-nav")).toBeVisible()
+      const fits = await page.locator(".header-inner").evaluate(header => {
+        const logo = header.querySelector(".wordmark")!.getBoundingClientRect()
+        const navigation = header.querySelector(".desktop-nav")!.getBoundingClientRect()
+        const actions = header.querySelector(".header-actions")!.getBoundingClientRect()
+        return logo.right < navigation.left && navigation.right < actions.left && actions.right <= innerWidth
+      })
+      expect(fits, `${lang} business header at ${width}px`).toBe(true)
+    }
+    for (const link of await page.locator(".business-services a").all()) {
+      const target = await link.getAttribute("href")
+      expect(target).toBeTruthy()
+      await expect(page.locator(target!)).toHaveCount(1)
+    }
+    await page.locator(".header-apply").click()
+    await expect(page).toHaveURL(`${base}${path}`)
+    const dialog = page.locator(".application-dialog[open]")
+    await expect(dialog).toBeVisible()
+    await expect(dialog.locator('[name="service"]')).toBeVisible()
+    await expect(page.locator(".application-dialog")).toHaveCount(1)
+    await dialog.locator(".dialog-close").focus()
+    await page.keyboard.press("Shift+Tab")
+    expect(await dialog.evaluate(element => !document.hasFocus() || element.contains(document.activeElement))).toBe(true)
+    await dialog.locator(".form-privacy a").focus()
+    await page.keyboard.press("Tab")
+    expect(await dialog.evaluate(element => !document.hasFocus() || element.contains(document.activeElement))).toBe(true)
+    await dialog.locator(".dialog-close").focus()
+    const accessibility = await new AxeBuilder({ page }).include(".application-dialog").withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
+    expect(accessibility.violations.map(item => item.id)).toEqual([])
+    await page.keyboard.press("Escape")
+    await expect(dialog).toHaveCount(0)
+    await expect(page.locator(".header-apply")).toBeFocused()
+  }
+  for (const trigger of await page.locator('main button[aria-haspopup="dialog"]').all()) {
+    await trigger.click()
+    await expect(page.locator(".application-dialog[open]")).toBeVisible()
+    await page.locator(".application-dialog .dialog-close").click()
+    await expect(page.locator(".application-dialog[open]")).toHaveCount(0)
+    await expect(trigger).toBeFocused()
+  }
+  await page.setViewportSize({ width: 320, height: 844 })
+  await page.goto(`${base}/cs`)
+  await page.locator(".menu-toggle").click()
+  await page.locator('#mobile-navigation a[href="/cs/pro-firmy"]').click()
+  await expect(page).toHaveURL(`${base}/cs/pro-firmy`)
+  await expect(page.locator("#mobile-navigation")).toBeHidden()
+  await page.locator(".menu-toggle").click()
+  await expect(page.locator('#mobile-navigation a[aria-current="page"]')).toHaveText("Pro firmy")
+  await page.keyboard.press("Escape")
+  await expect(page.locator(".menu-toggle")).toBeFocused()
+  await page.locator(".menu-toggle").click()
+  await expect(page.locator('#mobile-navigation a[href="/cs/kontakt"]')).toHaveCount(1)
+  await expect(page.locator('#mobile-navigation a[href$="#otazky"]')).toHaveCount(0)
+  await page.locator('#mobile-navigation button[aria-haspopup="dialog"]').click()
+  await expect(page.locator("#mobile-navigation")).toBeHidden()
+  await expect(page.locator(".application-dialog[open]")).toBeVisible()
+  await expect(page.locator("dialog[open]")).toHaveCount(1)
+  await page.keyboard.press("Escape")
+  await expect(page.locator(".menu-toggle")).toBeFocused()
+})
+
+test("business enquiry preserves data through delivery errors and confirms the right next step", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 })
+  let responseStatus = 500
+  const submissions: Record<string, string>[] = []
+  await page.route("**/api/contact", route => {
+    submissions.push(route.request().postDataJSON())
+    return route.fulfill({ status: responseStatus, contentType: "application/json", body: JSON.stringify({ success: responseStatus === 200 }) })
+  })
+  await page.goto(`${base}/cs/pro-firmy`)
+  const trigger = page.locator('.business-intro button[aria-haspopup="dialog"]')
+  await trigger.click()
+  const dialog = page.locator(".application-dialog[open]")
+  const form = dialog.locator("form")
+  await form.locator('[name="service"]').selectOption("private-ai")
+  await form.locator('[name="company"]').fill("Example s.r.o.")
+  await form.getByLabel("Jméno a příjmení").fill("QA Example")
+  await form.getByLabel("E-mail", { exact: true }).fill("qa@example.test")
+  await form.locator('[name="message"]').fill("Potřebujeme hledat ve firemní dokumentaci.")
+  await form.getByRole("button", { name: "Odeslat firemní poptávku" }).click()
+  await expect(form.getByRole("alert")).toContainText("Zprávu se nepodařilo odeslat")
+  await expect(form.locator('[name="company"]')).toHaveValue("Example s.r.o.")
+  await expect(form.locator('[name="message"]')).toHaveValue("Potřebujeme hledat ve firemní dokumentaci.")
+  responseStatus = 429
+  await form.getByRole("button", { name: "Odeslat firemní poptávku" }).click()
+  await expect(form.getByRole("alert")).toContainText("Příliš mnoho pokusů")
+  await expect(form.locator('[name="service"]')).toHaveValue("private-ai")
+  responseStatus = 200
+  await form.getByRole("button", { name: "Odeslat firemní poptávku" }).click()
+  const feedback = dialog.locator(".form-success")
+  await expect(feedback).toBeFocused()
+  await expect(feedback).toContainText("před zahájením práce")
+  await expect(feedback).not.toContainText("potvrzení místa")
+  expect(submissions[2].subject).toBe("Pro firmy: Privátní / interní AI")
+  expect(submissions[2].message).toBe("Firma: Example s.r.o.\n\nPotřebujeme hledat ve firemní dokumentaci.")
+  await feedback.getByRole("button").click()
+  await form.getByLabel("Jméno a příjmení").fill("QA Example")
+  await form.getByLabel("E-mail", { exact: true }).fill("qa@example.test")
+  await form.getByRole("button", { name: "Odeslat firemní poptávku" }).click()
+  await expect(feedback).toBeFocused()
+  expect(submissions[3].subject).toBe("Pro firmy")
+  expect(submissions[3].message).toBeTruthy()
+  expect(submissions[3].phone).toBeUndefined()
+  await page.keyboard.press("Escape")
+  await expect(dialog).toHaveCount(0)
+  await expect(trigger).toBeFocused()
+})
+
+test("business spacing keeps team and enquiry compact and private AI copy aligned", async ({ page }, testInfo) => {
+  for (const path of ["/cs/pro-firmy", "/en/for-business", "/ru/dlya-kompaniy"]) {
+    await page.goto(`${base}${path}`)
+    await page.evaluate(async () => { await document.fonts.ready })
+    await expect(page.locator("main form, main .person-card, main .team-credentials")).toHaveCount(0)
+    for (const width of [320, 390, 768, 1024, 1440, 2560]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await expect(page.locator(".site-header")).toHaveCSS("height", `${width < 768 ? 68 : width < 1024 ? 72 : 80}px`)
+      await expect(page.locator("#otazky")).toHaveCSS("padding-top", `${width < 768 ? 48 : width < 1024 ? 64 : width < 1600 ? 72 : 80}px`)
+      const spacing = await page.evaluate(() => {
+        const team = document.querySelector(".business-team .section-header")!.getBoundingClientRect()
+        const faq = document.querySelector("#faq-title")!.getBoundingClientRect()
+        const enquiry = document.querySelector("#poptavka")!
+        const layout = enquiry.querySelector(".application-layout")!
+        const action = layout.querySelector(".application-action")!
+        return {
+          sectionSpace: parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--section-space")),
+          teamToFaq: faq.top - team.bottom,
+          enquiryHeight: enquiry.getBoundingClientRect().height,
+          contentHeight: layout.getBoundingClientRect().height,
+          actionHeight: action.getBoundingClientRect().height,
+          introductionHeight: layout.querySelector(".section-header")!.getBoundingClientRect().height,
+          privateDescriptionTops: Array.from(document.querySelectorAll(".business-private-options dd")).map(element => element.getBoundingClientRect().top),
+        }
+      })
+      expect(Math.abs(spacing.teamToFaq - spacing.sectionSpace), `${path} team/FAQ spacing at ${width}px`).toBeLessThanOrEqual(1)
+      expect(Math.abs(spacing.enquiryHeight - spacing.contentHeight - 2 * spacing.sectionSpace - 2)).toBeLessThanOrEqual(1)
+      if (width >= 1024) {
+        expect(Math.max(...spacing.privateDescriptionTops) - Math.min(...spacing.privateDescriptionTops)).toBeLessThanOrEqual(1)
+        expect(Math.abs(spacing.contentHeight - Math.max(spacing.actionHeight, spacing.introductionHeight))).toBeLessThanOrEqual(1)
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+      if (path.startsWith("/cs/") && [390, 1440].includes(width)) await page.locator("#poptavka").screenshot({ path: testInfo.outputPath(`business-invitation-${width}.png`), animations: "disabled" })
+    }
+  }
+})
+
+test("general contact supports both enquiry intents without losing contact details", async ({ page }) => {
+  for (const path of ["/cs/kontakt", "/en/contact", "/ru/kontakt"]) {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto(`${base}${path}`)
+    const form = page.locator(".enquiry-form")
+    await form.locator('[name="name"]').fill("QA Example")
+    await form.locator('[name="email"]').fill("qa@example.test")
+    await form.locator('[name="message"]').fill("We need a tool for our team.")
+    await form.locator('input[name="intent"][value="business"]').check()
+    await expect(form.locator('[name="course"]')).toHaveCount(0)
+    await expect(form.locator('[name="service"]')).toBeVisible()
+    await expect(form.locator('[name="name"]')).toHaveValue("QA Example")
+    await expect(form.locator('[name="email"]')).toHaveValue("qa@example.test")
+    await expect(form.locator('[name="message"]')).toHaveValue("We need a tool for our team.")
+    const accessibility = await new AxeBuilder({ page }).include(".enquiry-form").withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
+    expect(accessibility.violations.map(item => item.id)).toEqual([])
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+    await form.locator('input[name="intent"][value="course"]').check()
+    await expect(form.locator('[name="course"]')).toBeVisible()
+    await expect(form.locator('[name="service"]')).toHaveCount(0)
+    await expect(form.locator('[name="message"]')).toHaveValue("We need a tool for our team.")
+  }
+})
 
 test("team credentials stay prominent and readable across languages and widths", async ({ page }, testInfo) => {
   for (const [lang, educationLabel, experienceLabel] of [
@@ -196,7 +383,11 @@ test("navigation and supporting text remain readable without header collisions",
   for (const lang of ["cs", "en", "ru"]) {
     await page.goto(`${base}/${lang}`)
     await page.evaluate(async () => { await document.fonts.ready })
-    for (const width of [320, 390, 768, 1024, 1280, 1440, 1920, 2560]) {
+    await expect(page.locator('.desktop-nav a[href$="#otazky"], .mobile-nav-links a[href$="#otazky"]')).toHaveCount(0)
+    const contactPath = lang === "en" ? "/en/contact" : `/${lang}/kontakt`
+    await expect(page.locator(`.desktop-nav a[href="${contactPath}"]`)).toHaveCount(1)
+    await expect(page.locator(`.mobile-nav-links a[href="${contactPath}"]`)).toHaveCount(1)
+    for (const width of [320, 390, 768, 1024, 1100, 1199, 1200, 1280, 1440, 1920, 2560]) {
       await page.setViewportSize({ width, height: 1000 })
       await expect(page.locator(".site-header")).toHaveCSS("height", `${width < 768 ? 68 : width < 1024 ? 72 : 80}px`)
       const minimumMeta = width < 768 ? 13 : 14
@@ -205,7 +396,7 @@ test("navigation and supporting text remain readable without header collisions",
       await expect(page.locator(".hero-funding")).toHaveCSS("font-size", `${width < 768 ? 15 : 16}px`)
       await expect(page.locator(".footer-links a").first()).toHaveCSS("font-size", `${width < 768 ? 15 : 16}px`)
       await expect(page.locator(".language-switcher summary")).toHaveCSS("font-size", "15px")
-      if (width >= 1024) {
+      if (width >= 1200) {
         await expect(page.locator(".desktop-nav a").first()).toHaveCSS("font-size", "17px")
         await expect(page.locator(".header-apply")).toHaveCSS("font-size", "16px")
         const fits = await page.locator(".header-inner").evaluate(header => {
@@ -215,6 +406,9 @@ test("navigation and supporting text remain readable without header collisions",
           return logo.right < navigation.left && navigation.right < actions.left && actions.right <= innerWidth
         })
         expect(fits, `${lang} header at ${width}px`).toBe(true)
+      } else {
+        await expect(page.locator(".menu-toggle")).toBeVisible()
+        await expect(page.locator(".desktop-nav")).toBeHidden()
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
       if (lang === "cs" && [1024, 1440, 1920].includes(width)) await page.locator(".site-header").screenshot({ path: testInfo.outputPath(`header-${width}.png`) })
@@ -669,6 +863,34 @@ test("the privacy policy discloses the processors the site actually contacts", a
 
 test.describe("200% zoom-equivalent reflow", () => {
   test.use({ viewport: { width: 720, height: 500 }, deviceScaleFactor: 2 })
+
+  test("business content and enquiry controls remain available in every language", async ({ page }, testInfo) => {
+    for (const path of ["/cs/pro-firmy", "/en/for-business", "/ru/dlya-kompaniy"]) {
+      await page.goto(`${base}${path}`)
+      await expect(page.locator("h1")).toBeVisible()
+      await expect(page.locator(".menu-toggle")).toBeVisible()
+      await expect(page.locator(".business-service")).toHaveCount(3)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
+      const trigger = page.locator('.business-intro button[aria-haspopup="dialog"]')
+      await trigger.click()
+      const dialog = page.locator(".application-dialog[open]")
+      const form = dialog.locator("form")
+      await form.locator('[name="name"]').fill("Zoom review")
+      await form.locator('[name="email"]').fill("zoom@example.test")
+      const submit = form.getByRole("button", { name: /Odeslat|Send|Отправить/ })
+      await submit.scrollIntoViewIfNeeded()
+      const bounds = await submit.boundingBox()
+      expect(bounds!.y).toBeGreaterThanOrEqual(16)
+      expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(500)
+      await submit.click()
+      await expect(form.getByRole("alert")).toBeVisible()
+      await expect(form.locator('[name="email"]')).toHaveValue("zoom@example.test")
+      await page.screenshot({ path: testInfo.outputPath(`business-${path.split("/")[1]}-zoom-equivalent.png`), animations: "disabled" })
+      await page.keyboard.press("Escape")
+      await expect(dialog).toHaveCount(0)
+      await expect(trigger).toBeFocused()
+    }
+  })
 
   test("course content and application controls remain available", async ({ page }, testInfo) => {
     await page.goto(`${base}${pythonPath}`)

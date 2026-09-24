@@ -6,18 +6,18 @@ import { CookieBanner } from "./components/CookieBanner"
 
 const langMetadata: Record<Language, { title: string; description: string; locale: string }> = {
   cs: {
-    title: "eXpansePi - Praktické IT a rekvalifikační kurzy",
-    description: "Vyberte si svůj směr v IT. Praktické kurzy s vývojáři z oboru, přehledným obsahem a jasnými podmínkami. Nabídku postupně rozšiřujeme.",
+    title: "eXpansePi - IT kurzy a služby pro firmy",
+    description: "Praktické IT kurzy pro jednotlivce. Pro firmy školení týmů, AI, automatizace procesů a software na míru od vývojářů z praxe.",
     locale: "cs_CZ"
   },
   en: {
-    title: "eXpansePi - Practical IT and Reskilling Courses",
-    description: "Find your direction in IT. Practical courses with practising developers, clear curricula and transparent conditions. Our catalog is growing.",
+    title: "eXpansePi - IT courses and business services",
+    description: "Practical IT courses for individuals. Employee training, AI, process automation and custom software for businesses, delivered by practising developers.",
     locale: "en_US"
   },
   ru: {
-    title: "eXpansePi - Практические IT-курсы и переподготовка",
-    description: "Найдите своё направление в IT. Практические курсы с разработчиками, понятными программами и прозрачными условиями. Каталог постепенно расширяется.",
+    title: "eXpansePi - IT-курсы и услуги для компаний",
+    description: "Практические IT-курсы для частных лиц. Для компаний: обучение команд, AI, автоматизация процессов и разработка на заказ от практикующих разработчиков.",
     locale: "ru_RU"
   }
 }

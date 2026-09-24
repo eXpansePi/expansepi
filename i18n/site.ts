@@ -147,7 +147,7 @@ const cs = {
     expertise: "Zaměření",
     portraitPending: "Fotografii připravujeme",
     companyNote: "Uvedené firmy popisují profesní zkušenosti lektorů, nikoli příslib zaměstnání nebo partnerství.",
-    founderNote: "Zakladatel eXpansePi. Software engineer s vazbou na MFF UK; zaměření na Python, algoritmy a umělou inteligenci.",
+    founderNote: "Zakladatel eXpansePi a softwarový vývojář.",
   },
   career: {
     eyebrow: "A co po kurzu?",
@@ -186,7 +186,7 @@ const cs = {
   about: {
     eyebrow: "O nás",
     title: "Lidé za eXpansePi",
-    intro: "Jsme tým vývojářů, který přenáší zkušenosti z reálných projektů do srozumitelné výuky. Chceme, abyste kódu rozuměli, nejen ho opisovali.",
+    intro: "Jsme tým vývojářů z praxe. Jednotlivce učíme rozumět kódu, firmám pomáháme rozvíjet týmy a řešit konkrétní problémy pomocí softwaru, AI a automatizace.",
     principlesTitle: "Jak přistupujeme k výuce",
     principles: [
       { title: "Praxe s kontextem", text: "Neučíme technologie odděleně. Ukazujeme, jak spolu souvisejí v opravdové aplikaci." },
@@ -205,7 +205,7 @@ const cs = {
   contact: {
     eyebrow: "Ozvěte se nám",
     title: "Kontakt",
-    intro: "Zajímá vás kurz, financování nebo vhodný termín? Ozvěte se. Konkrétní podmínky si ověříme společně.",
+    intro: "Zajímá vás kurz, financování nebo řešíte potřeby firmy? Napište nám. S výběrem kurzu i upřesněním firemního zadání vám pomůžeme.",
     formIntro: "Vaše zpráva",
     directions: "Zobrazit místo výuky na mapě",
   },
@@ -246,7 +246,7 @@ const en: SiteCopy = {
     { title: "Submit your application", text: "Confirm registration, eligibility, documents and the submission deadline with the Labour Office before the course starts." },
     { title: "Wait for approval", text: "Before starting, confirm funding, attendance and completion requirements, including any obligations if you do not finish." },
   ], official: "Official retraining funding conditions", disclaimer: "Approval is not automatic. If funding is rejected, we will discuss other options, including self-funded study. An enquiry does not commit you to enrolment or payment." },
-  team: { eyebrow: "Experience from professional development", title: "Instructors and team", intro: "Learn from developers who connect university foundations with experience from real projects.", educationLabel: "University graduates", educationDetail: "An academic foundation combined with hands-on software development.", experienceLabel: "Experience at international companies", experienceDetail: "Our instructors' current workplaces. They bring their software development experience directly into teaching.", all: "Meet the whole team", expertise: "Expertise", portraitPending: "Portrait coming soon", companyNote: "Company names describe instructors' professional experience, not employment promises or partnerships.", founderNote: "Founder of eXpansePi. Software engineer with a connection to Charles University's Faculty of Mathematics and Physics; focused on Python, algorithms and AI." },
+  team: { eyebrow: "Experience from professional development", title: "Instructors and team", intro: "Learn from developers who connect university foundations with experience from real projects.", educationLabel: "University graduates", educationDetail: "An academic foundation combined with hands-on software development.", experienceLabel: "Experience at international companies", experienceDetail: "Our instructors' current workplaces. They bring their software development experience directly into teaching.", all: "Meet the whole team", expertise: "Expertise", portraitPending: "Portrait coming soon", companyNote: "Company names describe instructors' professional experience, not employment promises or partnerships.", founderNote: "Founder of eXpansePi and software developer." },
   career: { eyebrow: "What comes after?", title: "A foundation. Not an effortless shortcut.", text: "New knowledge becomes valuable when you use it. Depending on your course, continue with personal projects, use technology at work or prepare for a new professional direction.", roles: ["Personal projects and a portfolio", "Technology in your everyday work", "Preparation for your next career step"], disclaimer: "The course does not guarantee employment or a particular salary. Outcomes depend on your effort, portfolio, other skills and the job market." },
   faq: { eyebrow: "", title: "Frequently asked questions", intro: "", items: [
     { question: "Can I join without experience or an IT degree?", answer: "Each course lists its entry level. Start with a beginner course if you do not have an IT background. Check prerequisites for more advanced courses. We will confirm the specific entry and funding requirements before enrolment." },
@@ -263,13 +263,13 @@ const en: SiteCopy = {
     { question: "What happens after I apply?", answer: "The form sends us your nonbinding interest. We will contact you to discuss the course, current price, dates and possible funding. You then confirm the next steps. The form is not a payment or automatic confirmation of a place." },
   ] },
   apply: { eyebrow: "A nonbinding first step", title: "Let's discuss your course.", intro: "Choose a course or ask for help with your choice. We will discuss your goals and whether the course is a good fit.", courseIntro: "Your name and email are enough. We will contact you to discuss the dates, participation requirements and any Labour Office funding.", button: "Send a nonbinding application", note: "No payment or binding enrolment." },
-  about: { eyebrow: "About us", title: "The people behind eXpansePi", intro: "We are developers translating real project experience into accessible teaching. We want you to understand code, not just copy it.", principlesTitle: "Our approach to teaching", principles: [
+  about: { eyebrow: "About us", title: "The people behind eXpansePi", intro: "We are practising developers. We teach individuals to understand code and help businesses develop their teams and solve concrete problems with software, AI and automation.", principlesTitle: "Our approach to teaching", principles: [
     { title: "Practice with context", text: "We do not teach technologies in isolation. We show how they connect in a real application." },
     { title: "Room for questions", text: "Beginner questions belong at the beginning. We break complex principles down step by step." },
     { title: "Understanding for yourself", text: "We help you explain and modify code, not just copy a finished solution." },
   ], teamTitle: "Meet our team" },
   listing: { title: "Programming and IT courses", intro: "Compare content, dates, prices and entry levels. We will help you choose a course that fits your goals.", upcomingTitle: "Courses in development", upcomingText: "These courses are not open for enrolment. Dates and prices will be published when preparation is complete.", contact: "Not sure which course fits? Talk to us." },
-  contact: { eyebrow: "Get in touch", title: "Contact", intro: "Questions about a course, funding or dates? Get in touch. We will confirm the specific conditions together.", formIntro: "Your message", directions: "View the teaching location on a map" },
+  contact: { eyebrow: "Get in touch", title: "Contact", intro: "Questions about a course, funding or a business need? Get in touch. We can help you choose a course or clarify your company's brief.", formIntro: "Your message", directions: "View the teaching location on a map" },
 }
 
 const ru: SiteCopy = {
@@ -305,7 +305,7 @@ const ru: SiteCopy = {
     { title: "Подайте заявку", text: "До начала курса уточните в Центре занятости регистрацию, право на участие, документы и срок подачи." },
     { title: "Дождитесь одобрения", text: "До начала подтвердите оплату, требования к посещаемости и завершению, а также обязательства при незавершении." },
   ], official: "Официальные условия финансирования", disclaimer: "Одобрение не автоматическое. В случае отказа сначала обсудим другие варианты, включая самостоятельную оплату. Обращение не обязывает вас записываться или платить." },
-  team: { eyebrow: "Опыт профессиональной разработки", title: "Преподаватели и команда", intro: "Учитесь у разработчиков, которые соединяют университетские знания с опытом реальных проектов.", educationLabel: "Выпускники университетов", educationDetail: "Университетская подготовка в сочетании с практикой разработки программ.", experienceLabel: "Опыт в международных компаниях", experienceDetail: "Здесь сейчас работают наши преподаватели. Свой опыт разработки программ они передают на занятиях.", all: "Познакомиться со всей командой", expertise: "Специализация", portraitPending: "Фотография готовится", companyNote: "Названия компаний описывают профессиональный опыт преподавателей, а не обещание трудоустройства или партнёрства.", founderNote: "Основатель eXpansePi. Software engineer, связанный с физико-математическим факультетом Карлова университета; специализируется на Python, алгоритмах и AI." },
+  team: { eyebrow: "Опыт профессиональной разработки", title: "Преподаватели и команда", intro: "Учитесь у разработчиков, которые соединяют университетские знания с опытом реальных проектов.", educationLabel: "Выпускники университетов", educationDetail: "Университетская подготовка в сочетании с практикой разработки программ.", experienceLabel: "Опыт в международных компаниях", experienceDetail: "Здесь сейчас работают наши преподаватели. Свой опыт разработки программ они передают на занятиях.", all: "Познакомиться со всей командой", expertise: "Специализация", portraitPending: "Фотография готовится", companyNote: "Названия компаний описывают профессиональный опыт преподавателей, а не обещание трудоустройства или партнёрства.", founderNote: "Основатель eXpansePi и разработчик программного обеспечения." },
   career: { eyebrow: "Что после курса?", title: "Основа для роста. Не путь без усилий.", text: "Знания ценны, когда вы их используете. В зависимости от курса развивайте собственные проекты, применяйте технологии в работе или готовьтесь к новому профессиональному направлению.", roles: ["Собственные проекты и портфолио", "Технологии в повседневной работе", "Подготовка к следующему карьерному шагу"], disclaimer: "Курс не гарантирует работу или конкретную зарплату. Результат зависит от усилий, портфолио, других знаний и рынка труда." },
   faq: { eyebrow: "", title: "Частые вопросы", intro: "", items: [
     { question: "Можно ли без опыта и IT-образования?", answer: "У каждого курса указан входной уровень. Без IT-опыта выбирайте программу для начинающих. Для продвинутых курсов проверьте необходимые знания. Конкретные условия поступления и финансирования уточним до записи." },
@@ -322,13 +322,13 @@ const ru: SiteCopy = {
     { question: "Что произойдёт после заявки?", answer: "Форма отправляет нам ваш интерес без обязательств. Мы свяжемся, обсудим курс, цену, даты и финансирование. Затем подтвердим дальнейшие шаги. Форма не является оплатой или автоматическим подтверждением места." },
   ] },
   apply: { eyebrow: "Первый шаг без обязательств", title: "Обсудим ваш курс.", intro: "Выберите курс или обратитесь за помощью с выбором. Вместе обсудим ваши цели и подходящую программу.", courseIntro: "Достаточно имени и e-mail. Свяжемся с вами и обсудим даты, условия участия и возможную оплату Центром занятости.", button: "Подать заявку без обязательств", note: "Без оплаты и обязательной записи." },
-  about: { eyebrow: "О нас", title: "Люди за eXpansePi", intro: "Мы разработчики, которые превращают опыт реальных проектов в понятное обучение. Хотим, чтобы вы понимали код, а не просто копировали его.", principlesTitle: "Наш подход к обучению", principles: [
+  about: { eyebrow: "О нас", title: "Люди за eXpansePi", intro: "Мы практикующие разработчики. Учим людей понимать код, а компаниям помогаем развивать команды и решать конкретные задачи с помощью программ, AI и автоматизации.", principlesTitle: "Наш подход к обучению", principles: [
     { title: "Практика с контекстом", text: "Не учим технологии отдельно. Показываем, как они связаны в приложении." },
     { title: "Место для вопросов", text: "Вопросы новичков естественны. Разбираем сложные принципы шаг за шагом." },
     { title: "Собственное понимание", text: "Помогаем научиться объяснять и менять код, а не просто копировать готовое решение." },
   ], teamTitle: "Наша команда" },
   listing: { title: "Курсы программирования и IT", intro: "Сравните содержание, даты, цены и входной уровень. Поможем выбрать курс, который соответствует вашим целям.", upcomingTitle: "Готовящиеся курсы", upcomingText: "Запись на эти программы пока не открыта. Даты и цены опубликуем после завершения подготовки.", contact: "Не уверены в выборе? Напишите нам." },
-  contact: { eyebrow: "Свяжитесь с нами", title: "Контакты", intro: "Вопросы о курсе, финансировании или датах? Свяжитесь с нами. Уточним конкретные условия вместе.", formIntro: "Ваше сообщение", directions: "Место обучения на карте" },
+  contact: { eyebrow: "Свяжитесь с нами", title: "Контакты", intro: "Вопросы о курсе, финансировании или задаче компании? Напишите нам. Поможем выбрать курс или уточнить задачу для бизнеса.", formIntro: "Ваше сообщение", directions: "Место обучения на карте" },
 }
 
 export function getSiteCopy(lang: Language): SiteCopy {

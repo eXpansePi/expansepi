@@ -5,7 +5,7 @@
 
 import { Language } from '@/i18n/config'
 
-export type RouteKey = 'courses' | 'blog' | 'vacancies' | 'about' | 'contact' | 'home' | 'gdpr'
+export type RouteKey = 'courses' | 'business' | 'blog' | 'vacancies' | 'about' | 'contact' | 'home' | 'gdpr'
 
 /**
  * Route mapping: language -> route key -> URL slug
@@ -13,6 +13,7 @@ export type RouteKey = 'courses' | 'blog' | 'vacancies' | 'about' | 'contact' | 
 const routeMap: Record<Language, Record<RouteKey, string>> = {
   cs: {
     courses: 'kurzy',
+    business: 'pro-firmy',
     blog: 'blog',
     vacancies: 'volne-pozice',
     about: 'o-nas',
@@ -22,6 +23,7 @@ const routeMap: Record<Language, Record<RouteKey, string>> = {
   },
   en: {
     courses: 'courses',
+    business: 'for-business',
     blog: 'blog',
     vacancies: 'vacancies',
     about: 'about',
@@ -31,6 +33,7 @@ const routeMap: Record<Language, Record<RouteKey, string>> = {
   },
   ru: {
     courses: 'kursy',
+    business: 'dlya-kompaniy',
     blog: 'blog',
     vacancies: 'vakansii',
     about: 'o-nas',
@@ -47,6 +50,7 @@ const routeMap: Record<Language, Record<RouteKey, string>> = {
 const internalRouteMap: Record<string, RouteKey> = {
   // Czech routes
   'kurzy': 'courses',
+  'pro-firmy': 'business',
   'blog': 'blog',
   'volne-pozice': 'vacancies',
   'o-nas': 'about',
@@ -55,12 +59,14 @@ const internalRouteMap: Record<string, RouteKey> = {
   'gdpr': 'gdpr',
   // English routes
   'courses': 'courses',
+  'for-business': 'business',
   'vacancies': 'vacancies',
   'about': 'about',
   'contact': 'contact',
   'home': 'home',
   // Russian routes
   'kursy': 'courses',
+  'dlya-kompaniy': 'business',
   'vakansii': 'vacancies',
   'glavnaya': 'home',
 }

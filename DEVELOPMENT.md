@@ -6,7 +6,7 @@ Visual and UX decisions **MUST** follow [design-principles.md](design-principles
 
 - `data/courses.json` is the source of course availability, topics, prices, schedules and localized details. Do not duplicate course facts in homepage components.
 - `status: "active"` publishes a course in the homepage preview, full catalog, contact selector and sitemap. The homepage shows up to six courses in source order; the catalog shows all of them.
-- `status: "upcoming"` shows a clearly marked preparation entry, without an application button, price or timetable. Set this status until the offer is ready. AI is currently a preparation entry only.
+- `status: "upcoming"` shows a clearly marked preparation entry, without an application button, price or timetable. Set this status until the offer is ready. The individual AI course is currently a preparation entry only; B2B AI services are an active, separate offering.
 - The homepage's next-start link is selected from all published courses. Add `sessions` as `{ "start": "YYYY-MM-DD", "end": "YYYY-MM-DD" }`. Already-started cohorts are excluded using the Prague calendar date.
 - `price` is the confirmed full CZK price, not the student's possible funded contribution. Omit it or use `null` until confirmed; neither the UI nor structured data should invent a free offer.
 - `softwareLicense` records an included JetBrains licence with `product`, `months`, `logo` and `url`. Set it for each confirmed course benefit; other courses must not inherit Python's product or licence duration.
@@ -14,6 +14,18 @@ Visual and UX decisions **MUST** follow [design-principles.md](design-principles
 - `experience: "python-web"` opts into the existing Python learning demo and course-format content. Do not copy this flag to unrelated courses. Other courses use the general data-driven detail template.
 - Add `cs`, `en` and `ru` content when publishing. The data layer supports fallback, but fully translated records avoid mixed-language catalog pages.
 - Blog records support `contentLanguage` independently of route language. Legacy records default to Czech; rendered text and `BlogPosting.inLanguage` use that source language. Do not label fallback content as translated.
+
+## Business Offering
+
+- `app/[lang]/pro-firmy/page.tsx` is the single business section. Public URLs are `/cs/pro-firmy`, `/en/for-business` and `/ru/dlya-kompaniy`; keep `lib/routes.ts`, `next.config.ts`, metadata and the sitemap aligned.
+- `i18n/business.ts` contains the localized service copy, engagement process and homepage introduction. Business AI services are active independently of any individual AI course still marked `upcoming` in the catalog.
+- Keep employee training, AI/automation and custom software under one navigation item. Private/internal AI is part of the AI offer, not a separate top-level page.
+- `EnquiryForm` with `intent="business"` uses the existing `/api/contact` endpoint, preserving validation, rate limits, honeypot and delivery handling. Company information is optional and included in the message; the service is included in the subject. The shorter business message limit reserves room for the company prefix within the API's 5000-character limit.
+- General contact uses `allowIntentSelection`; course forms keep the default intent. Business submissions must not trigger the course-application conversion. No new advertising conversion is configured for B2B.
+- All business-page enquiry buttons open one `EnquiryDialog`, shared with the course application dialog through `ApplyModal`. The mobile menu closes before opening the enquiry and becomes the focus-return target. The closing page invitation contains actions and contact details, not an inline form.
+- Keep the business team introduction collective, without names or employers. Reuse shared process/FAQ patterns. Do not add prices, response-time promises, client logos or security guarantees without confirmation.
+- The header switches to its mobile menu below 1200px to accommodate the new link without shrinking navigation text. The course hero, catalog facts, funding and enrollment actions remain unchanged.
+- Primary navigation includes Contact instead of FAQ in both desktop and mobile layouts; FAQ sections and footer links remain available.
 
 ## Lecturer Credentials
 
@@ -31,6 +43,7 @@ Visual and UX decisions **MUST** follow [design-principles.md](design-principles
 - `getLecturerCredentials` in [data/team.ts](data/team.ts) trims names and removes exact duplicates in first-appearance order. Use the same spelling and capitalization across records. Omit unknown fields or use empty arrays; names are never inferred from titles or biography text.
 - On a job change, replace the lecturer's `currentEmployers`. The previous company remains in the overview only if another lecturer still works there. Previous employment belongs in the biography, not this array. Update any outdated statements in localized biographies separately; prose is not rewritten automatically.
 - Each institution has a separate, wrapping list item. There is no fixed institution count, and groups with no names are hidden. These facts describe lecturers, not eXpansePi partnerships or course accreditation.
+- Ali Czech appears first in featured and full rosters, with a concise founder/developer description and without technology tags. Do not use vague university-affiliation wording in his description.
 - JSON is imported into the application bundle. Development updates through hot reload; production changes require a new build and deployment. The overview is derived from data, not fetched from a live employer directory.
 
 ## Reading And Spacing
@@ -54,11 +67,13 @@ npx playwright install chromium
 npx playwright install webkit
 npm run dev
 E2E_URL=http://localhost:3000 npm run test:browser
-E2E_URL=http://localhost:3000 E2E_BROWSER=webkit npm run test:browser
+E2E_URL=https://localhost:3001 E2E_BROWSER=webkit npm run test:browser
 npm run build
 ```
 
 For a separate review server, use `NEXT_OUTPUT_DIR=.next/review WATCHPACK_POLLING=true npm run dev -- --port 3001 --webpack`. The optional output directory avoids conflicting with another Next.js process. Development-only CSP permits the Webpack runtime; production does not permit `unsafe-eval`.
+
+Safari/WebKit applies the existing `upgrade-insecure-requests` CSP to local HTTP assets too. Run its browser checks against a local HTTPS preview, not an HTTP-only server. `E2E_URL=https://localhost:<port>` accepts a self-signed certificate only for loopback hosts; external HTTPS certificates remain verified. Keep the production CSP intact. The invalid-request API test requires a development server and should be excluded from production-preview UI runs.
 
 Browser tests cover 320–2560px layouts across the core funnel, blog, articles, vacancies and privacy page, plus shared composition anchors, partner and FAQ alignment, reading sizes, section rhythm, varied six-course fixtures, accessibility, languages, assets, consent, the learning demo, and application success/error/focus handling. Screenshots are written to ignored `test-results/`. Pass `--output=.next/composition-qa/review` to Playwright when retaining a review separately from a later focused test run. Form responses are intercepted: tests do not send real enquiries or email. The API tests use invalid or honeypot payloads only.
 

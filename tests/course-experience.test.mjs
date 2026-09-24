@@ -42,9 +42,153 @@ function sourceLoader(overrides = {}) {
   return path => load(resolve(root, path))
 }
 
+test("business routes preserve one localized destination across language switches", async () => {
+  const load = sourceLoader()
+  const { getRoutePath, getPublicPath, getInternalRoute, getAllRoutePaths } = load("lib/routes.ts")
+  const paths = { cs: "/cs/pro-firmy", en: "/en/for-business", ru: "/ru/dlya-kompaniy" }
+  assert.deepEqual(getAllRoutePaths("business"), paths)
+  for (const [lang, path] of Object.entries(paths)) {
+    assert.equal(getRoutePath(lang, "business"), path)
+    assert.equal(getInternalRoute(path.split("/")[2]), "business")
+    for (const source of Object.values(paths)) assert.equal(getPublicPath(source, lang), path)
+    assert.equal(getPublicPath("/cs/pro-firmy", lang), path)
+  }
+  const rewrites = await load("next.config.ts").default.rewrites()
+  for (const lang of ["en", "ru"]) {
+    assert.ok(rewrites.some(route => route.source === paths[lang] && route.destination === `/${lang}/pro-firmy`))
+  }
+})
+
 test("only cohorts that have not started are offered", () => {
   const sessions = getUpcomingSessions(course.sessions, new Date("2026-09-12T12:00:00Z"))
   assert.deepEqual(sessions, [{ start: "2026-10-03", end: "2027-01-30" }])
+})
+
+test("business enquiries reuse the form without course-only fields or commitments", () => {
+  const EnquiryForm = sourceLoader()("app/[lang]/components/EnquiryForm.tsx").default
+  for (const lang of ["cs", "en", "ru"]) {
+    const business = renderToStaticMarkup(React.createElement(EnquiryForm, { lang, intent: "business" }))
+    assert.match(business, /name="service"/)
+    assert.match(business, /name="company"/)
+    assert.match(business, /value="private-ai"/)
+    assert.match(business, /aria-describedby=/)
+    assert.equal((business.match(/required=""/g) || []).length, 2)
+    assert.doesNotMatch(business, /name="course"|name="intent"/)
+    const courseForm = renderToStaticMarkup(React.createElement(EnquiryForm, { lang, courseTitle: "Example course" }))
+    assert.doesNotMatch(courseForm, /name="service"|name="company"|name="intent"/)
+    const contact = renderToStaticMarkup(React.createElement(EnquiryForm, { lang, allowIntentSelection: true }))
+    assert.equal((contact.match(/type="radio"/g) || []).length, 2)
+    assert.match(contact, /name="course"/)
+  }
+})
+
+test("business pages expose services, a collective team introduction and one shared enquiry dialog", async () => {
+  const load = sourceLoader()
+  const { default: BusinessPage, generateMetadata } = load("app/[lang]/pro-firmy/page.tsx")
+  const { getBusinessCopy } = load("i18n/business.ts")
+  const { getRoutePath } = load("lib/routes.ts")
+  for (const lang of ["cs", "en", "ru"]) {
+    const params = Promise.resolve({ lang })
+    const copy = getBusinessCopy(lang)
+    const html = renderToStaticMarkup(await BusinessPage({ params }))
+    assert.equal((html.match(/<h1\b/g) || []).length, 1)
+    assert.ok(html.includes(copy.hero.note))
+    for (const id of ["skoleni", "ai-automatizace", "software", "privatni-ai", "spoluprace", "poptavka"]) assert.ok(html.includes(`id="${id}"`))
+    assert.doesNotMatch(html, /<form\b|person-card|team-credentials|Ali Czech|Vlad Karpenko|Rapid7|Grant Thornton|Azul Systems/)
+    assert.equal((html.match(/class="application-dialog"/g) || []).length, 1)
+    const dialogControls = [...html.matchAll(/aria-haspopup="dialog" aria-controls="([^"]+)"/g)].map(match => match[1])
+    assert.equal(dialogControls.length, 8)
+    assert.equal(new Set(dialogControls).size, 1)
+    assert.match(html, /OfferCatalog/)
+    assert.ok(html.includes(renderToStaticMarkup(copy.team.intro)))
+    assert.ok(html.includes(copy.ai.workflow.note))
+    assert.doesNotMatch(html, /name="course"|href="[^"]*#prihlaska"/)
+    const metadata = await generateMetadata({ params })
+    assert.ok(metadata.alternates.canonical.endsWith(getRoutePath(lang, "business")))
+    assert.equal(metadata.description, copy.meta.description)
+    assert.equal(Object.keys(metadata.alternates.languages).length, 4)
+  }
+})
+
+test("course and business dialogs reuse the form with the correct enquiry intent", () => {
+  const load = sourceLoader()
+  const EnquiryDialog = load("app/[lang]/components/EnquiryDialog.tsx").default
+  const ApplyModal = load("app/[lang]/kurzy/[slug]/components/ApplyModal.tsx").default
+  const { getBusinessCopy } = load("i18n/business.ts")
+  for (const lang of ["cs", "en", "ru"]) {
+    const copy = getBusinessCopy(lang)
+    const business = renderToStaticMarkup(React.createElement(EnquiryDialog, { lang, title: copy.enquiry.formTitle, intro: copy.hero.note, closeLabel: copy.enquiry.close, intent: "business", isOpen: true, onClose() {} }))
+    assert.match(business, /name="service"/)
+    assert.match(business, /name="company"/)
+    assert.ok(business.includes(copy.enquiry.close))
+    const courseDialog = renderToStaticMarkup(React.createElement(ApplyModal, { lang, courseTitle: "Example course", isOpen: true, onClose() {} }))
+    assert.match(courseDialog, /Example course/)
+    assert.doesNotMatch(courseDialog, /name="service"|name="company"/)
+  }
+})
+
+test("business submissions retain context within API limits and never track course conversions", async context => {
+  const requests = []
+  const conversions = []
+  const values = new FormData()
+  values.set("name", "QA Example")
+  values.set("email", "qa@example.test")
+  values.set("company", "C".repeat(160))
+  values.set("message", "M".repeat(4600))
+  values.set("service", "private-ai")
+  context.mock.method(globalThis, "FormData", function () { return values })
+  const load = sourceLoader({
+    react: { ...React, useState: initial => [initial, () => {}], useId: () => "test-form", useRef: () => ({ current: null }), useEffect: () => {} },
+    "@/lib/form-utils": {
+      fetchWithTimeout: async (url, options) => {
+        assert.equal(url, "/api/contact")
+        requests.push(JSON.parse(options.body))
+        return { ok: true, json: async () => ({ success: true }) }
+      },
+      trackApplicationConversion: async (...args) => { conversions.push(args) },
+    },
+  })
+  const EnquiryForm = load("app/[lang]/components/EnquiryForm.tsx").default
+  const event = { preventDefault() {}, currentTarget: {} }
+  for (const lang of ["cs", "en", "ru"]) {
+    await EnquiryForm({ lang, intent: "business" }).props.onSubmit(event)
+    const payload = requests.at(-1)
+    assert.ok(payload.subject.length <= 200)
+    assert.match(payload.subject, /AI/)
+    assert.ok(payload.message.includes(values.get("company")))
+    assert.ok(payload.message.endsWith(values.get("message")))
+    assert.ok(payload.message.length <= 5000)
+  }
+  assert.equal(conversions.length, 0)
+  await EnquiryForm({ lang: "en", courseTitle: "Example course" }).props.onSubmit(event)
+  assert.equal(requests.at(-1).subject, "Example course")
+  assert.equal(conversions.length, 1)
+})
+
+test("business discovery joins navigation, homepage, footer and sitemap without replacing courses", async () => {
+  const load = sourceLoader()
+  const Home = load("app/[lang]/page.tsx").default
+  const Navigation = load("app/[lang]/components/Navigation.tsx").default
+  const Footer = load("app/[lang]/components/Footer.tsx").default
+  const { getRoutePath } = load("lib/routes.ts")
+  const { getTranslations } = load("i18n/index.ts")
+  const entries = load("app/sitemap.ts").default()
+  for (const lang of ["cs", "en", "ru"]) {
+    const businessPath = getRoutePath(lang, "business")
+    const coursePath = getRoutePath(lang, "courses")
+    const navigation = renderToStaticMarkup(React.createElement(Navigation, { lang, t: getTranslations(lang) }))
+    assert.equal(navigation.split(`href="${businessPath}"`).length - 1, 2)
+    assert.equal(navigation.split(`href="${getRoutePath(lang, "contact")}"`).length - 1, 2)
+    assert.doesNotMatch(navigation, /#otazky/)
+    assert.ok(navigation.includes(`href="${coursePath}#nabidka"`))
+    const home = renderToStaticMarkup(await Home({ params: Promise.resolve({ lang }) }))
+    assert.match(home, /id="pro-firmy"/)
+    assert.match(home, /id="kurzy"/)
+    assert.ok(home.includes(`href="${businessPath}"`))
+    const footer = renderToStaticMarkup(React.createElement(Footer, { lang }))
+    assert.ok(footer.includes(`href="${businessPath}"`))
+    assert.equal(entries.filter(entry => entry.url.endsWith(businessPath)).length, 1)
+  }
 })
 
 test("expired and missing schedules have an honest empty state", () => {
@@ -269,6 +413,13 @@ test("featured profiles use concise summaries without losing full biographies", 
     const overview = renderToStaticMarkup(React.createElement(TeamSection, { lang }))
     const about = renderToStaticMarkup(React.createElement(TeamSection, { lang, full: true }))
     assert.ok(overview.includes(getSiteCopy(lang).team.all))
+    for (const html of [overview, about]) {
+      assert.equal(html.match(/<article[^>]*id="([^"]+)"/)?.[1], "lecturer-example-founder")
+      const founder = html.match(/<article[^>]*id="lecturer-example-founder"[\s\S]*?<\/article>/)?.[0]
+      assert.ok(founder)
+      assert.doesNotMatch(founder, /person-skills|s vazbou|with a connection|связанный/)
+      assert.ok(founder.includes(getSiteCopy(lang).team.founderNote))
+    }
     for (const person of people) {
       assert.ok(person.summary.length < person.description.length)
       assert.ok(overview.includes(person.summary))

@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
 import Navigation from "../components/Navigation"
 import Footer from "../components/Footer"
 import PartnerSection from "../components/PartnerSection"
@@ -30,7 +32,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const copy = getSiteCopy(lang)
 
   return <><Navigation activePage={getRoutePath(lang, "about")} lang={lang} t={t} /><main id="main-content" className="site-main">
-    <section className="page-intro"><div className="container"><p className="eyebrow">{copy.about.eyebrow}</p><h1>{copy.about.title}</h1><p className="lead">{copy.about.intro}</p></div></section>
+    <section className="page-intro"><div className="container"><p className="eyebrow">{copy.about.eyebrow}</p><h1>{copy.about.title}</h1><p className="lead">{copy.about.intro}</p><Link href={getRoutePath(lang, "business")} className="text-link mt-4">{t.common.business}<ArrowUpRight aria-hidden="true" /></Link></div></section>
     <TeamSection lang={lang} full />
     <section className="section surface-section" aria-labelledby="principles-title"><div className="container"><SectionHeading title={copy.about.principlesTitle} id="principles-title" /><div className="audience-grid">{copy.about.principles.map(principle => <div className="audience-item" key={principle.title}><h3>{principle.title}</h3><p>{principle.text}</p></div>)}</div></div></section>
     <PartnerSection lang={lang} />

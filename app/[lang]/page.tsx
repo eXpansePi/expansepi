@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUpRight, CalendarDays, ShieldCheck } from "lucide-react
 import { isValidLanguage, defaultLanguage } from "@/i18n/config"
 import { getTranslations } from "@/i18n/index"
 import { getSiteCopy } from "@/i18n/site"
+import { getBusinessCopy } from "@/i18n/business"
 import { getActiveCourses, getUpcomingCourses } from "@/data/courses"
 import { getUpcomingSessions, formatCourseDate } from "@/lib/course-schedule"
 import { getDetailRoutePath, getRoutePath } from "@/lib/routes"
@@ -23,8 +24,8 @@ interface HomePageProps {
 export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
   const resolvedParams = await params
   const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
-  const copy = getSiteCopy(lang)
-  const title = `${copy.hero.title} ${copy.hero.accent} | eXpansePi`
+  const copy = getBusinessCopy(lang).home
+  const title = copy.metaTitle
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://expansepi.com"
 
   const langMetadata: Record<string, { locale: string }> = {
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
 
   return {
     title: { absolute: title },
-    description: copy.hero.description,
+    description: copy.metaDescription,
     alternates: {
       canonical: `${baseUrl}/${lang}`,
       languages: {
@@ -53,12 +54,12 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
       url: `${baseUrl}/${lang}`,
       siteName: "eXpansePi",
       title,
-      description: copy.hero.description,
+      description: copy.metaDescription,
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description: copy.hero.description,
+      description: copy.metaDescription,
     },
   }
 }
@@ -68,6 +69,7 @@ export default async function Home({ params }: HomePageProps) {
   const lang = isValidLanguage(resolvedParams.lang) ? resolvedParams.lang : defaultLanguage
   const t = getTranslations(lang)
   const copy = getSiteCopy(lang)
+  const business = getBusinessCopy(lang)
   const courses = getActiveCourses(lang)
   const upcoming = getUpcomingCourses(lang)
   const nextCohort = courses.flatMap(course => {
@@ -101,6 +103,10 @@ export default async function Home({ params }: HomePageProps) {
             {upcoming.length > 0 && <div className="catalog-planned"><div><h3>{copy.catalog.preparing}</h3><p>{copy.catalog.plannedNote}</p></div><ul className="planned-topics">{upcoming.map(course => <li key={course.slug}>{course.topics?.[0] || course.title}</li>)}</ul></div>}
           </div>
         </section>
+        <section className="section-tight business-invitation" id="pro-firmy" aria-labelledby="business-invitation-title"><div className="container application-layout">
+          <SectionHeading eyebrow={t.common.business} title={business.home.title} text={business.home.intro} id="business-invitation-title" />
+          <div className="application-action"><Link className="button button-secondary" href={getRoutePath(lang, "business")}>{business.home.action}<ArrowUpRight aria-hidden="true" /></Link><p className="fine-print">{business.hero.note}</p></div>
+        </div></section>
         <AudienceSection copy={copy.audience} />
         <CourseFormatSection copy={copy.homeFormat} />
         <FundingSection copy={copy.funding} />

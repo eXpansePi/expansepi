@@ -58,7 +58,7 @@ export function CourseFormatSection({ copy }: { copy: SiteCopy["format"] }) {
   return <section className="section format-section" id="jak-to-probiha" aria-labelledby="format-title"><div className="container"><SectionHeading eyebrow={copy.eyebrow} title={copy.title} text={copy.intro} id="format-title" /><div className={`format-grid${copy.items.length === 3 ? " format-grid-three" : ""}`}>{copy.items.map(item => <div className="format-item" key={item.title}><span className="format-value">{item.value}</span><h3>{item.title}</h3><p>{item.text}</p></div>)}</div><p className="format-note">{copy.note}</p></div></section>
 }
 
-function ProcessSteps({ steps }: { steps: SiteCopy["funding"]["steps"] }) {
+export function ProcessSteps({ steps }: { steps: SiteCopy["funding"]["steps"] }) {
   return <ol className="steps-list process-steps">{steps.map((step, index) => <li key={step.title}><span className="step-marker" aria-hidden="true">0{index + 1}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol>
 }
 
@@ -82,23 +82,23 @@ export function FundingSection({ copy, course, lang }: { copy: SiteCopy["funding
 
 export function PersonCard({ person, copy, compact = false }: { person: Lecturer | TeamMember; copy: SiteCopy["team"]; compact?: boolean }) {
   const initials = person.name.split(" ").map(part => part[0]).slice(0, 2).join("")
-  const description = compact && person.summary ? person.summary : "role" in person && person.role === "founder" ? copy.founderNote : person.description
+  const isFounder = "role" in person && person.role === "founder"
+  const description = isFounder ? copy.founderNote : compact && person.summary ? person.summary : person.description
   const identity = [...person.title.split("\n").filter(Boolean), ...("role" in person ? [] : [...(person.currentEmployers || []), ...(person.universities || [])])].join(" · ")
   return (
     <article className={`person-card${person.photo ? "" : " person-card-no-photo"}`} id={`lecturer-${person.id}`}>
       <div className="person-portrait" title={!person.photo ? copy.portraitPending : undefined}>
         {person.photo ? <Image src={person.photo} alt={person.name} fill sizes="(max-width: 767px) 56px, 80px" className="object-cover" /> : <><span className="person-initials" aria-hidden="true">{initials}</span><span className="sr-only">{copy.portraitPending}</span></>}
       </div>
-      <div className="person-body"><div className="person-heading"><h3>{person.name}</h3><p className="person-role">{identity}</p><div className="person-skills" aria-label={copy.expertise}>{person.specializations?.slice(0, 3).map(skill => <span key={skill}>{skill}</span>)}</div></div><p className="person-description">{description}</p></div>
+      <div className="person-body"><div className="person-heading"><h3>{person.name}</h3><p className="person-role">{identity}</p>{!isFounder && <div className="person-skills" aria-label={copy.expertise}>{person.specializations?.slice(0, 3).map(skill => <span key={skill}>{skill}</span>)}</div>}</div><p className="person-description">{description}</p></div>
     </article>
   )
 }
 
-export function TeamSection({ lang, full = false }: { lang: Language; full?: boolean }) {
-  const copy = getSiteCopy(lang).team
+export function TeamSection({ lang, full = false, copy = getSiteCopy(lang).team }: { lang: Language; full?: boolean; copy?: SiteCopy["team"] }) {
   const people = [...getAllTeamMembers(lang), ...getAllLecturers(lang)]
   const credentials = getLecturerCredentials(lang)
-  const featured = full ? people : [people.find(person => person.id === "5"), people.find(person => person.id === "example-founder"), people.find(person => person.id === "2")].filter((person): person is Lecturer | TeamMember => !!person)
+  const featured = full ? people : [people.find(person => person.id === "example-founder"), people.find(person => person.id === "5"), people.find(person => person.id === "2")].filter((person): person is Lecturer | TeamMember => !!person)
   return (
     <section className="section" id="team" aria-labelledby="team-title">
       <div className="container">

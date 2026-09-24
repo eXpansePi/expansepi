@@ -128,7 +128,7 @@ export function getOrganizationSchema(): OrganizationSchema {
     "@type": "Organization",
     name: "eXpansePi",
     url: baseUrl,
-    description: "IT reskilling courses with experts from Charles University and Czech Technical University",
+    description: "Practical IT courses, employee training, AI and process automation, and custom software development.",
     sameAs: [
       // Add social media links when available
     ],

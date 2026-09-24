@@ -8,9 +8,9 @@ import { getTranslations } from "@/i18n/index"
 import { resetConsent } from "@/lib/consent"
 
 const labels = {
-  cs: { cookies: "Nastavení cookies", tagline: "Nové dovednosti. Nové možnosti. Praktické IT vzdělávání pro vaši další kapitolu.", tools: "Partneři" },
-  en: { cookies: "Cookie settings", tagline: "New skills. New possibilities. Practical IT education for your next chapter.", tools: "Partners" },
-  ru: { cookies: "Настройки cookie", tagline: "Новые навыки. Новые возможности. Практическое IT-образование для вашей новой главы.", tools: "Партнёры" },
+  cs: { cookies: "Nastavení cookies", tagline: "Praktické IT kurzy pro jednotlivce. Školení, AI, automatizace a software na míru pro firmy.", tools: "Partneři" },
+  en: { cookies: "Cookie settings", tagline: "Practical IT courses for individuals. Training, AI, automation and custom software for businesses.", tools: "Partners" },
+  ru: { cookies: "Настройки cookie", tagline: "Практические IT-курсы для частных лиц. Обучение, AI, автоматизация и разработка для компаний.", tools: "Партнёры" },
 }
 
 export default function Footer({ lang }: { lang: Language }) {
@@ -24,7 +24,7 @@ export default function Footer({ lang }: { lang: Language }) {
           <div>
             <h2 className="footer-heading">{t.footer.quickLinks}</h2>
             <ul className="footer-links">
-              {(["courses", "about", "contact"] as const).map(route => <li key={route}><Link href={getRoutePath(lang, route)}>{t.common[route]}</Link></li>)}
+              {(["courses", "business", "about", "contact"] as const).map(route => <li key={route}><Link href={getRoutePath(lang, route)}>{t.common[route]}</Link></li>)}
               <li><Link href={`/${lang}#otazky`}>{lang === "cs" ? "Časté otázky" : lang === "en" ? "Common questions" : "Частые вопросы"}</Link></li>
             </ul>
           </div>

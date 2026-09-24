@@ -23,10 +23,45 @@ interface EnquiryFormProps {
   lang: Language
   courseTitle?: string
   courses?: { slug: string; title: string }[]
+  intent?: "course" | "business"
+  allowIntentSelection?: boolean
 }
 
-export default function EnquiryForm({ lang, courseTitle, courses = [] }: EnquiryFormProps) {
-  const copy = labels[lang]
+const businessLabels = {
+  cs: {
+    audience: "S čím vám můžeme pomoci?", individual: "Kurzy pro jednotlivce", business: "Pro firmy", company: "Firma", course: "Oblast spolupráce", undecided: "Potřebuji probrat zadání", message: "Co potřebujete vyřešit?", hint: "Stačí popsat současný postup a co by mělo fungovat lépe. Citlivá firemní data zatím neposílejte.", send: "Odeslat firemní poptávku", subject: "Pro firmy", defaultMessage: "Rádi bychom probrali možnosti spolupráce pro naši firmu.", note: "Nezávazná poptávka. Ozveme se, upřesníme vaše potřeby a domluvíme další postup. Rozsah a cenu potvrdíme před zahájením práce.", successNote: "Ozveme se vám, probereme váš problém a domluvíme další postup. Rozsah a cenu si potvrdíme před zahájením práce. Poptávka vás k ničemu nezavazuje.",
+    services: [
+      { value: "training", label: "Školení zaměstnanců" },
+      { value: "ai", label: "AI a automatizace" },
+      { value: "software", label: "Software na míru" },
+      { value: "private-ai", label: "Privátní / interní AI" },
+    ],
+  },
+  en: {
+    audience: "How can we help?", individual: "Individual courses", business: "For businesses", company: "Company", course: "Area of interest", undecided: "Help me define the brief", message: "What do you need to solve?", hint: "Describe the current process and what should work better. Please do not send sensitive company data yet.", send: "Send a business enquiry", subject: "Business enquiry", defaultMessage: "We would like to discuss support for our company.", note: "A nonbinding enquiry. We will get in touch, clarify your needs and agree the next step. Scope and price are confirmed before work starts.", successNote: "We will contact you to discuss the problem and agree the next step. Scope and price are confirmed before work starts. Your enquiry creates no commitment.",
+    services: [
+      { value: "training", label: "Employee training" },
+      { value: "ai", label: "AI and automation" },
+      { value: "software", label: "Custom software" },
+      { value: "private-ai", label: "Private / internal AI" },
+    ],
+  },
+  ru: {
+    audience: "Чем мы можем помочь?", individual: "Курсы для себя", business: "Для компаний", company: "Компания", course: "Направление сотрудничества", undecided: "Помогите уточнить задачу", message: "Какую задачу нужно решить?", hint: "Опишите текущий процесс и что должно работать лучше. Пока не отправляйте конфиденциальные данные компании.", send: "Отправить запрос от компании", subject: "Запрос от компании", defaultMessage: "Хотим обсудить возможности сотрудничества для нашей компании.", note: "Запрос без обязательств. Свяжемся, уточним потребности и согласуем следующий шаг. Объём и стоимость подтвердим до начала работ.", successNote: "Свяжемся с вами, обсудим задачу и согласуем следующий шаг. Объём и стоимость подтвердим до начала работ. Запрос ни к чему вас не обязывает.",
+    services: [
+      { value: "training", label: "Обучение сотрудников" },
+      { value: "ai", label: "AI и автоматизация" },
+      { value: "software", label: "Разработка на заказ" },
+      { value: "private-ai", label: "Частный / внутренний AI" },
+    ],
+  },
+}
+
+export default function EnquiryForm({ lang, courseTitle, courses = [], intent = "course", allowIntentSelection = false }: EnquiryFormProps) {
+  const [selectedIntent, setSelectedIntent] = useState(intent)
+  const isBusiness = selectedIntent === "business"
+  const businessCopy = businessLabels[lang]
+  const copy = isBusiness ? { ...labels[lang], ...businessCopy } : labels[lang]
   const id = useId()
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error" | "limited">("idle")
   const successMessage = useRef<HTMLDivElement>(null)
@@ -51,8 +86,11 @@ export default function EnquiryForm({ lang, courseTitle, courses = [] }: Enquiry
     const phone = String(values.get("phone") || "").trim()
     const surname = String(values.get("surname") || "")
     const selected = courses.find(course => course.slug === values.get("course"))
-    const subject = courseTitle || selected?.title || copy.subject
-    const message = String(values.get("message") || "").trim() || copy.defaultMessage
+    const service = businessCopy.services.find(item => item.value === values.get("service"))
+    const company = String(values.get("company") || "").trim()
+    const subject = isBusiness ? [copy.subject, service?.label].filter(Boolean).join(": ") : courseTitle || selected?.title || copy.subject
+    const enquiry = String(values.get("message") || "").trim() || copy.defaultMessage
+    const message = isBusiness && company ? `${businessCopy.company}: ${company}\n\n${enquiry}` : enquiry
     setStatus("sending")
 
     try {
@@ -67,7 +105,7 @@ export default function EnquiryForm({ lang, courseTitle, courses = [] }: Enquiry
         return
       }
       setStatus("success")
-      if (courseTitle || selected) void trackApplicationConversion(email, phone, surname)
+      if (!isBusiness && (courseTitle || selected)) void trackApplicationConversion(email, phone, surname)
     } catch {
       setStatus("error")
     }
@@ -80,12 +118,17 @@ export default function EnquiryForm({ lang, courseTitle, courses = [] }: Enquiry
   return (
     <form className="enquiry-form" onSubmit={handleSubmit} aria-busy={status === "sending"}>
       <div hidden aria-hidden="true"><label htmlFor={`${id}-surname`}>Surname</label><input id={`${id}-surname`} name="surname" tabIndex={-1} autoComplete="off" /></div>
-      {!courseTitle && <div className="field"><label htmlFor={`${id}-course`}>{copy.course}</label><div className="select-field"><select name="course" id={`${id}-course`} defaultValue=""><option value="">{copy.undecided}</option>{courses.map(course => <option key={course.slug} value={course.slug}>{course.title}</option>)}</select><ChevronDown aria-hidden="true" /></div></div>}
+      {allowIntentSelection && !courseTitle && <fieldset className="enquiry-intent" disabled={status === "sending"}><legend>{businessCopy.audience}</legend><div className="enquiry-intent-options">{(["course", "business"] as const).map(option => <label key={option}><input type="radio" name="intent" value={option} checked={selectedIntent === option} onChange={() => setSelectedIntent(option)} /><span>{option === "business" ? businessCopy.business : businessCopy.individual}</span></label>)}</div></fieldset>}
+      {isBusiness ? <>
+        <div className="field"><label htmlFor={`${id}-service`}>{copy.course}</label><div className="select-field"><select name="service" id={`${id}-service`} defaultValue=""><option value="">{copy.undecided}</option>{businessCopy.services.map(service => <option key={service.value} value={service.value}>{service.label}</option>)}</select><ChevronDown aria-hidden="true" /></div></div>
+        <div className="field"><label htmlFor={`${id}-company`}>{businessCopy.company}{" "}<span>{copy.optional}</span></label><input id={`${id}-company`} name="company" autoComplete="organization" maxLength={160} /></div>
+      </> : !courseTitle && <div className="field"><label htmlFor={`${id}-course`}>{copy.course}</label><div className="select-field"><select name="course" id={`${id}-course`} defaultValue=""><option value="">{copy.undecided}</option>{courses.map(course => <option key={course.slug} value={course.slug}>{course.title}</option>)}</select><ChevronDown aria-hidden="true" /></div></div>}
       <div className="field"><label htmlFor={`${id}-name`}>{copy.name}</label><input id={`${id}-name`} name="name" autoComplete="name" required maxLength={100} onInput={event => event.currentTarget.setCustomValidity("")} /></div>
       <div className="field"><label htmlFor={`${id}-email`}>{copy.email}</label><input id={`${id}-email`} name="email" type="email" autoComplete="email" required minLength={5} maxLength={100} /></div>
-      <div className="field"><label htmlFor={`${id}-phone`}>{copy.phone}<span>{copy.optional}</span></label><input id={`${id}-phone`} name="phone" type="tel" autoComplete="tel" maxLength={20} pattern="\+?[0-9\s\-\(\)]{7,15}" /></div>
-      <div className="field"><label htmlFor={`${id}-message`}>{copy.message}<span>{copy.optional}</span></label><textarea id={`${id}-message`} name="message" rows={3} maxLength={5000} /></div>
+      <div className="field"><label htmlFor={`${id}-phone`}>{copy.phone}{" "}<span>{copy.optional}</span></label><input id={`${id}-phone`} name="phone" type="tel" autoComplete="tel" maxLength={20} pattern="\+?[0-9\s\-\(\)]{7,15}" /></div>
+      <div className="field"><label htmlFor={`${id}-message`}>{copy.message}{" "}<span>{copy.optional}</span></label>{isBusiness && <p className="field-hint" id={`${id}-message-hint`}>{businessCopy.hint}</p>}<textarea id={`${id}-message`} name="message" rows={isBusiness ? 5 : 3} maxLength={isBusiness ? 4600 : 5000} aria-describedby={isBusiness ? `${id}-message-hint` : undefined} /></div>
       {(status === "error" || status === "limited") && <p className="form-status form-error" role="alert">{copy[status]} <a href="mailto:info@expansepi.com">info@expansepi.com</a>.</p>}
+      {isBusiness && <p className="fine-print enquiry-note">{businessCopy.note}</p>}
       <button className="button button-primary" type="submit" disabled={status === "sending"}>{status === "sending" ? <><LoaderCircle className="loading-spinner" aria-hidden="true" />{copy.sending}</> : <>{copy.send}<ArrowUpRight aria-hidden="true" /></>}</button>
       <p className="form-privacy">{copy.privacy} <Link href={getRoutePath(lang, "gdpr")}>{copy.policy}</Link>.</p>
     </form>
