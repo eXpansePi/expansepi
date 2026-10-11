@@ -93,7 +93,7 @@
       "id": "3",
       "name": "Kostiantyn Agapov",
       "title": "Senior Software Engineer",
-      "currentEmployers": ["Rapid7"],
+      "currentEmployers": ["Microsoft"],
       "photo": "",
       "languages": {
         "cs": {
@@ -102,7 +102,7 @@
             "Operační systémy",
             "Architektura"
           ],
-          "description": "Seniorní vývojář v oblasti kybernetické bezpečnosti s více než 10 lety zkušeností. V Rapid7 pracuje na vývoji antivirových a endpoint bezpečnostních technologií. Dříve působil v Samsungu a několika startupech, z nichž jeden byl následně koupen společností Google. Specializuje se na nízkoúrovňový vývoj v C/C++, práci s endpoint systémy a tvorbu výkonných a spolehlivých bezpečnostních řešení."
+          "description": "Seniorní vývojář v oblasti kybernetické bezpečnosti s více než 10 lety zkušeností. Aktuálně působí v Microsoftu. Dříve pracoval v Rapid7 na vývoji antivirových a endpoint bezpečnostních technologií, v Samsungu a několika startupech, z nichž jeden byl následně zakoupen společností Google. Specializuje se na nízkoúrovňový vývoj v C/C++, práci s endpoint systémy a tvorbu výkonných a spolehlivých bezpečnostních řešení."
         },
         "en": {
           "specializations": [
@@ -110,7 +110,7 @@
             "Operating systems",
             "Architecture"
           ],
-          "description": "A senior cybersecurity developer with more than 10 years of experience. At Rapid7, he works on antivirus and endpoint security technologies. He previously worked at Samsung and several startups, one of which was later acquired by Google. He specializes in low-level development in C/C++, endpoint system engineering, and building high-performance, reliable security solutions."
+          "description": "Senior cybersecurity software engineer with over 10 years of experience. Currently working at Microsoft. Previously worked at Rapid7 developing antivirus and endpoint security technologies, at Samsung, and at several startups, one of which was subsequently acquired by Google. Specializes in low-level C/C++ development, working with endpoint systems, and creating high-performance, reliable security solutions."
         },
         "ru": {
           "specializations": [
@@ -118,7 +118,7 @@
             "Oперационные системы",
             "Архитектура"
           ],
-          "description": "Senior разработчик в области кибербезопасности с более чем 10-летним опытом. В Rapid7 работает над антивирусными и endpoint-технологиями. Ранее работал в Samsung и нескольких стартапах, один из которых позже был приобретён компанией Google. Специализируется на низкоуровневой разработке на C/C++, работе с endpoint-системами и создании высокопроизводительных и надёжных решений в сфере безопасности."
+          "description": "Senior разработчик в области кибербезопасности с более чем 10-летним опытом. В настоящее время работает в Microsoft. Ранее работал в Rapid7 над разработкой антивирусных технологий и систем безопасности конечных точек (endpoint), а также в Samsung и нескольких стартапах, один из которых впоследствии был приобретен компанией Google. Специализируется на низкоуровневой разработке на C/C++, работе с endpoint-системами и создании высокопроизводительных и надежных решений для обеспечения безопасности."
         }
       }
     },
